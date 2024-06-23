@@ -10,6 +10,8 @@ jobs:
     env:
       Workspace: /home/gemini/fe
     steps:
+      - name: Pull from main
+        run: cd $Workspace && git pull origin main
       - name: Install Dependencies
         run: cd $Workspace && npm install
       - name: Build
