@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    name: build and deploy
+    runs-on: self-hosted
+    env:
+      Workspace: /home/gemini/fe
+    steps:
+      - name: Install Dependencies
+        run: cd $Workspace && npm install
+      - name: Build
+        run: cd $Workspace && npm run build
+      - name: Deploy
+        run: cd $Workspace && pm2 start ecosystem.config.cjs
+  
