@@ -7,15 +7,5 @@ html {
 }
 
 #root {
-  @apply grid min-h-svh place-content-center;
-}
-
-.doodle {
-  @font-face {
-    font-family: "Short Stack";
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
-    src: url("https://fonts.googleapis.com/css2?family=Short+Stack&display=swap");
-  }
+  @apply grid min-h-svh place-content-center place-items-center;
 }
