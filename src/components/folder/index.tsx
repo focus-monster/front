@@ -2,17 +2,24 @@ import { PropsWithChildren, ReactNode } from "react";
 
 type Folder = {
   insert?: ReactNode;
+  title?: ReactNode;
   className?: string;
 };
 
 export default function Folder({
+  insert,
+  title,
   className,
   children,
-  insert,
 }: PropsWithChildren<Folder>) {
   return (
-    <div className="relative">
-      <img className="w-[34rem]" src="/folder-back.png" />
+    <div className="relative w-[34rem]">
+      <img className="" src="/folder-back.png" />
+      {title ? (
+        <div className="absolute left-[4.5rem] top-[1.5rem] text-2xl font-bold">
+          {title}
+        </div>
+      ) : null}
       {insert ? (
         <div className="absolute right-[4rem] top-0">{insert}</div>
       ) : null}
@@ -22,7 +29,7 @@ export default function Folder({
       />
       <div
         className={
-          "absolute inset-6 isolate z-10 grid items-end justify-center"
+          "absolute inset-8 isolate z-10 grid items-end justify-center"
         }
       >
         <div className={className}>{children}</div>
