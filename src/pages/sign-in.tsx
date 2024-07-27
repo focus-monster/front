@@ -1,4 +1,4 @@
-import GuestSignIn from "../components/auth/GuestSignIn";
+import GuestSignIn from "../components/auth/guest-sign-in";
 import GoogleAuth from "../components/auth/google";
 import Folder from "../components/folder";
 import TermsAndServices from "../components/terms-and-services";
