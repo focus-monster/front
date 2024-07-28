@@ -10,10 +10,10 @@ export type Auth = {
 // };
 
 const query = async () => {
-  await wait(2000);
+  await wait(1000);
 
   return {
-    session: "abc",
+    session: "null",
   } as Auth;
 };
 

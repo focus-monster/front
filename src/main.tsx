@@ -23,6 +23,20 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <App />,
+        children: [
+          {
+            path: "/settings",
+            element: <></>,
+          },
+          {
+            path: "/collection",
+            element: <></>,
+          },
+          {
+            path: "/",
+            element: <></>,
+          },
+        ],
       },
     ],
   },
