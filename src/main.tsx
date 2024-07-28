@@ -7,8 +7,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthLayout from "./pages/auth-layout.tsx";
 import Landing from "./pages/landing.tsx";
 import App from "./app.tsx";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <ReactQueryDevtools />
     </QueryClientProvider>
   </React.StrictMode>,
 );

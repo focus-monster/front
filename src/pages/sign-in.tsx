@@ -20,5 +20,5 @@ export default function SignIn() {
 }
 
 function Title() {
-  return <div>FocusMonster</div>;
+  return <div className="text-gray-900">FocusMonster</div>;
 }

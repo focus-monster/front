@@ -1,23 +1,17 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/auth";
-import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import Loading from "../components/loading";
+import { useAuth } from "../hooks/auth";
+import Landing from "./landing";
 
 export default function AuthLayout() {
-  const auth = useAuth();
-  const navigate = useNavigate();
+  const { data, isLoading } = useAuth();
 
-  useEffect(() => {
-    if (auth.loading) {
-      return;
-    }
-    if (!auth.session) {
-      navigate("/Landing");
-    }
-  }, [auth, navigate]);
-
-  if (auth.loading) {
+  if (isLoading) {
     return <Loading />;
+  }
+
+  if (data?.session === null) {
+    return <Landing />;
   }
 
   return <Outlet />;

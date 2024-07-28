@@ -1,25 +1,26 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { wait } from "../utils";
 
-type Auth = {
+export type Auth = {
   session: string | null;
-  loading: boolean;
+};
+
+// const initialData: Auth = {
+//   session: null,
+// };
+
+const query = async () => {
+  await wait(2000);
+
+  return {
+    session: "abc",
+  } as Auth;
 };
 
 export function useAuth() {
-  const [auth, setAuth] = useState<Auth>({
-    session: null,
-    loading: true,
+  return useQuery<Auth>({
+    queryKey: ["user"],
+    queryFn: query,
+    // initialData: initialData,
   });
-
-  useEffect(() => {
-    setTimeout(() => {
-      setAuth((prev) => ({
-        ...prev,
-        loading: false,
-        session: "asdf",
-      }));
-    }, 1000);
-  }, []);
-
-  return auth;
 }

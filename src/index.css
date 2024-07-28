@@ -7,5 +7,5 @@ html {
 }
 
 #root {
-  @apply grid min-h-svh place-content-center place-items-center text-gray-50;
+  @apply grid min-h-svh place-content-center place-items-center;
 }
