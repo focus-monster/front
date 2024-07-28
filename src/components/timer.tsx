@@ -64,7 +64,7 @@ export default function Timer() {
       return;
     }
     if (time.minutes >= 60) {
-      alert("");
+      alert("Minutes should be less than or equal to 60");
     }
     mutate();
   }
