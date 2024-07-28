@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthLayout from "./pages/auth-layout.tsx";
 import Landing from "./pages/landing.tsx";
+import App from "./app.tsx";
 
 const queryClient = new QueryClient();
 
@@ -19,9 +20,9 @@ const router = createBrowserRouter([
         element: <Landing />,
       },
       {
-        path: "/"
-        element: <App />
-      }
+        path: "/",
+        element: <App />,
+      },
     ],
   },
 ]);

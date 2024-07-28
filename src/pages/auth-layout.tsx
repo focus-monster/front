@@ -20,9 +20,5 @@ export default function AuthLayout() {
     return <Loading />;
   }
 
-  return (
-    <div className="">
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 }
