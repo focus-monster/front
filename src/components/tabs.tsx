@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Tabs() {
   return (
-    <ul className="mx-auto flex max-w-4xl gap-8 px-6 py-8 text-gray-50">
+    <ul className="mx-auto flex gap-8 px-8 py-8 text-gray-50">
       <Link to="/">
         <li className="flex h-full flex-col items-center justify-center gap-2">
           <div className="grid w-20 grow place-content-center">

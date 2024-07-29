@@ -8,6 +8,7 @@ import AuthLayout from "./pages/auth-layout.tsx";
 import Landing from "./pages/landing.tsx";
 import App from "./app.tsx";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Today from "./pages/today.tsx";
 
 export const queryClient = new QueryClient();
 
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/",
-            element: <></>,
+            element: <Today />,
           },
         ],
       },
