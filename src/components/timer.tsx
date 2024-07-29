@@ -70,9 +70,9 @@ export default function Timer() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-6 lg:flex-row">
-      <div className="flex items-center gap-2 rounded-lg border-2 border-gray-900 bg-gray-50 px-4 py-2">
-        Set Duration:
+    <div className="flex flex-col items-center justify-center gap-6 px-6 md:flex-row">
+      <div className="flex w-full flex-shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-gray-900 bg-gray-50 px-4 py-2 md:w-fit">
+        <span className="flex-shrink-0">Set Duration:</span>
         <input
           className="w-14 rounded-lg border border-gray-400 px-2 py-1"
           id="hour"
@@ -83,7 +83,7 @@ export default function Timer() {
             setTime((prev) => ({ ...prev, hours: Number(e.target.value) }));
           }}
         />
-        <label htmlFor="hour">hr</label>
+        <label htmlFor="hour">h</label>
         <input
           className="w-14 rounded-lg border border-gray-400 px-2 py-1"
           id="minutes"
@@ -94,11 +94,11 @@ export default function Timer() {
             setTime((prev) => ({ ...prev, minutes: Number(e.target.value) }));
           }}
         />
-        <label htmlFor="minutes">min</label>
+        <label htmlFor="minutes">m</label>
       </div>
-      <div className="flex items-center gap-2 rounded-lg border-2 border-gray-900 bg-gray-50 px-4 py-2">
+      <div className="flex w-full grow items-center gap-2 rounded-lg border-2 border-gray-900 bg-gray-50 px-4 py-2 md:w-fit">
         <input
-          className="w-96 rounded-lg border border-gray-400 px-2 py-1"
+          className="w-full rounded-lg border border-gray-400 px-2 py-1"
           id="task"
           type="text"
           placeholder="What is your task for this session? (optional)"
@@ -108,7 +108,7 @@ export default function Timer() {
         />
       </div>
       <button
-        className="rounded-lg bg-gray-900 px-6 py-3 text-lg text-gray-50"
+        className="w-full rounded-lg bg-gray-900 px-6 py-3 text-lg text-gray-50 md:w-fit"
         onClick={handleClick}
       >
         Focus Now!

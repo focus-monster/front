@@ -43,16 +43,12 @@ function AuthActions() {
   return (
     <button
       onClick={() => mutate()}
-      className="rounded-lg bg-gray-900 px-4 py-2 text-gray-50"
+      className="rounded-lg border-2 border-gray-900 bg-gray-50 px-4 py-2 text-gray-900"
     >
       Log Out
     </button>
   );
 }
 function LogIn() {
-  return (
-    <button className="rounded-lg bg-gray-100 px-4 py-2 text-gray-900">
-      Log In
-    </button>
-  );
+  return <button className="rounded-lg bg-gray-100 px-4 py-2">Log In</button>;
 }
