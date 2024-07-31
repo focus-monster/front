@@ -71,10 +71,10 @@ export default function Timer() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-6 px-6 md:flex-row">
-      <div className="flex w-full flex-shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-gray-900 bg-gray-50 px-4 py-2 md:w-fit">
+      <div className="flex w-full flex-shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-neutral-900 bg-neutral-50 px-4 py-2 md:w-fit">
         <span className="flex-shrink-0">Set Duration:</span>
         <input
-          className="w-14 rounded-lg border border-gray-400 px-2 py-1"
+          className="w-14 rounded-lg border border-neutral-400 px-2 py-1"
           id="hour"
           type="number"
           placeholder="0"
@@ -85,7 +85,7 @@ export default function Timer() {
         />
         <label htmlFor="hour">h</label>
         <input
-          className="w-14 rounded-lg border border-gray-400 px-2 py-1"
+          className="w-14 rounded-lg border border-neutral-400 px-2 py-1"
           id="minutes"
           type="number"
           placeholder="15"
@@ -96,9 +96,9 @@ export default function Timer() {
         />
         <label htmlFor="minutes">m</label>
       </div>
-      <div className="flex w-full grow items-center gap-2 rounded-lg border-2 border-gray-900 bg-gray-50 px-4 py-2 md:w-fit">
+      <div className="flex w-full grow items-center gap-2 rounded-lg border-2 border-neutral-900 bg-neutral-50 px-4 py-2 md:w-fit">
         <input
-          className="w-full rounded-lg border border-gray-400 px-2 py-1"
+          className="w-full rounded-lg border border-neutral-400 px-2 py-1"
           id="task"
           type="text"
           placeholder="What is your task for this session? (optional)"
@@ -108,7 +108,7 @@ export default function Timer() {
         />
       </div>
       <button
-        className="w-full rounded-lg bg-gray-900 px-6 py-3 text-lg text-gray-50 md:w-fit"
+        className="w-full rounded-lg bg-neutral-900 px-6 py-3 text-lg text-neutral-50 md:w-fit"
         onClick={handleClick}
       >
         Focus Now!

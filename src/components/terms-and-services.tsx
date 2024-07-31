@@ -3,7 +3,7 @@ export default function TermsAndServices() {
   const PRIVACY_URL = "#";
 
   return (
-    <p className="text-sm text-gray-700">
+    <p className="text-sm text-neutral-700">
       By using this site, you agree to our{" "}
       <a
         href={TERMS_AND_SERVICE_URL}

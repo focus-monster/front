@@ -4,7 +4,7 @@ export default function GoogleAuth() {
   return (
     <a
       href={GOOGLE_AUTH_LINK}
-      className="doodle-border box-border flex h-fit w-fit gap-4 rounded-lg border-gray-600 bg-white px-2 py-1 font-medium text-gray-500"
+      className="doodle-border box-border flex h-fit w-fit gap-4 rounded-lg border-neutral-600 bg-white px-2 py-1 font-medium text-neutral-500"
     >
       <GoogleIcon />
       Continue with Google

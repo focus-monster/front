@@ -9,6 +9,7 @@ import Landing from "./pages/landing.tsx";
 import App from "./app.tsx";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Today from "./pages/today.tsx";
+import Collection from "./pages/collection.tsx";
 
 export const queryClient = new QueryClient();
 
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/collection",
-            element: <></>,
+            element: <Collection />,
           },
           {
             path: "/",

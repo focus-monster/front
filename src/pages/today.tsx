@@ -113,9 +113,9 @@ function SessionCard({ session }: { session: Session }) {
       <div className="w-full bg-blue-200 p-2 text-center">
         {session.createdDateTime}
       </div>
-      <div className="flex gap-4 bg-gray-50 p-4">
+      <div className="flex gap-4 bg-neutral-50 p-4">
         <div className="line-clamp-4">{session.evaluation}</div>
-        <div className="aspect-square h-24 flex-shrink-0 bg-gray-200"></div>
+        <div className="aspect-square h-24 flex-shrink-0 bg-neutral-200"></div>
       </div>
     </div>
   );

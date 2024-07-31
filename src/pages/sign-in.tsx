@@ -8,7 +8,13 @@ export default function SignIn() {
     <>
       <Folder
         className="grid place-items-center gap-4"
-        insert={<img src="/cat_sad.png" className="w-44 -translate-y-10"></img>}
+        insert={
+          <img
+            src="/cat_sad.png"
+            className="w-44 -translate-y-10"
+            alt="sad cat"
+          ></img>
+        }
         title={<Title />}
       >
         <GoogleAuth />
@@ -20,5 +26,5 @@ export default function SignIn() {
 }
 
 function Title() {
-  return <div className="text-gray-900">FocusMonster</div>;
+  return <div className="text-neutral-900">FocusMonster</div>;
 }
