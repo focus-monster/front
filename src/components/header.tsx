@@ -6,10 +6,7 @@ export function Header() {
   return (
     <header className="flex items-center justify-between p-6">
       <div className="flex items-center gap-3">
-        <span className="aspect-square w-8 overflow-clip rounded-full bg-gray-400">
-          {/** Image */}
-        </span>
-        <div className="text-lg">Focus Monster</div>
+        <img src="logo.png" alt="focusmonster" />
       </div>
       <div>
         <AuthActions />

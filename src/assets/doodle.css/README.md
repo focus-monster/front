@@ -9,22 +9,25 @@ Doodle CSS is a simple hand drawn HTML/CSS theme.
 The main stylesheet is [doodle.css](./doodle.css).
 
 ```html
-<link rel="stylesheet" href="doodle.css">
+<link rel="stylesheet" href="doodle.css" />
 ```
 
 Then add the class `doodle` to the top level element you want to apply the theme to:
 
 ```html
-<body class="doodle">...</body>
+<body class="doodle">
+  ...
+</body>
 ```
 
 Load the Short Stack web font:
+
 ```html
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Short+Stack&display=swap');
-body {
-  font-family: 'Short Stack', cursive;
-}
+  @import url("https://fonts.googleapis.com/css2?family=Short+Stack&display=swap");
+  body {
+    font-family: "Short Stack", cursive;
+  }
 </style>
 ```
 
