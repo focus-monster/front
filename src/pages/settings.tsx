@@ -114,8 +114,14 @@ function UserProfile() {
   return (
     <div className="grow space-y-4">
       <h2 className="text-2xl font-semibold">User Profile</h2>
-      <p className="text-gray-800">Your user profile information.</p>
-      <div className="space-y-4"></div>
+      <div className="grid grid-cols-[200px__1fr] place-content-center items-center gap-2">
+        <div className="">Nickname</div>
+        <input type="text" className="rounded-lg bg-gray-300/50 p-2" />
+        <div className="">Job</div>
+        <input type="text" className="rounded-lg bg-gray-300/50 p-2" />
+        <div className="">Language</div>
+        <p className="rounded-lg p-2 text-gray-400">English</p>
+      </div>
     </div>
   );
 }
