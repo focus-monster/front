@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { wait } from "../utils";
 
 export type Auth = {
   session: string | null;
@@ -10,8 +9,6 @@ export type Auth = {
 // };
 
 const query = async () => {
-  await wait(1000);
-
   return {
     session: "null",
   } as Auth;

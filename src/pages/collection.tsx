@@ -24,7 +24,7 @@ const imageCards = [
     multiple: false,
   },
   {
-    key: 4,
+    key: 5,
     image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
     date: "2024-07-25T12:48:25.613",
     multiple: false,
@@ -37,7 +37,9 @@ export default function Collection() {
       {imageCards.length === 0 ? (
         <p>Your collection is empty</p>
       ) : (
-        imageCards.map((imageCard) => <ImageCard {...imageCard} />)
+        imageCards.map(({ key, ...imageCard }) => (
+          <ImageCard key={key} {...imageCard} />
+        ))
       )}
     </div>
   );
@@ -56,7 +58,15 @@ function ImageCard({
     <div className="space-y-4">
       <div className="relative">
         <div className="overflow-clip rounded-lg drop-shadow">
-          <img src={image} alt="image" />
+          <img
+            height="180px"
+            width="180px"
+            loading="lazy"
+            src={image}
+            alt="image"
+            className="w-full bg-gray-400 bg-cover"
+          />
+          <div className="absolute inset-0 -z-10 animate-pulse overflow-clip rounded-lg bg-neutral-400"></div>
         </div>
         {multiple ? (
           <div className="absolute inset-0 -z-10 rotate-12 overflow-clip rounded-lg bg-neutral-600 drop-shadow"></div>

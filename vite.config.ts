@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
+import path from "path";
 
 const API_URL = "http://localhost:8080";
 
@@ -15,6 +16,11 @@ export default defineConfig({
         target: API_URL,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
+    },
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });

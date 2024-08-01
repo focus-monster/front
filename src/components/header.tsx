@@ -6,7 +6,7 @@ export function Header() {
   return (
     <header className="flex items-center justify-between p-6">
       <div className="flex items-center gap-3">
-        <img src="/logo.png" alt="focusmonster" />
+        <img width="314px" height="33px" src="/logo.png" alt="focusmonster" />
       </div>
       <div>
         <AuthActions />

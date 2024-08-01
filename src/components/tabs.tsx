@@ -6,7 +6,7 @@ export default function Tabs() {
       <Link to="/">
         <li className="flex h-full flex-col items-center justify-center gap-2">
           <div className="grid w-20 grow place-content-center">
-            <img src="/home.png" alt="home"></img>
+            <img width="80px" height="68px" src="/home.png" alt="home"></img>
           </div>
           <p>Today</p>
         </li>
@@ -14,7 +14,12 @@ export default function Tabs() {
       <Link to="/collection">
         <li className="flex h-full flex-col items-center justify-center gap-2">
           <div className="grid w-20 grow place-content-center">
-            <img src="/gallery.png" alt="collection"></img>
+            <img
+              width="80px"
+              height="68px"
+              src="/gallery.png"
+              alt="collection"
+            ></img>
           </div>
           <p>Collection</p>
         </li>
@@ -22,7 +27,12 @@ export default function Tabs() {
       <Link to="/settings">
         <li className="flex h-full flex-col items-center justify-center gap-2">
           <div className="grid w-20 grow place-content-center">
-            <img src="/settings.png" alt="settings"></img>
+            <img
+              width="80px"
+              height="78px"
+              src="/settings.png"
+              alt="settings"
+            ></img>
           </div>
           <p>Settings</p>
         </li>

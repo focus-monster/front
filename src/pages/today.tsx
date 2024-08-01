@@ -100,7 +100,7 @@ export default function Today() {
       </div>
       <div className="mx-auto flex grow flex-col gap-6">
         {sessions.map((session) => {
-          return <SessionCard session={session} />;
+          return <SessionCard key={session.id} session={session} />;
         })}
       </div>
     </div>
