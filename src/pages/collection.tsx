@@ -29,6 +29,24 @@ const imageCards = [
     date: "2024-07-25T12:48:25.613",
     multiple: false,
   },
+  {
+    key: 6,
+    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    date: "2024-07-25T12:48:25.613",
+    multiple: false,
+  },
+  {
+    key: 7,
+    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    date: "2024-07-25T12:48:25.613",
+    multiple: false,
+  },
+  {
+    key: 8,
+    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    date: "2024-07-25T12:48:25.613",
+    multiple: false,
+  },
 ];
 
 export default function Collection() {

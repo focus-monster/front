@@ -10,6 +10,7 @@ import App from "./app.tsx";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Today from "./pages/today.tsx";
 import Collection from "./pages/collection.tsx";
+import Settings from "./pages/settings.tsx";
 
 export const queryClient = new QueryClient();
 
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/settings",
-            element: <></>,
+            element: <Settings />,
           },
           {
             path: "/collection",
