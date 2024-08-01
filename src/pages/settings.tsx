@@ -126,7 +126,7 @@ function getDomain(site: string) {
   const parts = siteName.split(".");
 
   if (parts.length > 2) {
-    return parts.at(-2);
+    return parts.at(-2)!;
   }
 
   return parts[0];
