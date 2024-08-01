@@ -28,18 +28,14 @@ function BannedSites() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            // if site starts with http:// or https://, remove it
-            let siteName: string | undefined = site.replace(
-              /(^\w+:|^)\/\//,
-              "",
-            );
-            // if site starts with www., remove it
-            siteName = siteName.replace(/(www\.)?/, "");
-            // if site has a path, remove it
-            siteName = siteName.split(".").at(-1);
+            if (!site) {
+              setError(true);
+              return;
+            }
+
+            const siteName: string = getDomain(site);
 
             if (!siteName) {
-              console.log("Invalid site name");
               setError(true);
               return;
             }
@@ -71,14 +67,14 @@ function BannedSites() {
       </div>
       <div>
         {Object.keys(bannedSites).map((site) => (
-          <Items key={site} site={site} />
+          <BlockedItem key={site} site={site} />
         ))}
       </div>
     </div>
   );
 }
 
-function Items({ site }: { site: string }) {
+function BlockedItem({ site }: { site: string }) {
   const { bannedSites, remove, toggle } = useBannedSites();
 
   const capitalize = (s: string) => {
@@ -118,8 +114,20 @@ function UserProfile() {
   return (
     <div className="grow space-y-4">
       <h2 className="text-2xl font-semibold">User Profile</h2>
-      <p className="text-gray-500">Your user profile information.</p>
+      <p className="text-gray-800">Your user profile information.</p>
       <div className="space-y-4"></div>
     </div>
   );
+}
+
+function getDomain(site: string) {
+  const siteName = new URL(site).hostname;
+
+  const parts = siteName.split(".");
+
+  if (parts.length > 2) {
+    return parts.at(-2);
+  }
+
+  return parts[0];
 }
