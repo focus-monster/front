@@ -40,6 +40,10 @@ const query = async () => {
     localStorage.setItem("socialId", socialId);
   }
 
+  const url = new URL(window.location.href);
+  url.searchParams.delete("socialId");
+  window.history.replaceState({}, "", url.toString());
+
   const response = await fetch(`/api/users/${socialId}`);
   const data = await response.json();
 
