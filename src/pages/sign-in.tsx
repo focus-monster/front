@@ -10,8 +10,8 @@ export default function SignIn() {
         className="grid place-items-center gap-4"
         insert={
           <img
-            src="/cat_sad.png"
-            className="w-44 -translate-y-10"
+            src="/landing-char.png"
+            className="w-44 translate-y-12"
             alt="sad cat"
           ></img>
         }
@@ -26,5 +26,7 @@ export default function SignIn() {
 }
 
 function Title() {
-  return <div className="text-neutral-900">FocusMonster</div>;
+  return (
+    <div className="p-2 text-2xl font-bold text-neutral-900">FocusMonster</div>
+  );
 }

@@ -31,20 +31,20 @@ const floatings: Floating[] = [
   {
     borderImage: "/image-border.png",
     image: "/meme-2.png",
-    left: 0.9,
+    left: 0.95,
     top: 0.5,
   },
   {
     borderImage: "/image-border.png",
     image: "/meme-3.png",
-    left: 0.4,
+    left: 0.3,
     top: 0.8,
   },
   {
     borderImage: "/word-border.png",
     phrase: "Ready to adopt a monster\nto conquer your distractions?",
     left: 0.3,
-    top: 0.4,
+    top: 0.3,
   },
   {
     borderImage: "/word-border.png",
@@ -80,12 +80,13 @@ function Floating() {
 
 function MovingFloat({ props }: { props: Floating }) {
   const ref = useRef<HTMLDivElement & { left: number }>(null);
+  const speed = Math.random() * 0.0003 + 0.0003;
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
       if (ref.current) {
         if (!ref.current.left) ref.current.left = props.left;
-        ref.current.left += 0.0005;
+        ref.current.left += speed;
         ref.current.style.left = `${ref.current.left * 100}vw`;
 
         if (ref.current.left > 1.4) {
