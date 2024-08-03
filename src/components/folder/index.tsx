@@ -16,17 +16,22 @@ export default function Folder({
     <div className="relative w-[34rem]">
       <img className="" src="/folder-back.png" />
       {title ? (
-        <div className="absolute left-[4.5rem] top-[1.5rem] text-2xl font-bold">
+        <div
+          style={{
+            backgroundImage: "url(/word-border.png)",
+            backgroundSize: "100% 80%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+          className="absolute left-[1.5rem] top-[1.5rem] w-fit min-w-[200px] p-4 text-center"
+        >
           {title}
         </div>
       ) : null}
       {insert ? (
         <div className="absolute right-[4rem] top-0">{insert}</div>
       ) : null}
-      <img
-        className="absolute bottom-0 right-0 w-[37rem] max-w-none"
-        src="/folder-front.png"
-      />
+      <img className="absolute bottom-0 right-0" src="/folder-front.png" />
       <div
         className={
           "absolute inset-8 isolate z-10 grid items-end justify-center"

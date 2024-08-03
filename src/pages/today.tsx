@@ -1,3 +1,4 @@
+import { useAuth } from "@/hooks/auth";
 import Folder from "../components/folder";
 
 type Session = {
@@ -92,11 +93,21 @@ const data: Session[] = [
 ];
 
 export default function Today() {
+  const { data: auth } = useAuth();
   const sessions = data;
+
   return (
     <div className="p flex flex-col gap-8 px-4 lg:flex-row">
-      <div className="mx-auto pb-8 pl-16">
-        <Folder />
+      <div className="mx-auto pb-8">
+        <Folder
+          title={
+            <>
+              <span className="text-2xl font-bold">{auth?.nickname}</span>
+              {" / "}
+              <span>Lv{3}</span>
+            </>
+          }
+        />
       </div>
       <div className="mx-auto flex grow flex-col gap-6">
         {sessions.map((session) => {
