@@ -19,6 +19,8 @@ function AuthActions() {
   const { mutate } = useMutation<Auth>({
     mutationKey: ["user"],
     mutationFn: async () => {
+      localStorage.removeItem("sessionId");
+
       return dummyAuth;
     },
     onSuccess: () => {

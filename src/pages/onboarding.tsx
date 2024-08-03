@@ -24,7 +24,7 @@ import { useAuth } from "@/hooks/auth";
 import { cn } from "@/lib/utils";
 import { queryClient } from "@/main";
 import { useMutation } from "@tanstack/react-query";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -99,7 +99,7 @@ export default function Onboarding() {
   const auth = useAuth();
   const navigation = useNavigate();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["user"],
     mutationFn: async () => {
       const response = await fetch("/api/users/onboarding", {
@@ -117,9 +117,10 @@ export default function Onboarding() {
 
       return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
       navigation("/");
+      console.log("all done");
     },
   });
 
@@ -213,9 +214,11 @@ export default function Onboarding() {
             onClick={() => {
               mutate();
             }}
+            disabled={isPending}
             className="w-full rounded-full"
           >
-            Adopt My FocusMonster
+            {isPending ? <Loader /> : null}
+            Adopting your FocusMonster
           </Button>
         </CardFooter>
       </Card>
