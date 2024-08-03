@@ -1,4 +1,6 @@
-const GOOGLE_AUTH_LINK = "#";
+const API_URL = "https://focusmonster.me:8080";
+
+const GOOGLE_AUTH_LINK = `https://accounts.google.com/o/oauth2/v2/auth?client_id=1079870955606-p10pgairi5gb9dfak16lrdtpronlnl6r.apps.googleusercontent.com&redirect_uri=${API_URL}/oauth/google&response_type=code&scope=email profile`;
 
 export default function GoogleAuth() {
   return (
