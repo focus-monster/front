@@ -42,6 +42,9 @@ export default function Timer() {
     mutationFn: async () => {
       await fetch("/api/focus", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           socialId: data?.socialId,
           duration: time,

@@ -5,6 +5,10 @@ import { queryClient } from "../../main";
 const mutation = async () => {
   const response = await fetch("/api/users/signUpAnonymous", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}),
   });
   const data = await response.json();
 

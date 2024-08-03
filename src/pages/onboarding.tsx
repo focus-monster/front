@@ -104,6 +104,9 @@ export default function Onboarding() {
     mutationFn: async () => {
       const response = await fetch("/api/users/onboarding", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           socialId: auth.data?.socialId,
           job: myJob,
