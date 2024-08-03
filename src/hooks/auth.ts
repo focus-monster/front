@@ -44,9 +44,10 @@ const query = async () => {
   url.searchParams.delete("socialId");
   window.history.replaceState({}, "", url.toString());
 
-  if (import.meta.env.DEV) {
-    return import.meta.env.VITE_AUTH as Auth;
-  }
+  // if (import.meta.env.DEV) {
+  //   console.log("DEV MODE");
+  //   return JSON.parse(import.meta.env.VITE_AUTH) as Auth;
+  // }
 
   const response = await fetch(`/api/users/${socialId}`);
   const data = await response.json();

@@ -1,12 +1,16 @@
+import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { useAuth } from "@/hooks/auth";
 import { useBannedSites } from "@/hooks/banned-sites";
+import { useMutation } from "@tanstack/react-query";
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export default function Settings() {
+  console.log("hi?");
   return (
-    <div className="mx-auto flex flex-col gap-8 p-8 lg:flex-row">
+    <div className="mx-auto flex flex-col divide-y-2 p-8 lg:flex-row lg:divide-x-2 lg:divide-y-0">
       <BannedSites />
       <UserProfile />
     </div>
@@ -19,7 +23,7 @@ function BannedSites() {
   const [error, setError] = useState(false);
 
   return (
-    <div className="grow space-y-4">
+    <div className="flex grow flex-col space-y-4 pb-6 lg:pb-0 lg:pr-6">
       <h2 className="text-2xl font-semibold">Blocked Websites</h2>
       <p className="text-gray-800">
         Don't open the websites, let your FocusMonster grow!
@@ -111,17 +115,52 @@ function BlockedItem({ site }: { site: string }) {
 }
 
 function UserProfile() {
+  const { data } = useAuth();
+
+  const [nickname, setNickname] = useState(data?.nickname);
+  const [job, setJob] = useState(data?.job);
+
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      await fetch("/api/users/onboarding", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          socialId: data?.socialId,
+          nickname,
+          job,
+        }),
+      });
+    },
+  });
+
   return (
-    <div className="grow space-y-4">
+    <div className="flex grow flex-col space-y-4 pt-6 lg:pl-6 lg:pt-0">
       <h2 className="text-2xl font-semibold">User Profile</h2>
       <div className="grid grid-cols-[200px__1fr] place-content-center items-center gap-2">
         <div className="">Nickname</div>
-        <input type="text" className="rounded-lg bg-gray-300/50 p-2" />
+        <input
+          type="text"
+          className="rounded-lg bg-gray-300/50 p-2"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+          placeholder={data?.nickname}
+        />
         <div className="">Job</div>
-        <input type="text" className="rounded-lg bg-gray-300/50 p-2" />
+        <input
+          type="text"
+          className="rounded-lg bg-gray-300/50 p-2"
+          value={job ? capitalizeAllWords(job) : ""}
+          onChange={(e) => setJob(e.target.value)}
+        />
         <div className="">Language</div>
         <p className="rounded-lg p-2 text-gray-400">English</p>
       </div>
+      <Button onClick={() => mutate()} className="self-end">
+        Update
+      </Button>
     </div>
   );
 }
@@ -136,4 +175,15 @@ function getDomain(site: string) {
   }
 
   return parts[0];
+}
+
+function capitalizeAllWords(s: string) {
+  return s
+    .split(" ")
+    .map((word) => capitalize(word))
+    .join(" ");
+}
+
+function capitalize(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }

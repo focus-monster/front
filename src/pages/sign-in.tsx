@@ -5,7 +5,7 @@ import TermsAndServices from "../components/terms-and-services";
 
 export default function SignIn() {
   return (
-    <>
+    <div className="mx-auto grid min-h-svh place-content-center gap-4">
       <Folder
         className="grid place-items-center gap-4"
         insert={
@@ -21,7 +21,7 @@ export default function SignIn() {
         <TermsAndServices />
       </Folder>
       <GuestSignIn />
-    </>
+    </div>
   );
 }
 

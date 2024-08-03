@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { Auth } from "../../hooks/auth";
 import { queryClient } from "../../main";
+import { Button } from "../ui/button";
 
 const mutation = async () => {
   const response = await fetch("/api/users/signUpAnonymous", {
@@ -11,6 +12,8 @@ const mutation = async () => {
     body: JSON.stringify({}),
   });
   const data = await response.json();
+
+  window.localStorage.setItem("socialId", data.socialId);
 
   return data as Auth;
 };
@@ -25,13 +28,14 @@ export default function GuestSignIn() {
   });
 
   return (
-    <button
+    <Button
+      variant="link"
+      className="mx-auto w-fit text-white underline"
       onClick={() => {
         mutate();
       }}
-      className="mt-4 w-fit cursor-pointer text-sm text-white underline"
     >
       Access as a guest
-    </button>
+    </Button>
   );
 }
