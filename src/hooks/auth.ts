@@ -14,7 +14,7 @@ export type Auth = {
   lastModifiedDateTime: string;
 };
 
-const dummyAuth: Auth = {
+export const dummyAuth: Auth = {
   id: 0,
   nickname: "dummy",
   email: "",

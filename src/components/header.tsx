@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { Auth, useAuth } from "../hooks/auth";
+import { Auth, dummyAuth, useAuth } from "../hooks/auth";
 import { queryClient } from "../main";
 
 export function Header() {
@@ -19,7 +19,7 @@ function AuthActions() {
   const { mutate } = useMutation<Auth>({
     mutationKey: ["user"],
     mutationFn: async () => {
-      return { socialId: null };
+      return dummyAuth;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });

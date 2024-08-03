@@ -1,14 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import { Auth } from "../../hooks/auth";
-import { wait } from "../../utils";
 import { queryClient } from "../../main";
 
 const mutation = async () => {
-  await wait(1000);
+  const response = await fetch("/api/users/signUpAnonymous", {
+    method: "POST",
+  });
+  const data = await response.json();
 
-  return {
-    socialId: "abc",
-  };
+  return data as Auth;
 };
 
 export default function GuestSignIn() {
