@@ -43,7 +43,7 @@ export default function Timer() {
       await fetch("/api/focus", {
         method: "POST",
         body: JSON.stringify({
-          socialId: data?.session,
+          socialId: data?.socialId,
           duration: time,
           task: task,
           bannedSites: bannedSites,

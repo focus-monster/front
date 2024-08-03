@@ -10,7 +10,7 @@ export default function AuthLayout() {
     return <Loading />;
   }
 
-  if (data?.session === null) {
+  if (data?.socialId === null) {
     return <Landing />;
   }
 

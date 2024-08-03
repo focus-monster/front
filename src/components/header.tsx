@@ -19,7 +19,7 @@ function AuthActions() {
   const { mutate } = useMutation<Auth>({
     mutationKey: ["user"],
     mutationFn: async () => {
-      return { session: null };
+      return { socialId: null };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });

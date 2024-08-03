@@ -7,7 +7,7 @@ const mutation = async () => {
   await wait(1000);
 
   return {
-    session: "abc",
+    socialId: "abc",
   };
 };
 
