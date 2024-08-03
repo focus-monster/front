@@ -11,7 +11,7 @@ export default function SignIn() {
         insert={
           <img
             src="/landing-char.png"
-            className="w-44 translate-y-12"
+            className="w-56 translate-y-4"
             alt="sad cat"
           ></img>
         }

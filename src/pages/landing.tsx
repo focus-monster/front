@@ -32,7 +32,7 @@ const floatings: Floating[] = [
     borderImage: "/image-border.png",
     image: "/meme-2.png",
     left: 0.95,
-    top: 0.5,
+    top: 0.4,
   },
   {
     borderImage: "/image-border.png",
@@ -64,7 +64,7 @@ const floatings: Floating[] = [
     borderImage: "/word-border.png",
     phrase: "Your monster will give you some tips!",
     left: 0,
-    top: 0.6,
+    top: 0.95,
   },
 ];
 
@@ -80,7 +80,7 @@ function Floating() {
 
 function MovingFloat({ props }: { props: Floating }) {
   const ref = useRef<HTMLDivElement & { left: number }>(null);
-  const speed = Math.random() * 0.0003 + 0.0003;
+  const speed = Math.random() * 0.0003 + 0.0004;
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
@@ -89,14 +89,20 @@ function MovingFloat({ props }: { props: Floating }) {
         ref.current.left += speed;
         ref.current.style.left = `${ref.current.left * 100}vw`;
 
-        if (ref.current.left > 1.4) {
+        if (ref.current.left > 1.2) {
           ref.current.left = -0.4;
+        } else if (ref.current.left > 1) {
+          ref.current.style.opacity = "0";
+          ref.current.style.scale = "0.5";
+        } else if (ref.current.left >= -0.1) {
+          ref.current.style.opacity = "1";
+          ref.current.style.scale = "1";
         }
       }
 
       return () => clearInterval(intervalRef);
     }, 10);
-  }, [props.left]);
+  }, [props.left, speed]);
 
   return (
     <div
@@ -107,9 +113,12 @@ function MovingFloat({ props }: { props: Floating }) {
         left: `${props.left * 100}vw`,
         transform: `translate(-50%, -50%)`,
         backgroundImage: `url(${props.borderImage})`,
-        backgroundSize: "contain",
+        backgroundSize: "100%",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
+        transition:
+          "opacity 0.1s ease-in-out, left 0.1s, scale 0.3s ease-in-out",
+        transformOrigin: "center",
       }}
     >
       {props.image && (
@@ -123,7 +132,7 @@ function MovingFloat({ props }: { props: Floating }) {
         </div>
       )}
       {props.phrase && (
-        <div className={cn("flex flex-col", props?.className)}>
+        <div className={cn("p-4", props?.className)}>
           {props.phrase.split("\n").map((phrase, index) => (
             <p key={index} className="mx-auto w-max text-neutral-900">
               {phrase}
