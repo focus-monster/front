@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 
 export default function Tabs() {
   return (
-    <ul className="mx-auto flex gap-8 px-8 py-8 text-neutral-50">
+    <ul className="mx-auto flex gap-12 px-8 py-8 text-neutral-50">
       <Link to="/">
         <li className="flex h-full flex-col items-center justify-center gap-2">
-          <div className="grid w-20 grow place-content-center">
+          <div className="grid w-16 grow place-content-center drop-shadow-lg">
             <img width="80px" height="68px" src="/home.png" alt="home"></img>
           </div>
           <p>Today</p>
@@ -13,7 +13,7 @@ export default function Tabs() {
       </Link>
       <Link to="/collection">
         <li className="flex h-full flex-col items-center justify-center gap-2">
-          <div className="grid w-20 grow place-content-center">
+          <div className="grid w-16 grow place-content-center drop-shadow-lg">
             <img
               width="80px"
               height="68px"
@@ -26,7 +26,7 @@ export default function Tabs() {
       </Link>
       <Link to="/settings">
         <li className="flex h-full flex-col items-center justify-center gap-2">
-          <div className="grid w-20 grow place-content-center">
+          <div className="grid w-16 grow place-content-center drop-shadow-lg">
             <img
               width="80px"
               height="78px"
