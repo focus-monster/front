@@ -11,8 +11,8 @@ export default function SignIn() {
         insert={
           <img
             src="/landing-char.png"
-            className="w-56 translate-y-4"
-            alt="sad cat"
+            className="w-56"
+            alt="focusmonster"
           ></img>
         }
         title={<Title />}

@@ -80,7 +80,7 @@ function Floating() {
 
 function MovingFloat({ props }: { props: Floating }) {
   const ref = useRef<HTMLDivElement & { left: number }>(null);
-  const speed = Math.random() * 0.0003 + 0.0004;
+  const speed = Math.random() * 0.002 + 0.001;
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
@@ -93,7 +93,7 @@ function MovingFloat({ props }: { props: Floating }) {
           ref.current.left = -0.4;
         } else if (ref.current.left > 1) {
           ref.current.style.opacity = "0";
-          ref.current.style.scale = "0.5";
+          ref.current.style.scale = "0.7";
         } else if (ref.current.left >= -0.1) {
           ref.current.style.opacity = "1";
           ref.current.style.scale = "1";
@@ -101,7 +101,7 @@ function MovingFloat({ props }: { props: Floating }) {
       }
 
       return () => clearInterval(intervalRef);
-    }, 10);
+    }, 100);
   }, [props.left, speed]);
 
   return (
