@@ -19,7 +19,7 @@ function AuthActions() {
   const { mutate } = useMutation<Auth>({
     mutationKey: ["user"],
     mutationFn: async () => {
-      localStorage.removeItem("sessionId");
+      localStorage.removeItem("socialId");
       console.log("logging out");
 
       return dummyAuth;
