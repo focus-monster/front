@@ -20,9 +20,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useAuth } from "@/hooks/auth";
 import { cn } from "@/lib/utils";
+import { queryClient } from "@/main";
+import { useMutation } from "@tanstack/react-query";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const JOBS: { value: string; label: string }[] = [
   { value: "aerospace", label: "Aerospace" },
@@ -88,8 +92,33 @@ const JOBS: { value: string; label: string }[] = [
 
 export default function Onboarding() {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [myJob, setMyJob] = useState("");
   const [input, setInput] = useState("Virtual Reality");
+
+  const auth = useAuth();
+  const navigation = useNavigate();
+
+  const { mutate } = useMutation({
+    mutationKey: ["user"],
+    mutationFn: async () => {
+      const response = await fetch("/api/users/onboarding", {
+        method: "POST",
+        body: JSON.stringify({
+          socialId: auth.data?.socialId,
+          job: myJob,
+          nickname: nickname,
+        }),
+      });
+      const data = await response.json();
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      navigation("/");
+    },
+  });
 
   return (
     <div className="mx-auto min-h-svh w-full max-w-4xl place-content-center place-items-center p-10">
@@ -101,7 +130,14 @@ export default function Onboarding() {
           <Label htmlFor="focusmon-name">
             Give your FocusMonster a lovely name!
           </Label>
-          <Input id="focusmon-name" placeholder="FluffyPaw77" />
+          <Input
+            value={nickname}
+            onChange={(e) => {
+              setNickname(e.currentTarget.value);
+            }}
+            id="focusmon-name"
+            placeholder="FluffyPaw77"
+          />
           <Label htmlFor="job">What's your job?</Label>
           <div>
             <Popover open={open} onOpenChange={setOpen}>
@@ -112,8 +148,8 @@ export default function Onboarding() {
                   aria-expanded={open}
                   className="w-full justify-between"
                 >
-                  {value.length > 0
-                    ? JOBS.find((job) => job.value === value)?.label
+                  {myJob.length > 0
+                    ? JOBS.find((job) => job.value === myJob)?.label
                     : "Select your job..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -130,7 +166,7 @@ export default function Onboarding() {
                     style={{ textAlign: "initial" }}
                     className=""
                     onClick={() => {
-                      setValue(input);
+                      setMyJob(input);
                       JOBS.push({
                         value: lowercaseAllFirstLetters(input),
                         label: input,
@@ -150,14 +186,14 @@ export default function Onboarding() {
                         value={job.value}
                         onSelect={(currentValue) => {
                           console.log(currentValue);
-                          setValue(currentValue === value ? "" : currentValue);
+                          setMyJob(currentValue === myJob ? "" : currentValue);
                           setOpen(false);
                         }}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4 shrink-0",
-                            value === job.value ? "opacity-100" : "opacity-0",
+                            myJob === job.value ? "opacity-100" : "opacity-0",
                           )}
                         />
                         {job.label}
@@ -170,7 +206,14 @@ export default function Onboarding() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full rounded-full">Adopt My FocusMonster</Button>
+          <Button
+            onClick={() => {
+              mutate();
+            }}
+            className="w-full rounded-full"
+          >
+            Adopt My FocusMonster
+          </Button>
         </CardFooter>
       </Card>
     </div>
