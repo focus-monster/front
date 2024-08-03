@@ -11,6 +11,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Today from "./pages/today.tsx";
 import Collection from "./pages/collection.tsx";
 import Settings from "./pages/settings.tsx";
+import Onboarding from "./pages/onboarding.tsx";
 
 export const queryClient = new QueryClient();
 
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/landing",
         element: <Landing />,
+      },
+      {
+        path: "/onboarding",
+        element: <Onboarding />,
       },
       {
         path: "/",

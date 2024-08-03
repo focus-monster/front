@@ -72,6 +72,6 @@
   }
 
   #root {
-    @apply grid min-h-svh place-content-center place-items-center;
+    @apply mx-auto min-h-svh min-w-[512px] max-w-7xl;
   }
 }

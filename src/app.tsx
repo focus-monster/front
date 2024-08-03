@@ -5,7 +5,7 @@ import Tabs from "./components/tabs";
 
 function App() {
   return (
-    <div className="min-h-svh w-svw max-w-6xl">
+    <div>
       <Header />
       <Timer />
       <Tabs />
