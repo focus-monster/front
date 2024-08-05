@@ -97,8 +97,8 @@ export default function Today() {
   const sessions = data;
 
   return (
-    <div className="p flex flex-col gap-8 px-4 lg:flex-row">
-      <div className="mx-auto pb-8">
+    <div className="flex flex-row gap-8 px-6">
+      <div className="w-full grow">
         <Folder
           title={
             <>
@@ -109,7 +109,7 @@ export default function Today() {
           }
         />
       </div>
-      <div className="mx-auto flex grow flex-col gap-6">
+      <div className="flex w-full grow flex-col gap-6">
         {sessions.map((session) => {
           return <SessionCard key={session.id} session={session} />;
         })}
@@ -120,13 +120,23 @@ export default function Today() {
 
 function SessionCard({ session }: { session: Session }) {
   return (
-    <div className="max-w-lg overflow-clip rounded-lg">
-      <div className="w-full bg-blue-200 p-2 text-center">
-        {session.createdDateTime}
-      </div>
-      <div className="flex gap-4 bg-neutral-50 p-4">
+    <div
+      style={{
+        backgroundImage: `url(/square.png)`,
+        backgroundSize: "100% 180px",
+      }}
+      className="h-[180px] overflow-clip rounded-lg"
+    >
+      <div className="w-full py-3 text-center">{session.createdDateTime}</div>
+      <div className="flex gap-4 bg-transparent px-7 py-2">
         <div className="line-clamp-4">{session.evaluation}</div>
-        <div className="aspect-square h-24 flex-shrink-0 bg-neutral-200"></div>
+        <div className="aspect-square w-24 shrink-0 overflow-hidden rounded-xl">
+          <img
+            className="object-cover"
+            src={session.image}
+            alt="session image"
+          />
+        </div>
       </div>
     </div>
   );

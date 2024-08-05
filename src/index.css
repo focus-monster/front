@@ -72,6 +72,6 @@
   }
 
   #root {
-    @apply mx-auto min-h-svh min-w-[512px] max-w-7xl;
+    @apply mx-auto min-h-svh min-w-[1350px] max-w-7xl;
   }
 }

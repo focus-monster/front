@@ -13,7 +13,7 @@ export default function Folder({
   children,
 }: PropsWithChildren<Folder>) {
   return (
-    <div className="relative w-[34rem]">
+    <div className="relative w-full">
       <img className="" src="/folder-back.png" />
       {title ? (
         <div
