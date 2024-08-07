@@ -23,72 +23,10 @@ import {
 import { useAuth } from "@/hooks/auth";
 import { cn } from "@/lib/utils";
 import { queryClient } from "@/main";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown, Loader } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const JOBS: { value: string; label: string }[] = [
-  { value: "aerospace", label: "Aerospace" },
-  { value: "agricultural technology", label: "Agricultural Technology" },
-  { value: "artificial intelligence", label: "Artificial Intelligence" },
-  { value: "augmented reality", label: "Augmented Reality" },
-  {
-    value: "autonomous driving technology",
-    label: "Autonomous Driving Technology",
-  },
-  { value: "big data", label: "Big Data" },
-  { value: "bioinformatics", label: "Bioinformatics" },
-  { value: "business strategy", label: "Business Strategy" },
-  { value: "cloud technology", label: "Cloud Technology" },
-  { value: "construction technology", label: "Construction Technology" },
-  { value: "content creation", label: "Content Creation" },
-  { value: "cultural arts", label: "Cultural Arts" },
-  { value: "cybersecurity", label: "Cybersecurity" },
-  { value: "data analysis", label: "Data Analysis" },
-  { value: "digital marketing", label: "Digital Marketing" },
-  {
-    value: "distributed ledger technology",
-    label: "Distributed Ledger Technology",
-  },
-  { value: "e-commerce", label: "E-commerce" },
-  { value: "educational technology", label: "Educational Technology" },
-  { value: "energy management", label: "Energy Management" },
-  { value: "engineering design", label: "Engineering Design" },
-  {
-    value: "entrepreneurship and venture capital",
-    label: "Entrepreneurship and Venture Capital",
-  },
-  { value: "environmental consulting", label: "Environmental Consulting" },
-  { value: "environmental research", label: "Environmental Research" },
-  { value: "financial technology", label: "Financial Technology" },
-  { value: "food science", label: "Food Science" },
-  { value: "game design", label: "Game Design" },
-  { value: "healthcare technology", label: "Healthcare Technology" },
-  { value: "human resources management", label: "Human Resources Management" },
-  { value: "influencer management", label: "Influencer Management" },
-  { value: "international trade", label: "International Trade" },
-  { value: "legal technology", label: "Legal Technology" },
-  { value: "leisure and entertainment", label: "Leisure and Entertainment" },
-  { value: "logistics management", label: "Logistics Management" },
-  { value: "manufacturing technology", label: "Manufacturing Technology" },
-  { value: "media and broadcasting", label: "Media and Broadcasting" },
-  { value: "medical research", label: "Medical Research" },
-  { value: "product management", label: "Product Management" },
-  { value: "public policy", label: "Public Policy" },
-  { value: "publishing and editing", label: "Publishing and Editing" },
-  { value: "real estate development", label: "Real Estate Development" },
-  { value: "remote work management", label: "Remote Work Management" },
-  { value: "renewable energy", label: "Renewable Energy" },
-  { value: "robotics", label: "Robotics" },
-  { value: "smart city", label: "Smart City" },
-  { value: "social media", label: "Social Media" },
-  { value: "sports management", label: "Sports Management" },
-  { value: "tech development", label: "Tech Development" },
-  { value: "tourism and travel", label: "Tourism and Travel" },
-  { value: "user experience design", label: "User Experience Design" },
-  { value: "virtual Reality", label: "Virtual Reality" },
-];
 
 export default function Onboarding() {
   const [open, setOpen] = useState(false);
@@ -98,6 +36,18 @@ export default function Onboarding() {
 
   const auth = useAuth();
   const navigation = useNavigate();
+
+  const { data } = useQuery({
+    queryKey: ["jobs"],
+    queryFn: async () => {
+      const response = await fetch("/api/jobs/list");
+      const data = (await response.json()) as string[];
+      return data.map((v) => ({
+        value: lowercaseAllFirstLetters(v),
+        label: v,
+      }));
+    },
+  });
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["user"],
@@ -153,7 +103,7 @@ export default function Onboarding() {
                   className="w-full justify-between"
                 >
                   {myJob.length > 0
-                    ? JOBS.find((job) => job.value === myJob)?.label
+                    ? data?.find((job) => job.value === myJob)?.label
                     : "Select your job..."}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -168,23 +118,23 @@ export default function Onboarding() {
                   />
                   <CommandEmpty
                     style={{ textAlign: "initial" }}
-                    className=""
+                    className="relative m-1 flex cursor-default select-none items-center rounded-sm bg-accent py-1.5 pl-8 text-sm outline-none"
                     onClick={() => {
                       setMyJob(input);
-                      JOBS.push({
+                      data?.push({
                         value: lowercaseAllFirstLetters(input),
                         label: input,
                       });
                       setOpen(false);
                     }}
                   >
-                    <Check
-                      className={cn("mr-2 h-4 w-4 shrink-0", "w-lg opacity-0")}
-                    />
                     {input}
                   </CommandEmpty>
-                  <CommandGroup className="max-h-[300px] overflow-scroll">
-                    {JOBS?.map((job) => (
+                  <CommandGroup
+                    className="max-h-[300px] w-full overflow-y-scroll"
+                    style={{ scrollbarWidth: "none" }}
+                  >
+                    {data?.map((job) => (
                       <CommandItem
                         key={job.value}
                         value={job.value}
@@ -218,7 +168,7 @@ export default function Onboarding() {
             className="w-full rounded-full"
           >
             {isPending ? <Loader /> : null}
-            Adopting your FocusMonster
+            Adopt your FocusMonster
           </Button>
         </CardFooter>
       </Card>
