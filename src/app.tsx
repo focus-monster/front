@@ -5,12 +5,12 @@ import Tabs from "./components/tabs";
 
 function App() {
   return (
-    <div>
+    <>
       <Header />
       <Timer />
       <Tabs />
       <Outlet />
-    </div>
+    </>
   );
 }
 

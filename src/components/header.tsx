@@ -4,7 +4,7 @@ import { queryClient } from "../main";
 
 export function Header() {
   return (
-    <header className="flex items-center justify-between p-6">
+    <header className="flex shrink-0 items-center justify-between p-6">
       <div className="flex items-center gap-3">
         <img width="314px" height="33px" src="/logo.png" alt="focusmonster" />
       </div>
@@ -26,6 +26,7 @@ function AuthActions() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["session"] });
     },
   });
 

@@ -12,6 +12,7 @@ export type Auth = {
   token: string;
   createdDateTime: string;
   lastModifiedDateTime: string;
+  focusStatus: string;
 };
 
 export const dummyAuth: Auth = {
@@ -26,6 +27,7 @@ export const dummyAuth: Auth = {
   token: "",
   createdDateTime: "",
   lastModifiedDateTime: "",
+  focusStatus: "",
 };
 
 const query = async () => {

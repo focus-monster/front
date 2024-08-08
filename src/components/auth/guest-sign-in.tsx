@@ -24,6 +24,7 @@ export default function GuestSignIn() {
     mutationFn: mutation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["session"] });
     },
   });
 

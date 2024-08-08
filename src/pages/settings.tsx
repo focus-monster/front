@@ -10,7 +10,7 @@ import { twMerge } from "tailwind-merge";
 export default function Settings() {
   console.log("hi?");
   return (
-    <div className="mx-auto flex flex-col divide-y-2 p-8 lg:flex-row lg:divide-x-2 lg:divide-y-0">
+    <div className="flex flex-col divide-y-2 p-8 lg:flex-row lg:divide-x-2 lg:divide-y-0">
       <BannedSites />
       <UserProfile />
     </div>
@@ -137,7 +137,7 @@ function UserProfile() {
   });
 
   return (
-    <div className="flex grow flex-col space-y-4 pt-6 lg:pl-6 lg:pt-0">
+    <div className="flex grow flex-col space-y-4 pl-6 pt-0">
       <h2 className="text-2xl font-semibold">User Profile</h2>
       <div className="grid grid-cols-[200px__1fr] place-content-center items-center gap-2">
         <div className="">Nickname</div>
