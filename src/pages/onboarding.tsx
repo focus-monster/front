@@ -75,6 +75,13 @@ export default function Onboarding() {
     },
   });
 
+  console.log(auth.data);
+
+  if (auth.data?.verified) {
+    navigation("/");
+    return null;
+  }
+
   return (
     <div className="mx-auto min-h-svh w-full max-w-4xl place-content-center place-items-center p-10">
       <Card className="flex w-full flex-col gap-10 rounded-3xl p-8">

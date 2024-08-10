@@ -21,5 +21,9 @@ export default function Loading() {
 
   const status = makeString();
 
-  return <div className="text-2xl">{status}</div>;
+  return (
+    <div className="grid h-full w-full place-content-center text-2xl">
+      {status}
+    </div>
+  );
 }

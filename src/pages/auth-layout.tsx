@@ -17,6 +17,8 @@ export default function AuthLayout() {
 
   const path = window.location.pathname;
 
+  console.log(data);
+
   if (
     data?.verified === false &&
     path !== "/onboarding" &&

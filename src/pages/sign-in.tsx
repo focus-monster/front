@@ -9,13 +9,27 @@ export default function SignIn() {
       <Folder
         className="grid place-items-center gap-4"
         insert={
-          <img
-            src="/landing-char.png"
-            className="w-56"
-            alt="focusmonster"
-          ></img>
+          <div className="absolute right-[4rem] top-16">
+            <img
+              src="/landing-char.png"
+              className="w-56"
+              alt="focusmonster"
+            ></img>
+          </div>
         }
-        title={<Title />}
+        title={
+          <div
+            style={{
+              backgroundImage: "url(/word-border.png)",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+            }}
+            className="absolute left-[13rem] top-[3rem] z-20 w-fit min-w-[200px] -translate-x-1/2 -translate-y-1/2 px-8 py-1 text-center"
+          >
+            <Title />
+          </div>
+        }
       >
         <GoogleAuth />
         <TermsAndServices />

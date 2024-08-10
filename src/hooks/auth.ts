@@ -13,6 +13,7 @@ export type Auth = {
   createdDateTime: string;
   lastModifiedDateTime: string;
   focusStatus: string;
+  level: number;
 };
 
 export const dummyAuth: Auth = {
@@ -28,6 +29,7 @@ export const dummyAuth: Auth = {
   createdDateTime: "",
   lastModifiedDateTime: "",
   focusStatus: "",
+  level: 0,
 };
 
 const query = async () => {
