@@ -55,7 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <Toaster />
+      <Toaster richColors closeButton position="top-center" />
       <ReactQueryDevtools />
     </QueryClientProvider>
   </React.StrictMode>,

@@ -5,12 +5,14 @@ import { useBannedSites } from "@/hooks/banned-sites";
 import { useMutation } from "@tanstack/react-query";
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
+import { Job } from "./onboarding";
 
 export default function Settings() {
   console.log("hi?");
   return (
-    <div className="flex flex-col divide-y-2 p-8 lg:flex-row lg:divide-x-2 lg:divide-y-0">
+    <div className="flex flex-row divide-y-0 p-8">
       <BannedSites />
       <UserProfile />
     </div>
@@ -114,13 +116,16 @@ function BlockedItem({ site }: { site: string }) {
   );
 }
 
+export const regex = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]+$/;
+
 function UserProfile() {
   const { data } = useAuth();
 
   const [nickname, setNickname] = useState(data?.nickname);
-  const [job, setJob] = useState(data?.job);
+  const [job, setJob] = useState(data?.job ?? "");
 
   const { mutate } = useMutation({
+    mutationKey: ["update-profile"],
     mutationFn: async () => {
       const res = await fetch("/api/users/onboarding", {
         method: "POST",
@@ -134,9 +139,15 @@ function UserProfile() {
         }),
       });
       if (!res.ok) {
-        throw new Error("Failed to update profile");
+        throw new Error("Failed to update profile: " + (await res.text()));
       }
       return await res.json();
+    },
+    onSuccess: () => {
+      toast.success("Profile updated");
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -145,20 +156,33 @@ function UserProfile() {
       <h2 className="text-2xl font-semibold">User Profile</h2>
       <div className="grid grid-cols-[200px__1fr] place-content-center items-center gap-2">
         <div className="">Nickname</div>
-        <input
-          type="text"
-          className="rounded-lg bg-gray-300/50 p-2"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          placeholder={data?.nickname}
-        />
+        <Button
+          variant="outline"
+          className="bg-transparent hover:bg-neutral-50/20"
+          asChild
+        >
+          <input
+            type="text"
+            className="rounded-lg bg-transparent p-2 text-neutral-200"
+            value={nickname}
+            onChange={(e) => {
+              if (e.target.value.length > 13) {
+                toast.error("Nickname should be less than 13 characters");
+                return;
+              }
+              if (e.target.value.length > 0 && !regex.test(e.target.value)) {
+                toast.error(
+                  "Nickname should be alphanumeric. No special characters",
+                );
+                return;
+              }
+              setNickname(e.target.value);
+            }}
+            placeholder={data?.nickname}
+          />
+        </Button>
         <div className="">Job</div>
-        <input
-          type="text"
-          className="rounded-lg bg-gray-300/50 p-2"
-          value={job ? capitalizeAllWords(job) : ""}
-          onChange={(e) => setJob(e.target.value)}
-        />
+        <Job myJob={job} setMyJob={setJob} transparent />
         <div className="">Language</div>
         <p className="rounded-lg p-2 text-gray-400">English</p>
       </div>
@@ -179,15 +203,4 @@ function getDomain(site: string) {
   }
 
   return parts[0];
-}
-
-function capitalizeAllWords(s: string) {
-  return s
-    .split(" ")
-    .map((word) => capitalize(word))
-    .join(" ");
-}
-
-function capitalize(s: string) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
 }

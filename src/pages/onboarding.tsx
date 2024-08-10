@@ -25,30 +25,17 @@ import { cn } from "@/lib/utils";
 import { queryClient } from "@/main";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown, Loader } from "lucide-react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { regex } from "./settings";
 
 export default function Onboarding() {
-  const [open, setOpen] = useState(false);
   const [nickname, setNickname] = useState("");
   const [myJob, setMyJob] = useState("");
-  const [input, setInput] = useState("Virtual Reality");
 
   const auth = useAuth();
   const navigation = useNavigate();
-
-  const { data } = useQuery({
-    queryKey: ["jobs"],
-    queryFn: async () => {
-      const response = await fetch("/api/jobs/list");
-      const data = (await response.json()) as string[];
-      return data.map((v) => ({
-        value: lowercaseAllFirstLetters(v),
-        label: v,
-      }));
-    },
-  });
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["user"],
@@ -77,14 +64,11 @@ export default function Onboarding() {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["session"] });
       navigation("/");
-      console.log("all done");
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
-
-  console.log(auth.data);
 
   if (auth.data?.verified) {
     navigation("/");
@@ -104,6 +88,16 @@ export default function Onboarding() {
           <Input
             value={nickname}
             onChange={(e) => {
+              if (e.target.value.length > 13) {
+                toast.error("Nickname should be less than 13 characters");
+                return;
+              }
+              if (e.target.value.length > 0 && !regex.test(e.target.value)) {
+                toast.error(
+                  "Nickname should be alphanumeric. No special characters",
+                );
+                return;
+              }
               setNickname(e.currentTarget.value);
             }}
             id="focusmon-name"
@@ -111,69 +105,7 @@ export default function Onboarding() {
           />
           <Label htmlFor="job">What's your job?</Label>
           <div>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                  className="w-full justify-between"
-                >
-                  {myJob.length > 0
-                    ? data?.find((job) => job.value === myJob)?.label
-                    : "Select your job..."}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent align="start" className="p-0">
-                <Command>
-                  <CommandInput
-                    onChangeCapture={(e) => {
-                      setInput(e.currentTarget.value);
-                    }}
-                    placeholder="Search your job..."
-                  />
-                  <CommandEmpty
-                    style={{ textAlign: "initial" }}
-                    className="relative m-1 flex cursor-default select-none items-center rounded-sm bg-accent py-1.5 pl-8 text-sm outline-none"
-                    onClick={() => {
-                      setMyJob(input);
-                      data?.push({
-                        value: lowercaseAllFirstLetters(input),
-                        label: input,
-                      });
-                      setOpen(false);
-                    }}
-                  >
-                    {input}
-                  </CommandEmpty>
-                  <CommandGroup
-                    className="max-h-[300px] w-full overflow-y-scroll"
-                    style={{ scrollbarWidth: "none" }}
-                  >
-                    {data?.map((job) => (
-                      <CommandItem
-                        key={job.value}
-                        value={job.value}
-                        onSelect={(currentValue) => {
-                          console.log(currentValue);
-                          setMyJob(currentValue === myJob ? "" : currentValue);
-                          setOpen(false);
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4 shrink-0",
-                            myJob === job.value ? "opacity-100" : "opacity-0",
-                          )}
-                        />
-                        {job.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </Command>
-              </PopoverContent>
-            </Popover>
+            <Job myJob={myJob} setMyJob={setMyJob} />
           </div>
         </CardContent>
         <CardFooter>
@@ -198,4 +130,82 @@ function lowercaseAllFirstLetters(str: string) {
     .split(" ")
     .map((word) => word.charAt(0).toLowerCase() + word.slice(1))
     .join(" ");
+}
+
+export function Job({
+  myJob,
+  setMyJob,
+  transparent,
+}: {
+  myJob: string;
+  setMyJob: Dispatch<SetStateAction<string>>;
+  transparent?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const { data } = useQuery({
+    queryKey: ["jobs"],
+    queryFn: async () => {
+      const response = await fetch("/api/jobs/list");
+      const data = (await response.json()) as string[];
+      return data.map((v) => ({
+        value: lowercaseAllFirstLetters(v),
+        label: v,
+      }));
+    },
+  });
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className={cn(
+            "w-full justify-between",
+            transparent &&
+              "bg-transparent text-neutral-200 hover:bg-neutral-50/20",
+          )}
+        >
+          {myJob.length > 0
+            ? data?.find((job) => job.value === myJob)?.label
+            : "Select your job..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className={"w-[400px] p-0"}>
+        <Command>
+          <CommandInput placeholder="Search your job..." />
+          <CommandEmpty className="px-6 py-6 text-center text-sm">
+            Your job sounds cool,
+            <br />
+            but FocusMonster can't understand it, yet.
+          </CommandEmpty>
+          <CommandGroup
+            className={"max-h-[300px] w-full overflow-y-scroll"}
+            style={{ scrollbarWidth: "none" }}
+          >
+            {data?.map((job) => (
+              <CommandItem
+                key={job.value}
+                value={job.value}
+                onSelect={(currentValue) => {
+                  setMyJob(currentValue === myJob ? "" : currentValue);
+                  setOpen(false);
+                }}
+              >
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4 shrink-0",
+                    myJob === job.value ? "opacity-100" : "opacity-0",
+                  )}
+                />
+                {job.label}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
 }

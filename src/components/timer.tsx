@@ -76,16 +76,19 @@ export default function Timer() {
   function handleClick() {
     if (time.hours === 0) {
       if (time.minutes < 15) {
-        alert("Minimum focus time is 15 minutes!");
+        toast.error("Minimum focus time is 15 minutes!");
         return;
       }
     }
     if (time.hours >= 5) {
-      alert("Maximum focus time is 5 hours!");
+      toast.error("Maximum focus time is 5 hours!");
       return;
     }
     if (time.minutes >= 60) {
-      alert("Minutes should be less than or equal to 60");
+      toast.error("Minutes should be less than or equal to 60");
+    }
+    if (isFocusing) {
+      toast.error("You are already focusing!");
     }
     mutate();
   }
@@ -102,6 +105,22 @@ export default function Timer() {
           min="0"
           max="4"
           value={time.hours}
+          onBlur={(e) => {
+            if (Number(e.target.value) > 4) {
+              setTime((prev) => ({ ...prev, hours: 4 }));
+              toast.error("Maximum focus time is 5 hours!", {
+                richColors: true,
+                closeButton: true,
+              });
+              return;
+            }
+            if (Number(e.target.value) < 0) {
+              setTime((prev) => ({ ...prev, hours: 0 }));
+              toast.error("Minium focus time is 0 hours!");
+              return;
+            }
+            setTime((prev) => ({ ...prev, hours: Number(e.target.value) }));
+          }}
           onChange={(e) => {
             if (isFocusing) return;
             setTime((prev) => ({ ...prev, hours: Number(e.target.value) }));
@@ -113,12 +132,56 @@ export default function Timer() {
           id="minutes"
           type="number"
           placeholder="15"
-          min="0"
-          max="59"
+          min="-5"
+          max="60"
           step="5"
           value={time.minutes}
+          onBlur={(e) => {
+            if (Number(e.target.value) > 60) {
+              setTime((prev) => ({ ...prev, minutes: 59 }));
+              toast.error("Maximum focus time is 59 minutes!");
+              return;
+            }
+            if (Number(e.target.value) <= 15 && time.hours === 0) {
+              setTime((prev) => ({ ...prev, minutes: 15 }));
+              toast.error("Minimum focus time is 15 minutes!");
+              return;
+            }
+            if (Number(e.target.value) < 0) {
+              if (time.hours === 0) {
+                setTime((prev) => ({ ...prev, minutes: 15 }));
+                return;
+              }
+              setTime((prev) => ({ ...prev, minutes: 0 }));
+              return;
+            }
+            setTime((prev) => ({ ...prev, minutes: Number(e.target.value) }));
+          }}
           onChange={(e) => {
             if (isFocusing) return;
+            if (time.hours === 0) {
+              if (Number(e.target.value) < 15) {
+                setTime((prev) => ({ ...prev, minutes: 15 }));
+                return;
+              }
+            }
+
+            if (e.target.value === "-5") {
+              if (time.hours === 0) {
+                setTime((prev) => ({ ...prev, minutes: 0 }));
+                return;
+              }
+              setTime((prev) => ({ minutes: 55, hours: prev.hours - 1 }));
+              return;
+            }
+            if (e.target.value === "60") {
+              if (time.hours === 4) {
+                return;
+              }
+              setTime((prev) => ({ hours: prev.hours + 1, minutes: 0 }));
+              return;
+            }
+
             setTime((prev) => ({ ...prev, minutes: Number(e.target.value) }));
           }}
         />
@@ -140,10 +203,10 @@ export default function Timer() {
         className={cn(
           "flex w-[180px] items-center justify-center gap-4 rounded-lg bg-neutral-900 px-6 py-3 text-lg text-neutral-50",
           isPending && "cursor-not-allowed bg-neutral-600",
-          isFocusing && "bg-red-500",
+          isFocusing && "cursor-not-allowed bg-red-500",
         )}
         onClick={handleClick}
-        disabled={isPending || isSessionLoading}
+        disabled={isPending || isSessionLoading || isFocusing}
       >
         <ButtonText isPending={isPending} sessionStarted={isFocusing} />
       </button>

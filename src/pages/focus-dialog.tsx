@@ -14,6 +14,12 @@ import { queryClient } from "@/main";
 import { Session } from "@/hooks/sessions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 export function FocusDialog() {
   const [open, setOpen] = useState(false);
@@ -21,8 +27,8 @@ export function FocusDialog() {
   const { isFocusing, lastSession } = useSessions();
 
   const { mutate } = useMutation({
-    mutationFn: async () => {
-      const res = await fetch(`/api/focus/succeed`, {
+    mutationFn: async (result: "succeed" | "fail") => {
+      const res = await fetch(`/api/focus/${result}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,6 +48,7 @@ export function FocusDialog() {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["session"] });
       setOpen(false);
+      toast.success("Session ended successfully");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -52,6 +59,7 @@ export function FocusDialog() {
     if (isFocusing) {
       setOpen(true);
     }
+    return () => setOpen(false);
   }, [isFocusing]);
 
   const [timeLeft, setTimeLeft] = useState(() =>
@@ -67,37 +75,63 @@ export function FocusDialog() {
     return () => clearInterval(ref);
   }, [lastSession]);
 
+  function handleClick() {
+    if (timeLeft?.hours < 0) {
+      mutate("succeed");
+    } else {
+      mutate("fail");
+    }
+  }
+
+  const timeEnded = timeLeft?.hours < 0;
+
   return (
     <Dialog open={open}>
       <DialogContent className="">
         <DialogTitle className="sr-only"></DialogTitle>
         <div className="mt-[100px] grid h-[300px] place-content-center justify-items-center gap-8">
-          {timeLeft?.hours < 0 ? (
-            <div>
-              <div className="text-center text-2xl font-bold">LEVEL UP NOW</div>
-              <div className="pt-4 text-center text-lg">You are over by</div>
-            </div>
-          ) : (
-            <div className="text-center text-2xl font-bold">UNTIL LEVEL UP</div>
-          )}
+          <div className="text-center text-2xl font-bold">
+            {timeEnded ? "LEVEL UP NOW" : "UNTIL LEVEL UP"}
+          </div>
           <div
             className={cn(
-              "text-center text-9xl font-bold",
+              "relative text-center text-9xl font-bold",
               timeLeft?.hours < 0 && "text-green-600",
             )}
           >
-            {Math.abs(timeLeft?.hours)} h {Math.abs(timeLeft?.minutes)} m
+            {timeEnded ? (
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 pt-4 text-center text-lg">
+                You are over by
+              </div>
+            ) : null}
+            {Math.abs(timeLeft?.hours + (timeEnded ? 1 : 0))} h{" "}
+            {Math.abs(timeLeft?.minutes)} m
           </div>
         </div>
-        <DialogFooter className="h-fit shrink sm:justify-center">
-          <Button
-            onClick={() => {
-              mutate();
-            }}
-            className="group flex w-fit gap-2"
-          >
-            {"End Session"} <ArrowRight />
-          </Button>
+        <DialogFooter className="h-fit shrink items-center justify-center sm:justify-center md:justify-center">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={handleClick}
+                  className={cn(
+                    "group flex w-fit gap-2 p-6 text-lg",
+                    !timeEnded && "bg-neutral-400",
+                  )}
+                >
+                  {timeEnded ? "End Session" : "Quit Session"}
+                  <ArrowRight />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {timeEnded
+                    ? "End the session and level up"
+                    : "Quitting the session is treated as a failure"}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -115,15 +149,6 @@ function calculateTimeLeft(lastSession?: Session) {
       new Date(lastSession.createdDateTime).getTimezoneOffset() * 60 * 1000;
 
     const timeDiff = duration - elapsedTime;
-
-    console.log(duration, elapsedTime);
-
-    if (timeDiff < 0) {
-      const hours = Math.floor((timeDiff * -1) / (1000 * 60 * 60)) * -1;
-      const minutes =
-        Math.ceil(((timeDiff * -1) % (1000 * 60 * 60)) / (1000 * 60)) * -1;
-      return { hours, minutes };
-    }
 
     const hours = Math.floor(timeDiff / (1000 * 60 * 60));
     const minutes = Math.ceil((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
