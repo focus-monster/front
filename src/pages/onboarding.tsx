@@ -27,6 +27,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown, Loader } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function Onboarding() {
   const [open, setOpen] = useState(false);
@@ -63,6 +64,11 @@ export default function Onboarding() {
           nickname: nickname,
         }),
       });
+      if (!response.ok) {
+        throw new Error(
+          "Failed to adopt your FocusMonster: " + (await response.text()),
+        );
+      }
       const data = await response.json();
 
       return data;
@@ -72,6 +78,9 @@ export default function Onboarding() {
       queryClient.invalidateQueries({ queryKey: ["session"] });
       navigation("/");
       console.log("all done");
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 

@@ -12,6 +12,7 @@ import Today from "./pages/today.tsx";
 import Collection from "./pages/collection.tsx";
 import Settings from "./pages/settings.tsx";
 import Onboarding from "./pages/onboarding.tsx";
+import { Toaster } from "sonner";
 
 export const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <Toaster />
       <ReactQueryDevtools />
     </QueryClientProvider>
   </React.StrictMode>,

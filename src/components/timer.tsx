@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useAuth } from "../hooks/auth";
 import { useBannedSites } from "../hooks/banned-sites";
 import { useSessions } from "@/hooks/sessions";
+import { toast } from "sonner";
 
 /**
  *  "socialId": "116618166312500650927",
@@ -47,7 +48,7 @@ export default function Timer() {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
-      await fetch("/api/focus", {
+      const res = await fetch("/api/focus", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,10 +60,16 @@ export default function Timer() {
           bannedSites: bannedSites,
         } as SessionStart),
       });
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["session"] });
+    },
+    onError: (e) => {
+      toast.error(e.message);
     },
   });
 

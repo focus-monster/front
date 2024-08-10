@@ -122,7 +122,7 @@ function UserProfile() {
 
   const { mutate } = useMutation({
     mutationFn: async () => {
-      await fetch("/api/users/onboarding", {
+      const res = await fetch("/api/users/onboarding", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -133,6 +133,10 @@ function UserProfile() {
           job,
         }),
       });
+      if (!res.ok) {
+        throw new Error("Failed to update profile");
+      }
+      return await res.json();
     },
   });
 

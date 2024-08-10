@@ -53,10 +53,16 @@ const query = async () => {
   //   return JSON.parse(import.meta.env.VITE_AUTH) as Auth;
   // }
 
-  const response = await fetch(`/api/users/${socialId}`);
-  const data = await response.json();
-
-  return data as Auth;
+  try {
+    const response = await fetch(`/api/users/${socialId}`);
+    const data = await response.json();
+    return data as Auth;
+  } catch (e) {
+    if (typeof e === "string" && e.includes("Invalid SocialId")) {
+      localStorage.removeItem("socialId");
+    }
+  }
+  return dummyAuth;
 };
 
 export function useAuth() {

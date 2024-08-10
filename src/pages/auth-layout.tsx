@@ -4,8 +4,12 @@ import { useAuth } from "../hooks/auth";
 import Landing from "./landing";
 
 export default function AuthLayout() {
-  const { data, isLoading } = useAuth();
+  const { data, isLoading, error, isError } = useAuth();
   const navigate = useNavigate();
+
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
 
   if (isLoading) {
     return <Loading />;

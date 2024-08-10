@@ -56,27 +56,6 @@ export default function Today() {
   );
 }
 
-export function calculateTimeLeft(lastSession?: Session) {
-  if (lastSession) {
-    const duration =
-      lastSession.duration.hours * 60 * 60 * 1000 +
-      lastSession.duration.minutes * 60 * 1000;
-    const elapsedTime =
-      new Date().getTime() -
-      new Date(lastSession.createdDateTime).getTime() +
-      new Date(lastSession.createdDateTime).getTimezoneOffset() * 60 * 1000;
-
-    const timeDiff = duration - elapsedTime;
-
-    if (timeDiff > 0) {
-      const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-      return { hours, minutes };
-    }
-  }
-  return { hours: 0, minutes: 0 };
-}
-
 export function Time({ session }: { session: Session }) {
   const fromTo =
     new Date(session.createdDateTime).toLocaleTimeString("en-US", {

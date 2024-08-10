@@ -15,7 +15,7 @@ export function SessionCard({ session }: { session: Session }) {
       <div className="w-full pt-4 text-center">
         <Result status={session} />
       </div>
-      <div className="flex gap-4 bg-transparent px-8 pb-9 pt-4">
+      <div className="grid grid-cols-[1fr,96px] gap-4 bg-transparent px-8 pb-9 pt-4">
         <div className="line-clamp-4 text-lg">
           {JSON.parse(session.evaluation)}
         </div>
