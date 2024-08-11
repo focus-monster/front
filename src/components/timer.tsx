@@ -205,10 +205,10 @@ export default function Timer() {
         className={cn(
           "flex w-[180px] items-center justify-center gap-4 rounded-lg bg-neutral-900 px-6 py-3 text-lg text-neutral-50",
           isPending && "cursor-not-allowed bg-neutral-600",
-          isFocusing && "cursor-not-allowed bg-red-500",
+          isFocusing && "bg-yellow-600",
         )}
         onClick={handleClick}
-        disabled={isPending || isSessionLoading || isFocusing}
+        disabled={isPending || isSessionLoading}
       >
         <ButtonText isPending={isPending} sessionStarted={isFocusing} />
       </button>
@@ -233,7 +233,7 @@ function ButtonText({
   }
 
   if (sessionStarted) {
-    return "Focusing...";
+    return "See Status";
   }
 
   return "Focus Now!";

@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import { readFileSync } from "fs";
 
 export const API_URL = "https://focusmonster.me:8080";
 export const GEMINI_URL = "http://focusmonster.me:8090";
@@ -10,6 +11,10 @@ export default defineConfig({
   plugins: [react()],
   preview: {
     port: 4173,
+    https: {
+      key: readFileSync(path.resolve(__dirname, "key.pem")),
+      cert: readFileSync(path.resolve(__dirname, "cert.pem")),
+    },
   },
   server: {
     proxy: {
@@ -25,6 +30,10 @@ export default defineConfig({
         secure: true,
         changeOrigin: true,
       },
+    },
+    https: {
+      key: readFileSync(path.resolve(__dirname, "key.pem")),
+      cert: readFileSync(path.resolve(__dirname, "cert.pem")),
     },
   },
   resolve: {

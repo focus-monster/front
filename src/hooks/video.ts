@@ -1,11 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { toast } from "sonner";
+import { useSessions } from "./sessions";
 
 export function useVideoStream() {
+  const { isFocusing } = useSessions();
   const mutation = useMutation({
     mutationKey: ["mediaStream"],
-    mutationFn: async (focusId: number) => {
+    mutationFn: async () => {
+      if (!isFocusing) {
+        return null;
+      }
       const stream = await startScreenCapture();
       if (!stream) {
         throw new Error("No video feed");
@@ -15,22 +20,13 @@ export function useVideoStream() {
       video.srcObject = stream ?? null;
       video.play();
 
-      function release() {
-        video.srcObject = null;
-        if (stream) stream.getTracks().forEach((track) => track.stop());
-      }
-
       return {
+        stream,
         video,
-        focusId,
-        release,
       };
     },
-    onSuccess: () => {
-      toast.success("Capturing screen...");
-    },
     onError: (error) => {
-      toast.error("Failed capturing screen... " + error.message);
+      toast.error("Failed to start video stream: " + error);
     },
   });
 
@@ -66,21 +62,57 @@ async function handleStream(data: {
 }
 
 export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
-  const { mutate, isSuccess, data } = useVideoStream();
+  const {
+    mutate: fetchVideoStream,
+    data: videoStream,
+    isSuccess,
+  } = useVideoStream();
+
+  const { mutate } = useMutation({
+    mutationKey: ["video"],
+    mutationFn: handleStream,
+    onSuccess: () => {
+      toast.success("Screen capture sent");
+    },
+    onError: (error) => {
+      toast.error("Failed to send screen capture: " + error);
+    },
+  });
+  const { currentFocusId } = useSessions();
+
+  const startVideoCapture = useCallback(() => {
+    if (!videoStream) {
+      fetchVideoStream();
+    }
+    if (videoStream && currentFocusId) {
+      mutate({
+        video: videoStream.video,
+        focusId: currentFocusId,
+      });
+    }
+  }, [currentFocusId, fetchVideoStream, videoStream, mutate]);
 
   useEffect(() => {
-    if (isSuccess && data.focusId) {
-      const ref = setInterval(async () => handleStream(data), interval);
-      handleStream(data);
+    if (isSuccess && videoStream && currentFocusId) {
+      const ref = setInterval(startVideoCapture, interval);
+      startScreenCapture();
       return () => {
         clearInterval(ref);
       };
     }
-  }, [interval, isSuccess, data]);
+  }, [interval, isSuccess, videoStream, currentFocusId, startVideoCapture]);
+
+  function release() {
+    videoStream?.stream.getTracks().forEach((track) => {
+      track.stop();
+    });
+    videoStream?.video.pause();
+  }
 
   return {
-    mutate,
-    release: data?.release,
+    videoStream,
+    fetchVideoStream,
+    release,
   };
 }
 
@@ -103,8 +135,6 @@ async function sendBlobToServer(blob: Blob, focusId: number) {
     console.error("Failed to send screen capture: " + data.error);
     toast.error("Failed to send screen capture: " + data.error);
   }
-
-  toast.success("Screen capture sent: " + data);
 
   return data;
 }

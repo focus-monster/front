@@ -50,14 +50,14 @@ export function FocusDialog() {
       queryClient.invalidateQueries({ queryKey: ["session"] });
       setOpen(false);
       toast.success("Session ended successfully");
-      release?.();
+      release();
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
-  const { mutate: sendVideo, release } = useVideo({
+  const { release, fetchVideoStream, videoStream } = useVideo({
     interval: 1000 * 60,
   });
 
@@ -66,7 +66,7 @@ export function FocusDialog() {
       setOpen(true);
     }
     return () => setOpen(false);
-  }, [isFocusing, currentFocusId, sendVideo]);
+  }, [isFocusing, currentFocusId, fetchVideoStream, videoStream]);
 
   const [timeLeft, setTimeLeft] = useState(() =>
     calculateTimeLeft(lastSession),
@@ -75,12 +75,10 @@ export function FocusDialog() {
   useEffect(() => {
     const ref = setInterval(() => {
       setTimeLeft(() => calculateTimeLeft(lastSession));
-      if (currentFocusId) sendVideo(currentFocusId);
     }, 1000);
     setTimeLeft(() => calculateTimeLeft(lastSession));
-    if (currentFocusId) sendVideo(currentFocusId);
     return () => clearInterval(ref);
-  }, [lastSession, currentFocusId, sendVideo]);
+  }, [lastSession, currentFocusId]);
 
   function handleClick() {
     if (timeLeft?.hours < 0) {
@@ -93,7 +91,7 @@ export function FocusDialog() {
   const timeEnded = timeLeft?.hours < 0;
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="">
         <DialogTitle className="sr-only"></DialogTitle>
         <div className="mt-[100px] grid h-[300px] place-content-center justify-items-center gap-8">
@@ -139,6 +137,13 @@ export function FocusDialog() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          <Button
+            onClick={() => {
+              fetchVideoStream();
+            }}
+          >
+            Start Video Feed
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
