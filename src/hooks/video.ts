@@ -106,7 +106,14 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
         clearInterval(ref);
       };
     }
-  }, [interval, isSuccess, videoStream, currentFocusId, mutate]);
+  }, [
+    interval,
+    isSuccess,
+    videoStream,
+    currentFocusId,
+    mutate,
+    auth?.socialId,
+  ]);
 
   function release() {
     videoStream?.stream.getTracks().forEach((track) => {
@@ -125,12 +132,14 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
 async function sendBlobToServer(blob: Blob, focusId: number, socialId: string) {
   const formData = new FormData();
   formData.append("file", blob);
-  formData.append("socialId", socialId);
 
-  const req = await fetch(`/gemini/image?focusId=${focusId}`, {
-    method: "POST",
-    body: formData,
-  });
+  const req = await fetch(
+    `/gemini/image?focusId=${focusId}&socialId=${socialId}`,
+    {
+      method: "POST",
+      body: formData,
+    },
+  );
 
   if (!req.ok) {
     console.error("Failed to send screen capture: " + (await req.text()));
