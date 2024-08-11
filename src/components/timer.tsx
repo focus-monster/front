@@ -100,6 +100,8 @@ export default function Timer() {
     mutate();
   }
 
+  console.log(timeError);
+
   return (
     <div className="flex items-center justify-center gap-6 px-6">
       <div className="flex w-fit flex-shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-neutral-900 bg-neutral-50 px-4 py-2">
