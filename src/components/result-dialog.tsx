@@ -15,22 +15,28 @@ export const ResultDialogContext = createContext(
     setOpen: (open: boolean) => void;
     result: Session | null;
     setResult: (result: Session | null) => void;
+    showLevelUp: boolean;
+    setShowLevelUp: (showLevelUp: boolean) => void;
   },
 );
 
 export const ResultDialogProvider: FC<PropsWithChildren> = ({ children }) => {
   const [open, setOpen] = useState(false);
   const [result, setResult] = useState<Session | null>(null);
+  const [showLevelUp, setShowLevelUp] = useState(true);
 
   return (
-    <ResultDialogContext.Provider value={{ open, setOpen, result, setResult }}>
+    <ResultDialogContext.Provider
+      value={{ open, setOpen, result, setResult, showLevelUp, setShowLevelUp }}
+    >
       {children}
     </ResultDialogContext.Provider>
   );
 };
 
 export function ResultDialog() {
-  const { open, setOpen, result } = useContext(ResultDialogContext);
+  const { open, setOpen, result, showLevelUp } =
+    useContext(ResultDialogContext);
   const { data: auth, isLoading } = useAuth();
   if (!result || isLoading)
     return (
@@ -65,10 +71,14 @@ export function ResultDialog() {
           <div className="flex h-[500px] w-full grow flex-col items-center overflow-hidden pb-6 pt-14">
             <div className="grid h-full grid-cols-[2fr,3fr] gap-2 px-4">
               <Result result={result.focusStatus} />
-              <p>{JSON.parse(result.evaluation)}</p>
+              <p className="h-[128px] overflow-y-scroll">
+                {JSON.parse(result.evaluation)}
+              </p>
               <div className="flex flex-col items-center justify-between px-2">
                 <Duration duration={result.resultDuration} />
-                <Level level={auth?.level ?? 0} result={result.focusStatus} />
+                {showLevelUp ? (
+                  <Level level={auth?.level ?? 0} result={result.focusStatus} />
+                ) : null}
                 <Character
                   result={result.focusStatus}
                   level={auth?.level ?? 0}

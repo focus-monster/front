@@ -1,7 +1,15 @@
 import { Session } from "@/hooks/sessions";
 import { Result } from "./result";
+import { useContext } from "react";
+import { ResultDialogContext } from "@/components/result-dialog";
 
 export function SessionCard({ session }: { session: Session }) {
+  const {
+    setOpen: setResultOpen,
+    setResult,
+    setShowLevelUp,
+  } = useContext(ResultDialogContext);
+
   return (
     <div
       style={{
@@ -10,7 +18,12 @@ export function SessionCard({ session }: { session: Session }) {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
-      className="h-[220px] w-[635px] rounded-lg"
+      className="h-[220px] w-[635px] rounded-lg hover:cursor-pointer"
+      onClick={() => {
+        setResult(session);
+        setResultOpen(true);
+        setShowLevelUp(false);
+      }}
     >
       <div className="w-full pt-4 text-center">
         <Result status={session} />
