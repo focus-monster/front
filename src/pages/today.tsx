@@ -47,7 +47,7 @@ export default function Today() {
           {isLoading ? (
             <Loading />
           ) : todaysSessions && todaysSessions.length > 0 ? (
-            todaysSessions?.map((session) => {
+            todaysSessions.reverse()?.map((session) => {
               if (session.focusStatus === "FOCUSING") return null;
               return <SessionCard key={session.id} session={session} />;
             })

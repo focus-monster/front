@@ -49,7 +49,7 @@ export default function Timer() {
 
   const { isLoading: isSessionLoading, isFocusing } = useSessions();
   const { setOpen } = useContext(FocusDialogContext);
-  const { fetchVideoStream } = useVideo({
+  const { fetchVideoStreamAsync } = useVideo({
     interval: 60 * 1000,
   });
 
@@ -101,7 +101,7 @@ export default function Timer() {
       setOpen(true);
       return;
     }
-    await fetchVideoStream();
+    await fetchVideoStreamAsync();
     mutate();
   }
 

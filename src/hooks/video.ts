@@ -5,13 +5,9 @@ import { useSessions } from "./sessions";
 import { useAuth } from "./auth";
 
 export function useVideoStream() {
-  const { isFocusing } = useSessions();
   const mutation = useMutation({
     mutationKey: ["mediaStream"],
     mutationFn: async () => {
-      if (!isFocusing) {
-        return null;
-      }
       const stream = await startScreenCapture();
       if (!stream) {
         throw new Error("No video feed");
@@ -27,7 +23,8 @@ export function useVideoStream() {
       };
     },
     onError: (error) => {
-      toast.error("Failed to start video stream: " + error);
+      toast.error("Monitoring disabled");
+      console.error("Monitoring disabled: " + error);
     },
   });
 
@@ -66,6 +63,7 @@ async function handleStream(data: {
 export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
   const {
     mutate: fetchVideoStream,
+    mutateAsync: fetchVideoStreamAsync,
     data: videoStream,
     isSuccess,
   } = useVideoStream();
@@ -73,11 +71,9 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
   const { mutate } = useMutation({
     mutationKey: ["video"],
     mutationFn: handleStream,
-    onSuccess: () => {
-      toast.success("Screen capture sent");
-    },
     onError: (error) => {
-      toast.error("Failed to send screen capture: " + error);
+      toast.error("Monitoring disabled");
+      console.error("Monitoring disabled: " + error);
     },
   });
   const { currentFocusId } = useSessions();
@@ -124,6 +120,7 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
 
   return {
     fetchVideoStream,
+    fetchVideoStreamAsync,
     videoStream,
     release,
   };
@@ -145,12 +142,14 @@ async function sendBlobToServer(blob: Blob, focusId: number, socialId: string) {
     if (!req.ok) {
       console.error("Failed to send screen capture: " + (await req.text()));
       toast.error("Failed to send screen capture: " + (await req.text()));
+      return null;
     }
 
     const data = await req.json();
     if (data.error) {
       console.error("Failed to send screen capture: " + data.error);
       toast.error("Failed to send screen capture: " + data.error);
+      return null;
     }
 
     return data;
@@ -161,12 +160,8 @@ async function sendBlobToServer(blob: Blob, focusId: number, socialId: string) {
 }
 
 export async function startScreenCapture() {
-  try {
-    const stream = await navigator.mediaDevices.getDisplayMedia({
-      video: true,
-    });
-    return stream;
-  } catch (e) {
-    toast.error("Failed to start screen capture: " + e);
-  }
+  const stream = await navigator.mediaDevices.getDisplayMedia({
+    video: true,
+  });
+  return stream;
 }
