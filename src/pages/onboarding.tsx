@@ -72,7 +72,6 @@ export default function Onboarding() {
 
   if (auth.data?.verified) {
     navigation("/");
-    return null;
   }
 
   return (
