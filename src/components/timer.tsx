@@ -1,12 +1,13 @@
+import { useSessions } from "@/hooks/sessions";
+import { useVideo } from "@/hooks/video";
 import { cn } from "@/lib/utils";
 import { queryClient } from "@/main";
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { useAuth } from "../hooks/auth";
 import { useBannedSites } from "../hooks/banned-sites";
-import { useSessions } from "@/hooks/sessions";
-import { toast } from "sonner";
 
 /**
  *  "socialId": "116618166312500650927",
@@ -44,7 +45,11 @@ export default function Timer() {
       .map((v) => v[0]),
   );
 
-  const { isLoading: isSessionLoading, isFocusing } = useSessions();
+  const {
+    isLoading: isSessionLoading,
+    isFocusing,
+    currentFocusId,
+  } = useSessions();
 
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
@@ -73,6 +78,11 @@ export default function Timer() {
     },
   });
 
+  const startVideo = useVideo({
+    interval: 1000,
+    focusId: 1,
+  });
+
   function handleClick() {
     if (time.hours === 0) {
       if (time.minutes < 15) {
@@ -90,7 +100,8 @@ export default function Timer() {
     if (isFocusing) {
       toast.error("You are already focusing!");
     }
-    mutate();
+    // mutate();
+    startVideo();
   }
 
   return (
@@ -223,10 +234,10 @@ function ButtonText({
 }) {
   if (isPending) {
     return (
-      <>
+      <div>
         Starting...
         <LoaderCircle className="animate-spin" />
-      </>
+      </div>
     );
   }
 
