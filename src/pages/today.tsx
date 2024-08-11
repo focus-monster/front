@@ -46,12 +46,15 @@ export default function Today() {
         <div className="flex w-full grow flex-col gap-6 overflow-y-scroll">
           {isLoading ? (
             <Loading />
-          ) : (
+          ) : todaysSessions && todaysSessions.length > 0 ? (
             todaysSessions?.map((session) => {
               if (session.focusStatus === "FOCUSING") return null;
-
               return <SessionCard key={session.id} session={session} />;
             })
+          ) : (
+            <div className="w-full py-40 text-center text-2xl text-neutral-100">
+              No session yet
+            </div>
           )}
         </div>
       </div>

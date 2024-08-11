@@ -123,8 +123,8 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
   }
 
   return {
-    videoStream,
     fetchVideoStream,
+    videoStream,
     release,
   };
 }

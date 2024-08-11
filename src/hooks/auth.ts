@@ -33,16 +33,18 @@ export const dummyAuth: Auth = {
 };
 
 const query = async () => {
-  let socialId = localStorage.getItem("socialId");
+  const urlSearch = new URLSearchParams(window.location.search);
+  let socialId = urlSearch.get("socialId");
 
   if (!socialId) {
-    const urlSearch = new URLSearchParams(window.location.search);
-    socialId = urlSearch.get("socialId");
-    if (!socialId) {
-      return dummyAuth;
-    }
-    localStorage.setItem("socialId", socialId);
+    socialId = localStorage.getItem("socialId");
   }
+
+  if (!socialId) {
+    return dummyAuth;
+  }
+
+  localStorage.setItem("socialId", socialId);
 
   const url = new URL(window.location.href);
   url.searchParams.delete("socialId");

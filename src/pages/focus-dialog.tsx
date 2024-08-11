@@ -1,5 +1,11 @@
+import { queryClient } from "@/app";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/auth";
-import { useSessions } from "@/hooks/sessions";
+import { Session, useSessions } from "@/hooks/sessions";
+import { useVideo } from "@/hooks/video";
+import { cn } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
 import {
   FC,
   PropsWithChildren,
@@ -8,26 +14,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Video } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "@/app";
-import { Session } from "@/hooks/sessions";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipProvider,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
-import { useVideo } from "@/hooks/video";
 
 export const FocusDialogContext = createContext(
   {} as { open: boolean; setOpen: (open: boolean) => void },
@@ -134,40 +121,32 @@ export function FocusDialog() {
             {Math.abs(timeLeft?.minutes)} m
           </div>
         </div>
-        <DialogFooter className="h-fit shrink items-center justify-center sm:justify-center md:justify-center">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  onClick={handleClick}
-                  className={cn(
-                    "group flex w-fit gap-2 p-6 text-lg",
-                    !timeEnded && "bg-neutral-400",
-                  )}
-                >
-                  {timeEnded ? "End Session" : "Quit Session"}
-                  <ArrowRight />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  {timeEnded
-                    ? "End the session and level up"
-                    : "Quitting the session is treated as a failure"}
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Button
-            variant="destructive"
-            className="rounded-full py-6"
-            onClick={() => {
-              fetchVideoStream();
-            }}
-          >
-            <Video />
-          </Button>
-        </DialogFooter>
+        <div className="mx-auto">
+          <div className="flex h-fit flex-row gap-4">
+            <Button
+              variant="secondary"
+              onClick={handleClick}
+              className={cn(
+                "group flex w-fit gap-2 text-lg",
+                !timeEnded && "bg-neutral-400",
+              )}
+            >
+              Quit Session
+            </Button>
+            <Button
+              variant="default"
+              onClick={() => {
+                fetchVideoStream();
+              }}
+              className="text-lg"
+            >
+              Change My Monitor
+            </Button>
+          </div>
+          <div className="pt-3 text-center">
+            <p>'Quit session' is treated as a failure</p>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );

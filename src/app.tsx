@@ -3,7 +3,7 @@ import { Header } from "./components/header";
 import Timer from "./components/timer";
 import Tabs from "./components/tabs";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { FocusDialogProvider } from "./pages/focus-dialog";
+import { FocusDialog, FocusDialogProvider } from "./pages/focus-dialog";
 import AuthLayout from "./pages/auth-layout";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "./error-boundary";
@@ -22,6 +22,7 @@ const router = createBrowserRouter([
       <QueryClientProvider client={queryClient}>
         <FocusDialogProvider>
           <AuthLayout />
+          <FocusDialog />
         </FocusDialogProvider>
         <Toaster richColors closeButton position="top-center" />
       </QueryClientProvider>

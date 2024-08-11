@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useAuth } from "../hooks/auth";
 import { useBannedSites } from "../hooks/banned-sites";
 import { FocusDialogContext } from "@/pages/focus-dialog";
+import { useVideo } from "@/hooks/video";
 
 /**
  *  "socialId": "116618166312500650927",
@@ -48,6 +49,9 @@ export default function Timer() {
 
   const { isLoading: isSessionLoading, isFocusing } = useSessions();
   const { setOpen } = useContext(FocusDialogContext);
+  const { fetchVideoStream } = useVideo({
+    interval: 60 * 1000,
+  });
 
   const { mutate, isPending } = useMutation<Session>({
     mutationFn: async () => {
@@ -97,6 +101,7 @@ export default function Timer() {
       setOpen(true);
       return;
     }
+    await fetchVideoStream();
     mutate();
   }
 
@@ -205,17 +210,25 @@ export default function Timer() {
           }}
         />
       </div>
-      <button
-        className={cn(
-          "flex w-[180px] items-center justify-center gap-4 rounded-lg bg-neutral-900 px-6 py-3 text-lg text-neutral-50",
-          isPending && "cursor-not-allowed bg-neutral-600",
-          isFocusing && "bg-yellow-600",
-        )}
-        onClick={handleClick}
-        disabled={isPending || isSessionLoading}
+      <div
+        style={{
+          backgroundImage: "url(/black-button.png)",
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
       >
-        <ButtonText isPending={isPending} sessionStarted={isFocusing} />
-      </button>
+        <button
+          className={cn(
+            "flex w-[180px] items-center justify-center gap-4 rounded-lg px-6 py-3 text-lg text-neutral-50",
+            isPending && "cursor-not-allowed",
+          )}
+          onClick={handleClick}
+          disabled={isPending || isSessionLoading}
+        >
+          <ButtonText isPending={isPending} sessionStarted={isFocusing} />
+        </button>
+      </div>
     </div>
   );
 }
