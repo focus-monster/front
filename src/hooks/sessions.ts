@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "./auth";
+import { getSocialId, useAuth } from "./auth";
 import { useMemo } from "react";
 
 export type Session = {
@@ -27,7 +27,8 @@ export function useSessions() {
   const query = useQuery<Session[]>({
     queryKey: ["session"],
     queryFn: async () => {
-      const response = await fetch(`/api/focus?socialId=${auth?.socialId}`);
+      const socialId = auth?.socialId ?? getSocialId();
+      const response = await fetch(`/api/focus?socialId=${socialId}`);
       const data = await response.json();
       return data as Session[];
     },

@@ -2,16 +2,18 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Loading from "../components/loading";
 import { useAuth } from "../hooks/auth";
 import Landing from "./landing";
+import { useSessions } from "@/hooks/sessions";
 
 export default function AuthLayout() {
   const { data, isLoading, error, isError } = useAuth();
+  const { isLoading: isSessionsLoading } = useSessions();
   const navigate = useNavigate();
 
   if (isError) {
     return <div>{error.message}</div>;
   }
 
-  if (isLoading) {
+  if (isLoading && isSessionsLoading) {
     return <Loading />;
   }
 

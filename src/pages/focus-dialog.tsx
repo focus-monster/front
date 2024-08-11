@@ -37,6 +37,8 @@ export function FocusDialog() {
 
   const { mutate } = useMutation({
     mutationFn: async (result: "succeed" | "fail") => {
+      if (!isFocusing) return;
+
       const res = await fetch(`/api/focus/${result}`, {
         method: "POST",
         headers: {
@@ -82,11 +84,17 @@ export function FocusDialog() {
 
   useEffect(() => {
     const ref = setInterval(() => {
-      setTimeLeft(() => calculateTimeLeft(lastSession));
+      setTimeLeft(() => {
+        const res = calculateTimeLeft(lastSession);
+        if (res.hours < 0 && isFocusing) {
+          mutate("succeed");
+        }
+        return res;
+      });
     }, 1000);
     setTimeLeft(() => calculateTimeLeft(lastSession));
     return () => clearInterval(ref);
-  }, [lastSession, currentFocusId]);
+  }, [lastSession, currentFocusId, mutate, isFocusing]);
 
   function handleClick() {
     if (timeLeft?.hours < 0) {

@@ -2,7 +2,7 @@ import { Session, useSessions } from "@/hooks/sessions";
 import { cn } from "@/lib/utils";
 import { queryClient } from "@/app";
 import { useMutation } from "@tanstack/react-query";
-import { LoaderCircle } from "lucide-react";
+import { AlertTriangle, LoaderCircle } from "lucide-react";
 import { useContext, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../hooks/auth";
@@ -108,9 +108,9 @@ export default function Timer() {
   console.log(timeError);
 
   return (
-    <div className="flex items-center justify-center gap-6 px-6">
-      <div className="flex w-fit flex-shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-neutral-900 bg-neutral-50 px-4 py-2">
-        <span className="flex-shrink-0">Set Duration:</span>
+    <div className="flex items-center justify-start gap-6 px-6">
+      <div className="flex w-fit flex-shrink-0 items-center justify-center gap-2 rounded-2xl border-2 border-neutral-900 bg-background px-4 py-2">
+        <span className="flex-shrink-0 pr-4">Set Duration:</span>
         <input
           className="w-14 rounded-lg border border-neutral-400 px-2 py-1"
           id="hour"
@@ -197,8 +197,13 @@ export default function Timer() {
           }}
         />
         <label htmlFor="minutes">m</label>
+        <AlertTriangle
+          className={cn(
+            timeError.length === 0 ? "text-background" : "text-red-600",
+          )}
+        />
       </div>
-      <div className="flex w-fit grow items-center gap-2 rounded-lg border-2 border-neutral-900 bg-neutral-50 px-4 py-2">
+      <div className="flex w-[350px] items-center gap-2 rounded-2xl border-2 border-neutral-900 bg-background px-4 py-2">
         <input
           className="w-full rounded-lg border border-neutral-400 px-2 py-1"
           id="task"
@@ -220,7 +225,7 @@ export default function Timer() {
       >
         <button
           className={cn(
-            "flex w-[180px] items-center justify-center gap-4 rounded-lg px-6 py-3 text-lg text-neutral-50",
+            "flex w-[180px] items-center justify-center gap-4 rounded-2xl px-6 py-3 text-lg text-neutral-50",
             isPending && "cursor-not-allowed",
           )}
           onClick={handleClick}

@@ -9,9 +9,9 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { Job } from "./onboarding";
 import { cn } from "@/lib/utils";
+import { useSessions } from "@/hooks/sessions";
 
 export default function Settings() {
-  console.log("hi?");
   return (
     <div className="flex flex-row divide-y-0 p-8">
       <BannedSites />
@@ -123,6 +123,7 @@ export const regex = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]+$/;
 
 function UserProfile() {
   const { data } = useAuth();
+  const { isFocusing } = useSessions();
 
   const [nickname, setNickname] = useState(data?.nickname);
   const [job, setJob] = useState(data?.job ?? "");
@@ -131,6 +132,9 @@ function UserProfile() {
   const { mutate, isSuccess } = useMutation({
     mutationKey: ["update-profile"],
     mutationFn: async () => {
+      if (isFocusing) {
+        return;
+      }
       const res = await fetch("/api/users/onboarding", {
         method: "POST",
         headers: {

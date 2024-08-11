@@ -32,7 +32,7 @@ export const dummyAuth: Auth = {
   level: 0,
 };
 
-const query = async () => {
+export function getSocialId() {
   const urlSearch = new URLSearchParams(window.location.search);
   let socialId = urlSearch.get("socialId");
 
@@ -50,10 +50,15 @@ const query = async () => {
   url.searchParams.delete("socialId");
   window.history.replaceState({}, "", url.toString());
 
+  return socialId;
+}
+
+const query = async () => {
   // if (import.meta.env.DEV) {
   //   console.log("DEV MODE");
   //   return JSON.parse(import.meta.env.VITE_AUTH) as Auth;
   // }
+  const socialId = getSocialId();
 
   try {
     const response = await fetch(`/api/users/${socialId}`);
