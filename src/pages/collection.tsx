@@ -1,7 +1,8 @@
 const imageCards = [
   {
     key: 1,
-    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    image:
+      "https://kr.object.ncloudstorage.com/gemini/failure/stress%20at%20work.png",
     date: "2024-07-22T12:48:25.613",
     multiple: false,
   },
@@ -13,37 +14,43 @@ const imageCards = [
   },
   {
     key: 3,
-    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    image:
+      "https://kr.object.ncloudstorage.com/gemini/failure/Being%20Adult%20is%20bad%20for%20health..jpg",
     date: "2024-07-24T12:48:25.613",
     multiple: false,
   },
   {
     key: 4,
-    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    image:
+      "https://kr.object.ncloudstorage.com/gemini/success/Waiting%20for%20the%20f_ckening.jpg",
     date: "2024-07-25T12:48:25.613",
     multiple: false,
   },
   {
     key: 5,
-    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    image:
+      "https://kr.object.ncloudstorage.com/gemini/success/F_k%20you%20and%20I_ll%20see%20you%20tomo.jpg",
     date: "2024-07-25T12:48:25.613",
     multiple: false,
   },
   {
     key: 6,
-    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    image:
+      "https://kr.object.ncloudstorage.com/gemini/success/50%20shades%20of%20grey%E2%80%A6%20under%20my%20ey.jpg",
     date: "2024-07-25T12:48:25.613",
     multiple: false,
   },
   {
     key: 7,
-    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    image:
+      "https://kr.object.ncloudstorage.com/gemini/failure/Monday%20mornings..jpg",
     date: "2024-07-25T12:48:25.613",
     multiple: false,
   },
   {
     key: 8,
-    image: "https://pbs.twimg.com/media/GGjuFyDbAAAOtOz.jpg",
+    image:
+      "https://kr.object.ncloudstorage.com/gemini/failure/stress%20at%20work.png",
     date: "2024-07-25T12:48:25.613",
     multiple: false,
   },
@@ -51,14 +58,20 @@ const imageCards = [
 
 export default function Collection() {
   return (
-    <div className="mx-auto grid grid-cols-3 gap-12 p-8 md:grid-cols-4 lg:grid-cols-5">
-      {imageCards.length === 0 ? (
-        <p>Your collection is empty</p>
-      ) : (
-        imageCards.map(({ key, ...imageCard }) => (
-          <ImageCard key={key} {...imageCard} />
-        ))
-      )}
+    <div className="relative mx-auto">
+      <div className="grid h-full w-full grid-cols-5 gap-12 p-8 blur">
+        {imageCards.length === 0 ? (
+          <p>Your collection is empty</p>
+        ) : (
+          imageCards.map(({ key, ...imageCard }) => (
+            <ImageCard key={key} {...imageCard} />
+          ))
+        )}
+      </div>
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-2xl text-neutral-100">
+        <div>Coming Soon!</div>
+        <div>Stay Tuned for Exciting Updates 🥰</div>
+      </div>
     </div>
   );
 }
