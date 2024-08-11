@@ -1,5 +1,4 @@
-import { useSessions } from "@/hooks/sessions";
-import { useVideo } from "@/hooks/video";
+import { Session, useSessions } from "@/hooks/sessions";
 import { cn } from "@/lib/utils";
 import { queryClient } from "@/main";
 import { useMutation } from "@tanstack/react-query";
@@ -45,13 +44,9 @@ export default function Timer() {
       .map((v) => v[0]),
   );
 
-  const {
-    isLoading: isSessionLoading,
-    isFocusing,
-    currentFocusId,
-  } = useSessions();
+  const { isLoading: isSessionLoading, isFocusing } = useSessions();
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending } = useMutation<Session>({
     mutationFn: async () => {
       const res = await fetch("/api/focus", {
         method: "POST",
@@ -68,22 +63,19 @@ export default function Timer() {
       if (!res.ok) {
         throw new Error(await res.text());
       }
+      return await res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["session"] });
+      toast.success("Session started successfully");
     },
     onError: (e) => {
       toast.error(e.message);
     },
   });
 
-  const startVideo = useVideo({
-    interval: 1000,
-    focusId: 1,
-  });
-
-  function handleClick() {
+  async function handleClick() {
     if (time.hours === 0) {
       if (time.minutes < 15) {
         toast.error("Minimum focus time is 15 minutes!");
@@ -100,8 +92,7 @@ export default function Timer() {
     if (isFocusing) {
       toast.error("You are already focusing!");
     }
-    // mutate();
-    startVideo();
+    mutate();
   }
 
   return (

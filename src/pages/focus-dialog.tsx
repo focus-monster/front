@@ -20,11 +20,12 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
+import { useVideo } from "@/hooks/video";
 
 export function FocusDialog() {
   const [open, setOpen] = useState(false);
   const { data: auth } = useAuth();
-  const { isFocusing, lastSession } = useSessions();
+  const { isFocusing, lastSession, currentFocusId } = useSessions();
 
   const { mutate } = useMutation({
     mutationFn: async (result: "succeed" | "fail") => {
@@ -49,10 +50,15 @@ export function FocusDialog() {
       queryClient.invalidateQueries({ queryKey: ["session"] });
       setOpen(false);
       toast.success("Session ended successfully");
+      release?.();
     },
     onError: (error) => {
       toast.error(error.message);
     },
+  });
+
+  const { mutate: sendVideo, release } = useVideo({
+    interval: 1000 * 60,
   });
 
   useEffect(() => {
@@ -60,20 +66,21 @@ export function FocusDialog() {
       setOpen(true);
     }
     return () => setOpen(false);
-  }, [isFocusing]);
+  }, [isFocusing, currentFocusId, sendVideo]);
 
   const [timeLeft, setTimeLeft] = useState(() =>
     calculateTimeLeft(lastSession),
   );
 
   useEffect(() => {
-    const ref = setInterval(
-      () => setTimeLeft(() => calculateTimeLeft(lastSession)),
-      1000,
-    );
+    const ref = setInterval(() => {
+      setTimeLeft(() => calculateTimeLeft(lastSession));
+      if (currentFocusId) sendVideo(currentFocusId);
+    }, 1000);
     setTimeLeft(() => calculateTimeLeft(lastSession));
+    if (currentFocusId) sendVideo(currentFocusId);
     return () => clearInterval(ref);
-  }, [lastSession]);
+  }, [lastSession, currentFocusId, sendVideo]);
 
   function handleClick() {
     if (timeLeft?.hours < 0) {
