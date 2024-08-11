@@ -14,6 +14,7 @@ import Settings from "./pages/settings.tsx";
 import Onboarding from "./pages/onboarding.tsx";
 import { Toaster } from "sonner";
 import { FocusDialogProvider } from "./pages/focus-dialog.tsx";
+import { ErrorBoundary } from "./error-boundary.tsx";
 
 export const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <AuthLayout />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: "/landing",

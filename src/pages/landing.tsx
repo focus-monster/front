@@ -32,25 +32,25 @@ const floatings: Floating[] = [
     borderImage: "/image-border.png",
     image: "/meme-2.png",
     left: 0.95,
-    top: 0.4,
+    top: 0.3,
   },
   {
     borderImage: "/image-border.png",
     image: "/meme-3.png",
     left: 0.3,
-    top: 0.8,
+    top: 0.9,
   },
   {
     borderImage: "/word-border.png",
     phrase: "Ready to adopt a monster\nto conquer your distractions?",
     left: 0.3,
-    top: 0.3,
+    top: 0.4,
   },
   {
     borderImage: "/word-border.png",
     phrase: "FocusMonster",
     left: 0.7,
-    top: 0.7,
+    top: 0.2,
     className: "text-4xl font-bold",
   },
   {
@@ -58,7 +58,7 @@ const floatings: Floating[] = [
     phrase:
       "Losing focus?\nSummon the monster residing in the folders of your PC!",
     left: 0.8,
-    top: 0.2,
+    top: 0.5,
   },
   {
     borderImage: "/word-border.png",
@@ -70,7 +70,7 @@ const floatings: Floating[] = [
 
 function Floating() {
   return (
-    <div className="pointer-events-none absolute left-0 top-0 isolate z-50 h-svh w-svw overflow-hidden">
+    <div className="pointer-events-none fixed left-0 top-0 isolate z-50 h-screen w-screen overflow-hidden">
       {floatings.map((floating, index) => (
         <MovingFloat key={index} props={floating} />
       ))}
@@ -80,7 +80,7 @@ function Floating() {
 
 function MovingFloat({ props }: { props: Floating }) {
   const ref = useRef<HTMLDivElement & { left: number }>(null);
-  const speed = Math.random() * 0.002 + 0.001;
+  const speed = Math.random() * 0.003 + 0.0001;
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
@@ -89,11 +89,11 @@ function MovingFloat({ props }: { props: Floating }) {
         ref.current.left += speed;
         ref.current.style.left = `${ref.current.left * 100}vw`;
 
-        if (ref.current.left > 1.2) {
+        if (ref.current.left > 1.3) {
           ref.current.left = -0.4;
-        } else if (ref.current.left > 1) {
+        } else if (ref.current.left > 1.2) {
           ref.current.style.opacity = "0";
-          ref.current.style.scale = "0.7";
+          ref.current.style.scale = "0.9";
         } else if (ref.current.left >= -0.1) {
           ref.current.style.opacity = "1";
           ref.current.style.scale = "1";

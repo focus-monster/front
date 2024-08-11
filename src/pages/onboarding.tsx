@@ -33,6 +33,8 @@ import { regex } from "./settings";
 export default function Onboarding() {
   const [nickname, setNickname] = useState("");
   const [myJob, setMyJob] = useState("");
+  const [nicknameError, setNicknameError] = useState("");
+  const [jobError, setJobError] = useState("");
 
   const auth = useAuth();
   const navigation = useNavigate();
@@ -63,9 +65,15 @@ export default function Onboarding() {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["session"] });
+      toast.success("Welcome to FocusMonster!");
       navigation("/");
     },
     onError: (error) => {
+      console.log(error.message);
+      if (error.message.includes("Invalid Nickname")) {
+        setNicknameError("The nickname is already taken.");
+        return;
+      }
       toast.error(error.message);
     },
   });
@@ -76,7 +84,7 @@ export default function Onboarding() {
         <CardHeader>
           <CardTitle>Tell Us More About Yourself</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        <CardContent className="relative flex flex-col gap-4">
           <Label htmlFor="focusmon-name">
             Give your FocusMonster a lovely name!
           </Label>
@@ -84,35 +92,69 @@ export default function Onboarding() {
             value={nickname}
             onChange={(e) => {
               if (e.target.value.length > 13) {
-                toast.error("Nickname should be less than 13 characters");
+                setNicknameError("Nickname should be less than 13 characters");
                 return;
               }
               if (e.target.value.length > 0 && !regex.test(e.target.value)) {
-                toast.error(
+                setNicknameError(
                   "Nickname should be alphanumeric. No special characters",
                 );
                 return;
               }
+              setNicknameError("");
               setNickname(e.currentTarget.value);
             }}
             id="focusmon-name"
             placeholder="FluffyPaw77"
+            className={cn(nicknameError ? "border-red-500" : "")}
           />
+          {nicknameError.length > 0 ? (
+            <div className="absolute top-2 rounded-lg bg-red-100 px-4 py-1 text-red-800">
+              {nicknameError}
+            </div>
+          ) : null}
           <Label htmlFor="job">What's your job?</Label>
           <div>
-            <Job myJob={myJob} setMyJob={setMyJob} />
+            <Job
+              myJob={myJob}
+              setMyJob={(e) => {
+                setMyJob(e);
+                setJobError("");
+              }}
+            />
           </div>
+          {jobError.length > 0 ? (
+            <div className="absolute top-24 rounded-lg bg-red-100 px-4 py-1 text-red-800">
+              {jobError}
+            </div>
+          ) : null}
         </CardContent>
         <CardFooter>
           <Button
             onClick={() => {
+              console.log(nickname, myJob);
+              if (nickname.length === 0) {
+                setNicknameError("Nickname is required");
+                return;
+              }
+              if (myJob.length === 0) {
+                setJobError("Job is required");
+                return;
+              }
               mutate();
             }}
-            disabled={isPending}
-            className="w-full rounded-full"
+            className={cn(
+              "relative w-full rounded-full",
+              (isPending || nickname.length === 0 || myJob.length === 0) &&
+                "cursor-not-allowed",
+            )}
           >
-            {isPending ? <Loader /> : null}
-            Adopt your FocusMonster
+            <span className="relative">
+              Adopt your FocusMonster
+              {isPending ? (
+                <Loader className="absolute -right-8 top-0 animate-spin" />
+              ) : null}
+            </span>
           </Button>
         </CardFooter>
       </Card>

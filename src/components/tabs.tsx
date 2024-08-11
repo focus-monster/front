@@ -8,7 +8,7 @@ export default function Tabs() {
           <div className="grid w-16 grow place-content-center drop-shadow-lg">
             <img width="80px" height="68px" src="/home.png" alt="home"></img>
           </div>
-          <p>Today</p>
+          <p>Today's Log</p>
         </li>
       </Link>
       <Link to="/collection">
