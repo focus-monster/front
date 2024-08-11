@@ -5,10 +5,13 @@ import { useSessions, Session, applyTimezoneOffset } from "@/hooks/sessions";
 import { SessionCard } from "./session-card";
 import { Character } from "@/components/character";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { LoginPopup } from "@/components/login-popup";
 
 export default function Today() {
   const { data: auth } = useAuth();
   const { isLoading, todaysSessions } = useSessions();
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -17,7 +20,13 @@ export default function Today() {
           <Folder
             landing=""
             title={
-              <div>
+              <div className="">
+                {open ? (
+                  <LoginPopup
+                    onClick={() => setOpen(false)}
+                    className="left-[50px] top-[200px] z-30"
+                  />
+                ) : null}
                 <div
                   style={{
                     backgroundImage: "url(/word-border.png)",
@@ -25,14 +34,22 @@ export default function Today() {
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
                   }}
-                  className="absolute bottom-[15%] left-[50%] z-20 w-fit min-w-[300px] -translate-x-1/2 -translate-y-1/2 px-10 py-8 text-center"
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                  className="absolute left-[50%] top-[250px] z-20 w-fit min-w-[300px] -translate-x-1/2 px-10 py-8 text-center"
                 >
                   <span className="pr-3 text-xl font-bold">
-                    {auth?.nickname}
+                    {auth?.nickname === "Anonymous" ? "Guest" : auth?.nickname}
                   </span>
                   <span>{" / "}</span>
                   <span>Lv{auth?.level ?? 0}</span>
                 </div>
+                {auth?.anonymous ? (
+                  <div className="absolute left-[150px] top-[360px] z-10 w-fit rounded-full bg-yellow-400 px-4">
+                    *Log in to save your monster's level and logs.
+                  </div>
+                ) : null}
                 <TotalFocusTime />
               </div>
             }

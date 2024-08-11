@@ -15,9 +15,9 @@ const mutation = async () => {
   if (!response.ok) {
     throw new Error("Failed to sign in as a guest: " + (await response.text()));
   }
-  const data = await response.json();
+  const data = (await response.json()) as Auth;
 
-  window.localStorage.setItem("socialId", data.socialId);
+  window.localStorage.setItem("socialId", data.socialId!);
 
   return data as Auth;
 };

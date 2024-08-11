@@ -3,7 +3,7 @@ import { Header } from "./components/header";
 import Timer from "./components/timer";
 import Tabs from "./components/tabs";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { FocusDialog, FocusDialogProvider } from "./pages/focus-dialog";
+import { FocusDialog, FocusDialogProvider } from "./components/focus-dialog";
 import AuthLayout from "./pages/auth-layout";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "./error-boundary";
@@ -12,6 +12,7 @@ import Onboarding from "./pages/onboarding";
 import Settings from "./pages/settings";
 import Collection from "./pages/collection";
 import Today from "./pages/today";
+import { ResultDialog, ResultDialogProvider } from "./components/result-dialog";
 
 export const queryClient = new QueryClient();
 
@@ -20,10 +21,13 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <QueryClientProvider client={queryClient}>
-        <FocusDialogProvider>
-          <AuthLayout />
-          <FocusDialog />
-        </FocusDialogProvider>
+        <ResultDialogProvider>
+          <FocusDialogProvider>
+            <AuthLayout />
+            <FocusDialog />
+            <ResultDialog />
+          </FocusDialogProvider>
+        </ResultDialogProvider>
         <Toaster richColors closeButton position="top-center" />
       </QueryClientProvider>
     ),

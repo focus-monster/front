@@ -9,6 +9,10 @@ export type Session = {
     hours: number;
     minutes: number;
   };
+  resultDuration: {
+    hours: number;
+    minutes: number;
+  };
   banedSiteAccessLog: {
     name: string;
     count: number;

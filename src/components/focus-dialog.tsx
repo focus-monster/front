@@ -16,6 +16,7 @@ import {
   useState,
 } from "react";
 import { toast } from "sonner";
+import { ResultDialogContext } from "./result-dialog";
 
 export const FocusDialogContext = createContext(
   {} as { open: boolean; setOpen: (open: boolean) => void },
@@ -35,6 +36,7 @@ export function FocusDialog() {
   const { open, setOpen } = useContext(FocusDialogContext);
   const { data: auth } = useAuth();
   const { isFocusing, lastSession, currentFocusId } = useSessions();
+  const { setOpen: setResultOpen, setResult } = useContext(ResultDialogContext);
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (result: "succeed" | "fail") => {
@@ -66,6 +68,10 @@ export function FocusDialog() {
         toast.error("Session quitted");
       }
       release();
+      if (data) {
+        setResultOpen(true);
+        setResult(data);
+      }
     },
     onError: (error) => {
       toast.error(error.message);
@@ -112,7 +118,16 @@ export function FocusDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="">
+      <DialogContent
+        style={{
+          backgroundImage: 'url("/dialog-frame.png")',
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+          width: "800px",
+          height: "603px",
+        }}
+        className=""
+      >
         <DialogTitle className="sr-only"></DialogTitle>
         <div className="mt-[100px] grid h-[300px] place-content-center justify-items-center gap-8">
           <div className="text-center text-2xl font-bold">

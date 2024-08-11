@@ -7,7 +7,7 @@ import { useContext, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../hooks/auth";
 import { useBannedSites } from "../hooks/banned-sites";
-import { FocusDialogContext } from "@/pages/focus-dialog";
+import { FocusDialogContext } from "@/components/focus-dialog";
 import { useVideo } from "@/hooks/video";
 
 /**

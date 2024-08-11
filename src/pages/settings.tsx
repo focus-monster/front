@@ -10,6 +10,7 @@ import { twMerge } from "tailwind-merge";
 import { Job } from "./onboarding";
 import { cn } from "@/lib/utils";
 import { useSessions } from "@/hooks/sessions";
+import { LoginPopup } from "@/components/login-popup";
 
 export default function Settings() {
   return (
@@ -160,8 +161,9 @@ function UserProfile() {
   });
 
   return (
-    <div className="flex grow flex-col space-y-4 pl-6 pt-0">
+    <div className="relative flex grow flex-col space-y-4 pl-6 pt-0">
       <h2 className="text-2xl font-semibold text-neutral-100">User Profile</h2>
+      {data?.anonymous ? <LoginPopup className="left-16 top-6" /> : null}
       <div className="relative grid grid-cols-[200px__1fr] place-content-center items-center gap-2 pt-10">
         {nicknameError.length > 0 && (
           <div className="absolute -top-1 rounded-full bg-red-100 px-4 py-1 text-red-600">
