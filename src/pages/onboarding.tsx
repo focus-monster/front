@@ -69,7 +69,6 @@ export default function Onboarding() {
       navigation("/");
     },
     onError: (error) => {
-      console.log(error.message);
       if (error.message.includes("Invalid Nickname")) {
         setNicknameError("The nickname is already taken.");
         return;
@@ -132,7 +131,6 @@ export default function Onboarding() {
         <CardFooter>
           <Button
             onClick={() => {
-              console.log(nickname, myJob);
               if (nickname.length === 0) {
                 setNicknameError("Nickname is required");
                 return;

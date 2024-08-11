@@ -68,11 +68,9 @@ export function useSessions() {
 }
 
 export function applyTimezoneOffset(date: string) {
-  console.log(new Date(date));
   const currentTime = new Date(
     new Date(date).getTime() - new Date().getTimezoneOffset() * 60 * 1000,
   );
-  console.log(currentTime);
 
   return currentTime;
 }

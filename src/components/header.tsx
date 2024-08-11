@@ -23,7 +23,6 @@ function AuthActions() {
     mutationKey: ["user"],
     mutationFn: async () => {
       localStorage.removeItem("socialId");
-      console.log("logging out");
 
       return dummyAuth;
     },
