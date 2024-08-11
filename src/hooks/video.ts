@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useSessions } from "./sessions";
+import { useAuth } from "./auth";
 
 export function useVideoStream() {
   const { isFocusing } = useSessions();
@@ -36,6 +37,7 @@ export function useVideoStream() {
 async function handleStream(data: {
   video: HTMLVideoElement;
   focusId: number;
+  socialId: string;
 }) {
   try {
     if (data.video.readyState < 2) {
@@ -52,7 +54,7 @@ async function handleStream(data: {
     ctx?.drawImage(data.video, 0, 0, canvas.width, canvas.height);
     canvas.toBlob(async (blob) => {
       if (blob) {
-        sendBlobToServer(blob, data.focusId);
+        sendBlobToServer(blob, data.focusId, data.socialId);
       }
     }, "image/png");
   } catch (e) {
@@ -80,18 +82,26 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
   });
   const { currentFocusId } = useSessions();
 
+  const { data: auth } = useAuth();
+
   useEffect(() => {
     if (isSuccess && videoStream && currentFocusId) {
       const ref = setInterval(() => {
+        if (auth?.socialId) {
+          mutate({
+            video: videoStream.video,
+            focusId: currentFocusId,
+            socialId: auth?.socialId,
+          });
+        }
+      }, interval);
+      if (auth?.socialId) {
         mutate({
           video: videoStream.video,
           focusId: currentFocusId,
+          socialId: auth?.socialId,
         });
-      }, interval);
-      mutate({
-        video: videoStream.video,
-        focusId: currentFocusId,
-      });
+      }
       return () => {
         clearInterval(ref);
       };
@@ -112,9 +122,10 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
   };
 }
 
-async function sendBlobToServer(blob: Blob, focusId: number) {
+async function sendBlobToServer(blob: Blob, focusId: number, socialId: string) {
   const formData = new FormData();
   formData.append("file", blob);
+  formData.append("socialId", socialId);
 
   const req = await fetch(`/gemini/image?focusId=${focusId}`, {
     method: "POST",
