@@ -10,7 +10,7 @@ export const GEMINI_URL = "http://focusmonster.me:8090";
 export default defineConfig({
   plugins: [react()],
   preview: {
-    port: 4173,
+    port: 80,
     https: {
       key: readFileSync(path.resolve(__dirname, "key.pem")),
       cert: readFileSync(path.resolve(__dirname, "cert.pem")),
