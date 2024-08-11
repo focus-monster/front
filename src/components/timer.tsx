@@ -9,6 +9,7 @@ import { useAuth } from "../hooks/auth";
 import { useBannedSites } from "../hooks/banned-sites";
 import { FocusDialogContext } from "@/components/focus-dialog";
 import { useVideo } from "@/hooks/video";
+import { Input } from "./ui/input";
 
 /**
  *  "socialId": "116618166312500650927",
@@ -39,7 +40,7 @@ export default function Timer() {
   });
   const [task, setTask] = useState("");
   const { data } = useAuth();
-  const [timeError, setTimError] = useState("");
+  const [timeError, setTimeError] = useState("");
 
   const bannedSites = useBannedSites((state) =>
     Object.entries(state.bannedSites)
@@ -105,103 +106,106 @@ export default function Timer() {
     mutate();
   }
 
-  console.log(timeError);
-
   return (
-    <div className="flex items-center justify-start gap-6 px-6">
-      <div className="flex w-fit flex-shrink-0 items-center justify-center gap-2 rounded-2xl border-2 border-neutral-900 bg-background px-4 py-2">
+    <div className="flex items-center justify-start gap-6 px-6 py-4">
+      <div className="relative flex w-fit flex-shrink-0 items-center justify-center gap-6 rounded-2xl border-2 border-neutral-900 bg-background px-4 py-2">
         <span className="flex-shrink-0 pr-4">Set Duration:</span>
-        <input
-          className="w-14 rounded-lg border border-neutral-400 px-2 py-1"
-          id="hour"
-          type="number"
-          placeholder="0"
-          min="0"
-          max="4"
-          value={Number(time.hours)}
-          onChange={(e) => {
-            console.log(e.target.value, Number(e.target.value));
-            if (isFocusing) return;
-            if (Number(e.target.value) > 4) {
-              setTime((prev) => ({ ...prev, hours: 4 }));
-              toast.error("Please enter a time less than 5 hours!");
-              setTimError("Please enter a time less than 5 hours!");
-              return;
-            }
-            if (Number(e.target.value) < 0) {
-              setTime((prev) => ({ ...prev, hours: 0 }));
-              toast.error("Minium focus time is 0 hours!");
-              setTimError("Minium focus time is 0 hours!");
-              return;
-            }
-            setTime((prev) => ({ ...prev, hours: Number(e.target.value) }));
-          }}
-        />
-        <label htmlFor="hour">h</label>
-        <input
-          className="w-14 rounded-lg border border-neutral-400 px-2 py-1"
-          id="minutes"
-          type="number"
-          placeholder="15"
-          min="-5"
-          max="60"
-          step="5"
-          value={time.minutes}
-          onBlur={(e) => {
-            if (Number(e.target.value) > 60) {
-              setTime((prev) => ({ ...prev, minutes: 59 }));
-              toast.error("Maximum focus time is 59 minutes!");
-              return;
-            }
-            if (Number(e.target.value) <= 15 && time.hours === 0) {
-              setTime((prev) => ({ ...prev, minutes: 15 }));
-              toast.error("Minimum focus time is 15 minutes!");
-              return;
-            }
-            if (Number(e.target.value) < 0) {
+        <div className="flex flex-row items-center justify-center gap-2">
+          <Input
+            className={cn(
+              "w-16 border-2",
+              timeError.length > 0 && "border-red-600",
+            )}
+            id="hour"
+            type="number"
+            placeholder="0"
+            min="-1"
+            max="5"
+            value={Number(time.hours)}
+            onChange={(e) => {
+              console.log(e.target.value, Number(e.target.value));
+              if (isFocusing) return;
+              if (Number(e.target.value) > 4) {
+                setTime((prev) => ({ ...prev, hours: 4 }));
+                setTimeError("Please enter a time less than 5 hours!");
+                return;
+              }
+              if (Number(e.target.value) < 0) {
+                setTime((prev) => ({ ...prev, hours: 0 }));
+                setTimeError("Minium focus time is 0 hours!");
+                return;
+              }
+              setTimeError("");
+              setTime((prev) => ({ ...prev, hours: Number(e.target.value) }));
+            }}
+          />
+          <label htmlFor="hour">h</label>
+        </div>
+        <div className="flex flex-row items-center justify-center gap-2">
+          <Input
+            className={cn(
+              "w-16 border-2",
+              timeError.length > 0 && "border-red-600",
+            )}
+            id="minutes"
+            type="number"
+            placeholder="15"
+            min="-5"
+            max="60"
+            step="5"
+            value={time.minutes}
+            onChange={(e) => {
+              if (isFocusing) return;
               if (time.hours === 0) {
-                setTime((prev) => ({ ...prev, minutes: 15 }));
-                return;
+                if (
+                  Number(e.target.value) >= 10 &&
+                  Number(e.target.value) < 15
+                ) {
+                  setTime((prev) => ({ ...prev, minutes: 15 }));
+                  setTimeError("Minimum focus time is 15 minutes!");
+                  return;
+                }
               }
-              setTime((prev) => ({ ...prev, minutes: 0 }));
-              return;
-            }
-            setTime((prev) => ({ ...prev, minutes: Number(e.target.value) }));
-          }}
-          onChange={(e) => {
-            if (isFocusing) return;
-            if (time.hours === 0) {
-              if (Number(e.target.value) < 15) {
-                setTime((prev) => ({ ...prev, minutes: 15 }));
-                return;
-              }
-            }
 
-            if (e.target.value === "-5") {
-              if (time.hours === 0) {
-                setTime((prev) => ({ ...prev, minutes: 0 }));
+              if (e.target.value === "-5") {
+                if (time.hours === 0) {
+                  setTime((prev) => ({ ...prev, minutes: 0 }));
+                  setTimeError("Minimum focus time is 15 minutes!");
+                  return;
+                }
+                setTime((prev) => ({ minutes: 55, hours: prev.hours - 1 }));
                 return;
               }
-              setTime((prev) => ({ minutes: 55, hours: prev.hours - 1 }));
-              return;
-            }
-            if (e.target.value === "60") {
-              if (time.hours === 4) {
+              if (time.hours >= 5) {
+                if (e.target.value !== "0") {
+                  setTime((prev) => ({ ...prev, minutes: 0 }));
+                  setTimeError("Focus time should be less than 5 hours!");
+                  return;
+                }
+              }
+              if (e.target.value === "60") {
+                setTime((prev) => ({ hours: prev.hours + 1, minutes: 0 }));
                 return;
               }
-              setTime((prev) => ({ hours: prev.hours + 1, minutes: 0 }));
-              return;
-            }
 
-            setTime((prev) => ({ ...prev, minutes: Number(e.target.value) }));
-          }}
-        />
-        <label htmlFor="minutes">m</label>
+              setTimeError("");
+              setTime((prev) => ({ ...prev, minutes: Number(e.target.value) }));
+            }}
+          />
+          <label htmlFor="minutes">m</label>
+        </div>
         <AlertTriangle
           className={cn(
             timeError.length === 0 ? "text-background" : "text-red-600",
           )}
         />
+        <div>
+          {timeError.length > 0 && (
+            <span className="absolute -bottom-10 right-10 rounded-full bg-red-100 px-2 py-1 text-sm text-red-600">
+              {timeError}
+            </span>
+          )}
+        </div>
       </div>
       <div className="flex w-[350px] items-center gap-2 rounded-2xl border-2 border-neutral-900 bg-background px-4 py-2">
         <input
