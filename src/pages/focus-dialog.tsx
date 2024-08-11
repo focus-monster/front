@@ -6,6 +6,7 @@ import { Session, useSessions } from "@/hooks/sessions";
 import { useVideo } from "@/hooks/video";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
 import {
   FC,
   PropsWithChildren,
@@ -35,7 +36,7 @@ export function FocusDialog() {
   const { data: auth } = useAuth();
   const { isFocusing, lastSession, currentFocusId } = useSessions();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (result: "succeed" | "fail") => {
       if (!isFocusing) return;
 
@@ -53,13 +54,17 @@ export function FocusDialog() {
       if (!res.ok) {
         throw new Error("Failed to end session: " + (await res.text()));
       }
-      return await res.json();
+      return (await res.json()) as Session;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       queryClient.invalidateQueries({ queryKey: ["session"] });
       setOpen(false);
-      toast.success("Session ended successfully");
+      if (data?.focusStatus === "SUCCEED") {
+        toast.success("Session ended successfully");
+      } else {
+        toast.error("Session quitted");
+      }
       release();
     },
     onError: (error) => {
@@ -137,8 +142,9 @@ export function FocusDialog() {
                 "group flex w-fit gap-2 text-lg",
                 !timeEnded && "bg-neutral-400",
               )}
+              disabled={isPending}
             >
-              Quit Session
+              {isPending ? <Loader className="animate-spin" /> : "Quit Session"}
             </Button>
             <Button
               variant="default"
