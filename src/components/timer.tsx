@@ -34,7 +34,10 @@ type SessionStart = {
 };
 
 export default function Timer() {
-  const [time, setTime] = useState({
+  const [time, setTime] = useState<{
+    hours: number | undefined;
+    minutes: number | undefined;
+  }>({
     hours: 0,
     minutes: 15,
   });
@@ -85,16 +88,16 @@ export default function Timer() {
 
   async function handleClick() {
     if (time.hours === 0) {
-      if (time.minutes < 15) {
+      if (Number(time.minutes) < 15) {
         toast.error("Minimum focus time is 15 minutes!");
         return;
       }
     }
-    if (time.hours >= 5) {
+    if (Number(time.hours) >= 5) {
       toast.error("Maximum focus time is 5 hours!");
       return;
     }
-    if (time.minutes >= 60) {
+    if (Number(time.minutes) >= 60) {
       toast.error("Minutes should be less than or equal to 60");
       return;
     }
@@ -120,19 +123,36 @@ export default function Timer() {
             type="number"
             placeholder="0"
             min="-1"
-            max="5"
-            value={Number(time.hours)}
-            onChange={(e) => {
-              console.log(e.target.value, Number(e.target.value));
-              if (isFocusing) return;
-              if (Number(e.target.value) > 4) {
-                setTime((prev) => ({ ...prev, hours: 4 }));
-                setTimeError("Please enter a time less than 5 hours!");
+            max="6"
+            value={time.hours}
+            onBlur={(e) => {
+              if (Number(e.target.value) >= 5) {
+                if (time.minutes !== 0) {
+                  setTime((prev) => ({ ...prev, hours: 5, minutes: 0 }));
+                  setTimeError("Maximum focus hours is 5!");
+                  return;
+                }
+              }
+              if (Number(e.target.value) <= 0) {
+                setTime((prev) => ({ ...prev, hours: 0, minutes: 15 }));
+                setTimeError("Minium focus time is 15 minutes!");
                 return;
               }
-              if (Number(e.target.value) < 0) {
+            }}
+            onChange={(e) => {
+              if (isFocusing) return;
+              if (e.target.value === "") {
+                setTime((prev) => ({ ...prev, hours: undefined }));
+                return;
+              }
+              if (Number(e.target.value) > 5) {
+                setTime((prev) => ({ ...prev, hours: 5 }));
+                setTimeError("Maximum focus hours is 5!");
+                return;
+              }
+              if (Number(e.target.value) <= 0) {
                 setTime((prev) => ({ ...prev, hours: 0 }));
-                setTimeError("Minium focus time is 0 hours!");
+                setTimeError("Minium focus time is 15 minutes!");
                 return;
               }
               setTimeError("");
@@ -151,11 +171,24 @@ export default function Timer() {
             type="number"
             placeholder="15"
             min="-5"
-            max="60"
+            max="65"
             step="5"
             value={time.minutes}
+            onBlur={(e) => {
+              if (time.hours === 0) {
+                if (Number(e.target.value) < 15) {
+                  setTime((prev) => ({ ...prev, minutes: 15 }));
+                  setTimeError("Minimum focus time is 15 minutes!");
+                  return;
+                }
+              }
+            }}
             onChange={(e) => {
               if (isFocusing) return;
+              if (e.target.value === "") {
+                setTime((prev) => ({ ...prev, minutes: undefined }));
+                return;
+              }
               if (time.hours === 0) {
                 if (
                   Number(e.target.value) >= 10 &&
@@ -167,24 +200,38 @@ export default function Timer() {
                 }
               }
 
-              if (e.target.value === "-5") {
+              if (Number(e.target.value) === -5) {
                 if (time.hours === 0) {
                   setTime((prev) => ({ ...prev, minutes: 0 }));
                   setTimeError("Minimum focus time is 15 minutes!");
                   return;
                 }
-                setTime((prev) => ({ minutes: 55, hours: prev.hours - 1 }));
+                setTime((prev) => ({
+                  minutes: 55,
+                  hours: Number(prev.hours) - 1,
+                }));
+                setTimeError("");
                 return;
               }
-              if (time.hours >= 5) {
+              if (Number(time.hours) >= 5) {
                 if (e.target.value !== "0") {
                   setTime((prev) => ({ ...prev, minutes: 0 }));
-                  setTimeError("Focus time should be less than 5 hours!");
+                  setTimeError("Maximum focus time is 5 hours!");
                   return;
                 }
               }
-              if (e.target.value === "60") {
-                setTime((prev) => ({ hours: prev.hours + 1, minutes: 0 }));
+              if (Number(e.target.value) === 60) {
+                setTime((prev) => ({
+                  ...prev,
+                  hours: Number(prev.hours) + 1,
+                  minutes: Number(0),
+                }));
+                setTimeError("");
+                return;
+              }
+              if (Number(e.target.value) > 60) {
+                setTime((prev) => ({ ...prev, minutes: 55 }));
+                setTimeError("Minutes should be less than 60!");
                 return;
               }
 
@@ -201,7 +248,7 @@ export default function Timer() {
         />
         <div>
           {timeError.length > 0 && (
-            <span className="absolute -bottom-10 right-10 rounded-full bg-red-100 px-2 py-1 text-sm text-red-600">
+            <span className="absolute -bottom-10 right-10 rounded-full bg-red-100 px-3 py-1 text-sm text-red-600">
               {timeError}
             </span>
           )}
