@@ -4,10 +4,17 @@ import { cn } from "@/lib/utils";
 
 function Landing() {
   return (
-    <>
+    <div>
+      <div>
+        <img
+          src="/logo.png"
+          alt="FocusMonster"
+          className="w-[320px] px-11 py-8"
+        />
+      </div>
       <SignIn />
       <Floating />
-    </>
+    </div>
   );
 }
 
@@ -18,6 +25,7 @@ type Floating = {
   top: number;
   left: number;
   className?: string;
+  speed: number;
 };
 
 const floatings: Floating[] = [
@@ -27,24 +35,28 @@ const floatings: Floating[] = [
     left: 0.1,
     top: 0.1,
     className: "w-56",
+    speed: 0.003,
   },
   {
     borderImage: "/image-border.png",
     image: "/meme-2.png",
     left: 0.95,
     top: 0.3,
+    speed: 0.0035,
   },
   {
     borderImage: "/image-border.png",
     image: "/meme-3.png",
     left: 0.3,
-    top: 0.9,
+    top: 0.99,
+    speed: 0.004,
   },
   {
     borderImage: "/word-border.png",
     phrase: "Ready to adopt a monster\nto conquer your distractions?",
     left: 0.3,
     top: 0.4,
+    speed: 0.001,
   },
   {
     borderImage: "/word-border.png",
@@ -52,6 +64,7 @@ const floatings: Floating[] = [
     left: 0.7,
     top: 0.2,
     className: "text-4xl font-bold",
+    speed: 0.002,
   },
   {
     borderImage: "/word-border.png",
@@ -59,12 +72,14 @@ const floatings: Floating[] = [
       "Losing focus?\nSummon the monster residing in the folders of your PC!",
     left: 0.8,
     top: 0.5,
+    speed: 0.0015,
   },
   {
     borderImage: "/word-border.png",
     phrase: "Your monster will give you some tips!",
     left: 0,
     top: 0.95,
+    speed: 0.0022,
   },
 ];
 
@@ -80,13 +95,12 @@ function Floating() {
 
 function MovingFloat({ props }: { props: Floating }) {
   const ref = useRef<HTMLDivElement & { left: number }>(null);
-  const speed = Math.random() * 0.003 + 0.0001;
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
       if (ref.current) {
         if (!ref.current.left) ref.current.left = props.left;
-        ref.current.left += speed;
+        ref.current.left += props.speed;
         ref.current.style.left = `${ref.current.left * 100}vw`;
 
         if (ref.current.left > 1.3) {
@@ -102,7 +116,7 @@ function MovingFloat({ props }: { props: Floating }) {
 
       return () => clearInterval(intervalRef);
     }, 100);
-  }, [props.left, speed]);
+  }, [props.left, props.speed]);
 
   return (
     <div

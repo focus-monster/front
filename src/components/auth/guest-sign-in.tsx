@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { Auth } from "../../hooks/auth";
-import { queryClient } from "../../main";
+import { queryClient } from "@/app";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 
@@ -38,7 +38,7 @@ export default function GuestSignIn() {
   return (
     <Button
       variant="link"
-      className="mx-auto w-fit text-white underline"
+      className="mx-auto w-fit text-neutral-900 underline"
       onClick={() => {
         mutate();
       }}

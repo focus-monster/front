@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Video } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "@/main";
+import { queryClient } from "@/app";
 import { Session } from "@/hooks/sessions";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";

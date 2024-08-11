@@ -1,12 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
 import { Auth, dummyAuth, useAuth } from "../hooks/auth";
-import { queryClient } from "../main";
+import { queryClient } from "@/app";
+import { Link } from "react-router-dom";
 
 export function Header() {
   return (
     <header className="flex shrink-0 items-center justify-between p-6">
       <div className="flex items-center gap-3">
-        <img width="314px" height="33px" src="/logo.png" alt="focusmonster" />
+        <Link to="/">
+          <img width="314px" height="33px" src="/logo.png" alt="focusmonster" />
+        </Link>
       </div>
       <div>
         <AuthActions />

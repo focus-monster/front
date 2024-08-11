@@ -1,6 +1,6 @@
 import { Session, useSessions } from "@/hooks/sessions";
 import { cn } from "@/lib/utils";
-import { queryClient } from "@/main";
+import { queryClient } from "@/app";
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
 import { useContext, useState } from "react";
@@ -38,6 +38,7 @@ export default function Timer() {
   });
   const [task, setTask] = useState("");
   const { data } = useAuth();
+  const [timeError, setTimError] = useState("");
 
   const bannedSites = useBannedSites((state) =>
     Object.entries(state.bannedSites)
@@ -110,25 +111,22 @@ export default function Timer() {
           placeholder="0"
           min="0"
           max="4"
-          value={time.hours}
-          onBlur={(e) => {
+          value={Number(time.hours)}
+          onChange={(e) => {
+            console.log(e.target.value, Number(e.target.value));
+            if (isFocusing) return;
             if (Number(e.target.value) > 4) {
               setTime((prev) => ({ ...prev, hours: 4 }));
-              toast.error("Maximum focus time is 5 hours!", {
-                richColors: true,
-                closeButton: true,
-              });
+              toast.error("Please enter a time less than 5 hours!");
+              setTimError("Please enter a time less than 5 hours!");
               return;
             }
             if (Number(e.target.value) < 0) {
               setTime((prev) => ({ ...prev, hours: 0 }));
               toast.error("Minium focus time is 0 hours!");
+              setTimError("Minium focus time is 0 hours!");
               return;
             }
-            setTime((prev) => ({ ...prev, hours: Number(e.target.value) }));
-          }}
-          onChange={(e) => {
-            if (isFocusing) return;
             setTime((prev) => ({ ...prev, hours: Number(e.target.value) }));
           }}
         />
@@ -229,7 +227,7 @@ function ButtonText({
 }) {
   if (isPending) {
     return (
-      <div>
+      <div className="flex flex-row gap-4">
         Starting...
         <LoaderCircle className="animate-spin" />
       </div>

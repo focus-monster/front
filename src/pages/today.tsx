@@ -3,7 +3,6 @@ import Folder from "../components/folder";
 import Loading from "@/components/loading";
 import { useSessions, Session } from "@/hooks/sessions";
 import { SessionCard } from "./session-card";
-import { FocusDialog } from "./focus-dialog";
 import { Character } from "@/components/character";
 import { useQuery } from "@tanstack/react-query";
 
@@ -16,19 +15,25 @@ export default function Today() {
       <div className="flex min-h-1 grow flex-row gap-8 px-6">
         <div className="w-full grow">
           <Folder
+            landing=""
             title={
-              <div
-                style={{
-                  backgroundImage: "url(/word-border.png)",
-                  backgroundSize: "100% 100%",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                }}
-                className="absolute bottom-[30%] left-[50%] z-20 w-fit min-w-[200px] -translate-x-1/2 -translate-y-1/2 px-8 py-4 text-center"
-              >
-                <span className="text-2xl font-bold">{auth?.nickname}</span>
-                {" / "}
-                <span>Lv{auth?.level ?? 0}</span>
+              <div>
+                <div
+                  style={{
+                    backgroundImage: "url(/word-border.png)",
+                    backgroundSize: "100% 100%",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                  className="absolute bottom-[15%] left-[50%] z-20 w-fit min-w-[300px] -translate-x-1/2 -translate-y-1/2 px-10 py-8 text-center"
+                >
+                  <span className="pr-3 text-xl font-bold">
+                    {auth?.nickname}
+                  </span>
+                  <span>{"   / "}</span>
+                  <span>Lv{auth?.level ?? 0}</span>
+                </div>
+                <TotalFocusTime />
               </div>
             }
             insert={
@@ -37,7 +42,6 @@ export default function Today() {
               </div>
             }
           />
-          <TotalFocusTime />
         </div>
         <div className="flex w-full grow flex-col gap-6 overflow-y-scroll">
           {isLoading ? (
@@ -51,7 +55,6 @@ export default function Today() {
           )}
         </div>
       </div>
-      <FocusDialog />
     </>
   );
 }
@@ -118,7 +121,7 @@ function TotalFocusTime() {
   });
   if (isLoading) return null;
   return (
-    <div className="absolute bottom-10 left-24 flex items-end justify-center gap-4 font-semibold">
+    <div className="absolute bottom-5 left-16 z-10 flex items-end justify-center gap-4 font-semibold">
       <span className="">TOTAL FOCUS TIME</span>
       <span className="text-4xl">
         {data?.hours} h {data?.minutes} m

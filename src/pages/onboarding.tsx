@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/popover";
 import { useAuth } from "@/hooks/auth";
 import { cn } from "@/lib/utils";
-import { queryClient } from "@/main";
+import { queryClient } from "@/app";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Check, ChevronsUpDown, Loader } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";

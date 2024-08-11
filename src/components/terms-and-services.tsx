@@ -3,18 +3,19 @@ export default function TermsAndServices() {
   const PRIVACY_URL = "#";
 
   return (
-    <p className="text-sm text-neutral-700">
-      By using this site, you agree to our{" "}
+    <p className="mx-auto text-sm text-neutral-100">
+      Your use of this website constitutes acceptance of our{" "}
       <a
         href={TERMS_AND_SERVICE_URL}
         className="cursor-pointer font-bold underline"
       >
-        Terms of Service
+        User Agreement
       </a>{" "}
       and{" "}
       <a href={PRIVACY_URL} className="cursor-pointer font-bold underline">
-        Privacy
+        Privacy Policy
       </a>
+      .
     </p>
   );
 }
