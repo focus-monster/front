@@ -1,6 +1,13 @@
 import { useAuth } from "@/hooks/auth";
 import { useSessions } from "@/hooks/sessions";
-import { useEffect, useState } from "react";
+import {
+  FC,
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Video } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/main";
 import { Session } from "@/hooks/sessions";
@@ -22,8 +29,22 @@ import {
 } from "@/components/ui/tooltip";
 import { useVideo } from "@/hooks/video";
 
-export function FocusDialog() {
+export const FocusDialogContext = createContext(
+  {} as { open: boolean; setOpen: (open: boolean) => void },
+);
+
+export const FocusDialogProvider: FC<PropsWithChildren> = ({ children }) => {
   const [open, setOpen] = useState(false);
+
+  return (
+    <FocusDialogContext.Provider value={{ open, setOpen }}>
+      {children}
+    </FocusDialogContext.Provider>
+  );
+};
+
+export function FocusDialog() {
+  const { open, setOpen } = useContext(FocusDialogContext);
   const { data: auth } = useAuth();
   const { isFocusing, lastSession, currentFocusId } = useSessions();
 
@@ -37,7 +58,7 @@ export function FocusDialog() {
         body: JSON.stringify({
           socialId: auth?.socialId,
           focusId: String(lastSession?.id),
-          banedSiteAccessLog: [{ name: "YouTube", count: 1 }],
+          banedSiteAccessLog: [],
         }),
       });
       if (!res.ok) {
@@ -66,7 +87,7 @@ export function FocusDialog() {
       setOpen(true);
     }
     return () => setOpen(false);
-  }, [isFocusing, currentFocusId, fetchVideoStream, videoStream]);
+  }, [isFocusing, currentFocusId, fetchVideoStream, videoStream, setOpen]);
 
   const [timeLeft, setTimeLeft] = useState(() =>
     calculateTimeLeft(lastSession),
@@ -138,11 +159,13 @@ export function FocusDialog() {
             </Tooltip>
           </TooltipProvider>
           <Button
+            variant="destructive"
+            className="rounded-full py-6"
             onClick={() => {
               fetchVideoStream();
             }}
           >
-            Start Video Feed
+            <Video />
           </Button>
         </DialogFooter>
       </DialogContent>

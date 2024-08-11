@@ -13,6 +13,7 @@ import Collection from "./pages/collection.tsx";
 import Settings from "./pages/settings.tsx";
 import Onboarding from "./pages/onboarding.tsx";
 import { Toaster } from "sonner";
+import { FocusDialogProvider } from "./pages/focus-dialog.tsx";
 
 export const queryClient = new QueryClient();
 
@@ -54,7 +55,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <FocusDialogProvider>
+        <RouterProvider router={router} />
+      </FocusDialogProvider>
       <Toaster richColors closeButton position="top-center" />
       <ReactQueryDevtools />
     </QueryClientProvider>

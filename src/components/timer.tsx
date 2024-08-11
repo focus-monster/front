@@ -3,10 +3,11 @@ import { cn } from "@/lib/utils";
 import { queryClient } from "@/main";
 import { useMutation } from "@tanstack/react-query";
 import { LoaderCircle } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../hooks/auth";
 import { useBannedSites } from "../hooks/banned-sites";
+import { FocusDialogContext } from "@/pages/focus-dialog";
 
 /**
  *  "socialId": "116618166312500650927",
@@ -45,6 +46,7 @@ export default function Timer() {
   );
 
   const { isLoading: isSessionLoading, isFocusing } = useSessions();
+  const { setOpen } = useContext(FocusDialogContext);
 
   const { mutate, isPending } = useMutation<Session>({
     mutationFn: async () => {
@@ -88,9 +90,11 @@ export default function Timer() {
     }
     if (time.minutes >= 60) {
       toast.error("Minutes should be less than or equal to 60");
+      return;
     }
     if (isFocusing) {
-      toast.error("You are already focusing!");
+      setOpen(true);
+      return;
     }
     mutate();
   }

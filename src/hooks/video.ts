@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import { useSessions } from "./sessions";
 
@@ -80,27 +80,23 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
   });
   const { currentFocusId } = useSessions();
 
-  const startVideoCapture = useCallback(() => {
-    if (!videoStream) {
-      fetchVideoStream();
-    }
-    if (videoStream && currentFocusId) {
+  useEffect(() => {
+    if (isSuccess && videoStream && currentFocusId) {
+      const ref = setInterval(() => {
+        mutate({
+          video: videoStream.video,
+          focusId: currentFocusId,
+        });
+      }, interval);
       mutate({
         video: videoStream.video,
         focusId: currentFocusId,
       });
-    }
-  }, [currentFocusId, fetchVideoStream, videoStream, mutate]);
-
-  useEffect(() => {
-    if (isSuccess && videoStream && currentFocusId) {
-      const ref = setInterval(startVideoCapture, interval);
-      startScreenCapture();
       return () => {
         clearInterval(ref);
       };
     }
-  }, [interval, isSuccess, videoStream, currentFocusId, startVideoCapture]);
+  }, [interval, isSuccess, videoStream, currentFocusId, mutate]);
 
   function release() {
     videoStream?.stream.getTracks().forEach((track) => {
