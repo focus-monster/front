@@ -33,13 +33,11 @@ export const dummyAuth: Auth = {
 };
 
 const query = async () => {
-  const socialId = localStorage.getItem("socialId");
-  console.log("37:" + socialId);
+  let socialId = localStorage.getItem("socialId");
 
   if (!socialId) {
     const urlSearch = new URLSearchParams(window.location.search);
-    const socialId = urlSearch.get("socialId");
-    console.log("41:" + socialId);
+    socialId = urlSearch.get("socialId");
     if (!socialId) {
       return dummyAuth;
     }
@@ -56,7 +54,6 @@ const query = async () => {
   // }
 
   try {
-    console.log("57:" + socialId);
     const response = await fetch(`/api/users/${socialId}`);
     const data = await response.json();
     return data as Auth;
