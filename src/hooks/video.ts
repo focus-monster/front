@@ -133,26 +133,31 @@ async function sendBlobToServer(blob: Blob, focusId: number, socialId: string) {
   const formData = new FormData();
   formData.append("file", blob);
 
-  const req = await fetch(
-    `/gemini/image?focusId=${focusId}&socialId=${socialId}`,
-    {
-      method: "POST",
-      body: formData,
-    },
-  );
+  try {
+    const req = await fetch(
+      `/gemini/image?focusId=${focusId}&socialId=${socialId}`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
 
-  if (!req.ok) {
-    console.error("Failed to send screen capture: " + (await req.text()));
-    toast.error("Failed to send screen capture: " + (await req.text()));
+    if (!req.ok) {
+      console.error("Failed to send screen capture: " + (await req.text()));
+      toast.error("Failed to send screen capture: " + (await req.text()));
+    }
+
+    const data = await req.json();
+    if (data.error) {
+      console.error("Failed to send screen capture: " + data.error);
+      toast.error("Failed to send screen capture: " + data.error);
+    }
+
+    return data;
+  } catch (e) {
+    console.error("Failed to send screen capture: " + e);
+    toast.error("Failed to send screen capture: " + e);
   }
-
-  const data = await req.json();
-  if (data.error) {
-    console.error("Failed to send screen capture: " + data.error);
-    toast.error("Failed to send screen capture: " + data.error);
-  }
-
-  return data;
 }
 
 export async function startScreenCapture() {
