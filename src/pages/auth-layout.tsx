@@ -21,6 +21,10 @@ export default function AuthLayout() {
 
   const path = window.location.pathname;
 
+  if (path === "/onboarding" && data?.verified === true) {
+    navigate("/");
+  }
+
   if (
     data?.verified === false &&
     path !== "/onboarding" &&
