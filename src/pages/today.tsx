@@ -1,7 +1,7 @@
-import { useAuth } from "@/hooks/auth";
+import { getSocialId, useAuth } from "@/hooks/auth";
 import Folder from "../components/folder";
 import Loading from "@/components/loading";
-import { useSessions, Session } from "@/hooks/sessions";
+import { useSessions, Session, applyTimezoneOffset } from "@/hooks/sessions";
 import { SessionCard } from "./session-card";
 import { Character } from "@/components/character";
 import { useQuery } from "@tanstack/react-query";
@@ -30,7 +30,7 @@ export default function Today() {
                   <span className="pr-3 text-xl font-bold">
                     {auth?.nickname}
                   </span>
-                  <span>{"   / "}</span>
+                  <span>{" / "}</span>
                   <span>Lv{auth?.level ?? 0}</span>
                 </div>
                 <TotalFocusTime />
@@ -64,15 +64,18 @@ export default function Today() {
 
 export function Time({ session }: { session: Session }) {
   const fromTo =
-    new Date(session.createdDateTime).toLocaleTimeString("en-US", {
+    applyTimezoneOffset(session.createdDateTime).toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
     }) +
     " ~ " +
-    new Date(session.lastModifiedDateTime).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    applyTimezoneOffset(session.lastModifiedDateTime).toLocaleTimeString(
+      "en-US",
+      {
+        hour: "2-digit",
+        minute: "2-digit",
+      },
+    );
 
   const timeDiff =
     new Date(session.lastModifiedDateTime).getTime() -
@@ -116,8 +119,9 @@ function TotalFocusTime() {
   }>({
     queryKey: ["totalFocusTime"],
     queryFn: async () => {
+      const socialId = auth?.socialId ?? getSocialId();
       const response = await fetch(
-        `/api/focus/today-time?socialId=${auth?.socialId}`,
+        `/api/focus/today-time?socialId=${socialId}`,
       );
       return response.json();
     },

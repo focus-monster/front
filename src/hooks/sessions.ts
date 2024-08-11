@@ -37,10 +37,14 @@ export function useSessions() {
   const todaysSessions = useMemo(
     () =>
       query?.data?.filter((session) => {
-        return (
-          new Date().getTime() - new Date(session.createdDateTime).getTime() <
-          24 * 60 * 60 * 1000
-        );
+        const today = new Date().toLocaleDateString();
+        const sessionStartDate = applyTimezoneOffset(
+          session.createdDateTime,
+        ).toLocaleDateString();
+        const sessionEndDate = applyTimezoneOffset(
+          session.lastModifiedDateTime,
+        ).toLocaleDateString();
+        return sessionStartDate === today || sessionEndDate === today;
       }),
     [query.data],
   );
@@ -57,4 +61,14 @@ export function useSessions() {
   );
 
   return { ...query, currentFocusId, isFocusing, todaysSessions, lastSession };
+}
+
+export function applyTimezoneOffset(date: string) {
+  console.log(new Date(date));
+  const currentTime = new Date(
+    new Date(date).getTime() - new Date().getTimezoneOffset() * 60 * 1000,
+  );
+  console.log(currentTime);
+
+  return currentTime;
 }

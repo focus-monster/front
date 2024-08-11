@@ -12,12 +12,12 @@ type BannedSitesType = {
 };
 
 const defaultBannedSites = {
-  youtube: true,
-  instagram: true,
-  facebook: true,
-  X: true,
-  reddit: true,
-  tiktok: true,
+  "youtube.com": true,
+  "instagram.com": true,
+  "facebook.com": true,
+  "X.com": true,
+  "reddit.com": true,
+  "tiktok.com": true,
 };
 
 function loadBannedSites() {

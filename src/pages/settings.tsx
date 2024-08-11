@@ -20,6 +20,8 @@ export default function Settings() {
   );
 }
 
+export const startsWithHttp = /^(http|https):\/\//;
+
 function BannedSites() {
   const [site, setSite] = useState("");
   const { bannedSites, add } = useBannedSites();
@@ -86,24 +88,20 @@ function BannedSites() {
 function BlockedItem({ site }: { site: string }) {
   const { bannedSites, remove, toggle } = useBannedSites();
 
-  const capitalize = (s: string) => {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
   return (
     <div className="flex items-center justify-between gap-4 rounded-lg p-2">
       <img
         width="24px"
         height="24px"
-        src={`https://www.google.com/s2/favicons?domain=${site}.com`}
+        src={`https://www.google.com/s2/favicons?domain=${site}`}
         alt=""
       />
       <a
         className="grow text-gray-50 underline"
         target="_blank"
-        href={`https://${site}.com`}
+        href={`https://${site}`}
       >
-        {capitalize(site)}
+        {site}
       </a>
       <Switch
         checked={bannedSites[site]}
@@ -224,13 +222,11 @@ function UserProfile() {
 }
 
 function getDomain(site: string) {
-  const siteName = new URL(site).hostname;
-
-  const parts = siteName.split(".");
-
-  if (parts.length > 2) {
-    return parts.at(-2)!;
+  if (startsWithHttp.test(site)) {
+    const siteName = new URL(site).hostname;
+    return siteName;
   }
 
-  return parts[0];
+  const siteName = new URL("https://" + site).hostname;
+  return siteName;
 }

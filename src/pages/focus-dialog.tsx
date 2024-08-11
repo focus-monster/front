@@ -83,12 +83,15 @@ export function FocusDialog() {
   );
 
   useEffect(() => {
+    if (!isFocusing) return;
     const ref = setInterval(() => {
+      const res = calculateTimeLeft(lastSession);
+      if (res.hours < 0) {
+        mutate("succeed");
+        clearInterval(ref);
+        return;
+      }
       setTimeLeft(() => {
-        const res = calculateTimeLeft(lastSession);
-        if (res.hours < 0 && isFocusing) {
-          mutate("succeed");
-        }
         return res;
       });
     }, 1000);
@@ -97,11 +100,7 @@ export function FocusDialog() {
   }, [lastSession, currentFocusId, mutate, isFocusing]);
 
   function handleClick() {
-    if (timeLeft?.hours < 0) {
-      mutate("succeed");
-    } else {
-      mutate("fail");
-    }
+    mutate("fail");
   }
 
   const timeEnded = timeLeft?.hours < 0;
