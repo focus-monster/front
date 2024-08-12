@@ -111,7 +111,15 @@ export default function Timer() {
 
   return (
     <div className="flex items-center justify-start gap-6 px-6 py-4">
-      <div className="relative flex w-fit flex-shrink-0 items-center justify-center gap-6 rounded-2xl border-2 border-neutral-900 bg-background px-4 py-2">
+      <div
+        style={{
+          backgroundImage: "url(/input-doodle.png)",
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+        className="relative flex w-fit flex-shrink-0 items-center justify-center gap-6 px-4 py-2"
+      >
         <span className="flex-shrink-0 pr-4">Set Duration:</span>
         <div className="flex flex-row items-center justify-center gap-2">
           <Input
@@ -254,9 +262,17 @@ export default function Timer() {
           )}
         </div>
       </div>
-      <div className="flex w-[350px] items-center gap-2 rounded-2xl border-2 border-neutral-900 bg-background px-4 py-2">
-        <input
-          className="w-full rounded-lg border border-neutral-400 px-2 py-1"
+      <div
+        style={{
+          backgroundImage: "url(/input-doodle.png)",
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+        className="flex w-[350px] items-center gap-2 px-4 py-2"
+      >
+        <Input
+          className="w-full rounded-lg border-2"
           id="task"
           type="text"
           placeholder="What is your task for this session? (optional)"
