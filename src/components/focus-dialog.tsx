@@ -38,6 +38,10 @@ export function FocusDialog() {
   const { isFocusing, lastSession, currentFocusId } = useSessions();
   const { setOpen: setResultOpen, setResult } = useContext(ResultDialogContext);
 
+  const { fetchVideoStream, videoStream } = useVideo({
+    interval: 1000 * 60,
+  });
+
   const { mutate, isPending } = useMutation({
     mutationFn: async (result: "succeed" | "fail") => {
       if (!isFocusing) return;
@@ -67,7 +71,6 @@ export function FocusDialog() {
       } else {
         toast.error("Session quitted");
       }
-      release();
       if (data) {
         setResultOpen(true);
         setResult(data);
@@ -76,10 +79,6 @@ export function FocusDialog() {
     onError: (error) => {
       toast.error(error.message);
     },
-  });
-
-  const { release, fetchVideoStream, videoStream } = useVideo({
-    interval: 1000 * 60,
   });
 
   useEffect(() => {

@@ -14,7 +14,7 @@ export function useVideoStream() {
       }
 
       const video = document.createElement("video");
-      video.srcObject = stream ?? null;
+      video.srcObject = stream;
       video.play();
 
       return {
@@ -32,6 +32,7 @@ export function useVideoStream() {
 }
 
 async function handleStream(data: {
+  stream: MediaStream;
   video: HTMLVideoElement;
   focusId: number;
   socialId: string;
@@ -81,24 +82,33 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
   const { data: auth } = useAuth();
 
   useEffect(() => {
-    if (isSuccess && videoStream && currentFocusId) {
+    if (isSuccess && videoStream && currentFocusId && auth?.socialId) {
+      console.log("videoStream: " + videoStream);
+
       const ref = setInterval(() => {
         if (auth?.socialId) {
           mutate({
+            stream: videoStream.stream,
             video: videoStream.video,
             focusId: currentFocusId,
-            socialId: auth?.socialId,
+            socialId: auth.socialId,
           });
         }
       }, interval);
       if (auth?.socialId) {
         mutate({
+          stream: videoStream.stream,
           video: videoStream.video,
           focusId: currentFocusId,
-          socialId: auth?.socialId,
+          socialId: auth.socialId,
         });
       }
       return () => {
+        toast.success("Screen capture stopped");
+        videoStream.video.pause();
+        videoStream.stream.getTracks().forEach((track) => {
+          track.stop();
+        });
         clearInterval(ref);
       };
     }
@@ -111,18 +121,10 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
     auth?.socialId,
   ]);
 
-  function release() {
-    videoStream?.stream.getTracks().forEach((track) => {
-      track.stop();
-    });
-    videoStream?.video.pause();
-  }
-
   return {
     fetchVideoStream,
     fetchVideoStreamAsync,
     videoStream,
-    release,
   };
 }
 
