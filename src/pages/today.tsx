@@ -13,6 +13,10 @@ export default function Today() {
   const { isLoading, todaysSessions } = useSessions();
   const [open, setOpen] = useState(false);
 
+  const finishedTodaysSessions = todaysSessions
+    ?.reverse()
+    .filter((session) => session.focusStatus !== "FOCUSING");
+
   return (
     <>
       <div className="flex min-h-1 grow flex-row gap-8 px-6">
@@ -63,11 +67,10 @@ export default function Today() {
         <div className="flex max-h-[580px] w-full grow flex-col gap-6 overflow-y-scroll">
           {isLoading ? (
             <Loading />
-          ) : todaysSessions && todaysSessions.length > 0 ? (
-            todaysSessions.reverse()?.map((session) => {
-              if (session.focusStatus === "FOCUSING") return null;
-              return <SessionCard key={session.id} session={session} />;
-            })
+          ) : finishedTodaysSessions && finishedTodaysSessions.length > 0 ? (
+            finishedTodaysSessions.map((session) => (
+              <SessionCard key={session.id} session={session} />
+            ))
           ) : (
             <div className="w-full py-40 text-center text-2xl text-neutral-100">
               No session yet
