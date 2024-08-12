@@ -38,7 +38,7 @@ export function FocusDialog() {
   const { isFocusing, lastSession, currentFocusId } = useSessions();
   const { setOpen: setResultOpen, setResult } = useContext(ResultDialogContext);
 
-  const { fetchVideoStream, videoStream } = useVideo({
+  const { fetchVideoStreamAsync } = useVideo({
     interval: 1000 * 60,
   });
 
@@ -86,7 +86,7 @@ export function FocusDialog() {
       setOpen(true);
     }
     return () => setOpen(false);
-  }, [isFocusing, currentFocusId, fetchVideoStream, videoStream, setOpen]);
+  }, [isFocusing, setOpen]);
 
   const [timeLeft, setTimeLeft] = useState(() =>
     calculateTimeLeft(lastSession),
@@ -163,7 +163,7 @@ export function FocusDialog() {
             <Button
               variant="default"
               onClick={() => {
-                fetchVideoStream();
+                fetchVideoStreamAsync();
               }}
               className="text-lg"
             >

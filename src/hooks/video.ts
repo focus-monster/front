@@ -1,13 +1,13 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useSessions } from "./sessions";
 import { useAuth } from "./auth";
 
 export function useVideoStream() {
-  const mutation = useMutation({
-    mutationKey: ["mediaStream"],
-    mutationFn: async () => {
+  const query = useQuery({
+    queryKey: ["mediaStream"],
+    queryFn: async () => {
       const stream = await startScreenCapture();
       if (!stream) {
         throw new Error("No video feed");
@@ -22,13 +22,10 @@ export function useVideoStream() {
         video,
       };
     },
-    onError: (error) => {
-      toast.error("Monitoring disabled");
-      console.error("Monitoring disabled: " + error);
-    },
+    enabled: false,
   });
 
-  return mutation;
+  return query;
 }
 
 async function handleStream(data: {
@@ -63,8 +60,7 @@ async function handleStream(data: {
 
 export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
   const {
-    mutate: fetchVideoStream,
-    mutateAsync: fetchVideoStreamAsync,
+    refetch: fetchVideoStreamAsync,
     data: videoStream,
     isSuccess,
   } = useVideoStream();
@@ -104,7 +100,6 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
         });
       }
       return () => {
-        toast.success("Screen capture stopped");
         videoStream.video.pause();
         videoStream.stream.getTracks().forEach((track) => {
           track.stop();
@@ -122,7 +117,6 @@ export function useVideo({ interval = 1000 * 60 }: { interval?: number }) {
   ]);
 
   return {
-    fetchVideoStream,
     fetchVideoStreamAsync,
     videoStream,
   };
