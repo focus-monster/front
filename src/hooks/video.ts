@@ -23,6 +23,7 @@ export function useVideoStream() {
       };
     },
     enabled: false,
+    retry: false,
   });
 
   return query;
