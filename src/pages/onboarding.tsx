@@ -29,6 +29,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { regex } from "./settings";
+import { useSessions } from "@/hooks/sessions";
 
 export default function Onboarding() {
   const [nickname, setNickname] = useState("");
@@ -177,6 +178,7 @@ export function Job({
   transparent?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const { isFocusing } = useSessions();
   const { data } = useQuery({
     queryKey: ["jobs"],
     queryFn: async () => {
@@ -201,6 +203,7 @@ export function Job({
             transparent &&
               "bg-transparent text-neutral-200 hover:bg-neutral-50/20",
           )}
+          disabled={isFocusing}
         >
           {myJob.length > 0
             ? data?.find((job) => job.value === myJob)?.label

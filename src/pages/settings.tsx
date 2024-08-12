@@ -88,6 +88,7 @@ function BannedSites() {
 
 function BlockedItem({ site }: { site: string }) {
   const { bannedSites, remove, toggle } = useBannedSites();
+  const { isFocusing } = useSessions();
 
   return (
     <div className="flex items-center justify-between gap-4 rounded-lg p-2">
@@ -106,11 +107,22 @@ function BlockedItem({ site }: { site: string }) {
       </a>
       <Switch
         checked={bannedSites[site]}
-        onCheckedChange={() => toggle(site)}
+        disabled={isFocusing}
+        onCheckedChange={() => {
+          if (isFocusing) return;
+          toggle(site);
+        }}
       />
       <button
-        onClick={() => remove(site)}
-        className="ml-2 rounded-full p-1 hover:bg-gray-100/30"
+        onClick={() => {
+          if (isFocusing) return;
+          remove(site);
+        }}
+        className={cn(
+          "ml-2 rounded-full p-1 hover:bg-gray-100/30",
+          isFocusing && "hover:bg-transparent",
+        )}
+        disabled={isFocusing}
       >
         <X className="text-white" />
       </button>
@@ -174,12 +186,14 @@ function UserProfile() {
         <Button
           variant="outline"
           className="bg-transparent hover:bg-neutral-50/20"
+          disabled={isFocusing}
           asChild
         >
           <input
             type="text"
             className="rounded-lg bg-transparent p-2 text-neutral-200"
             value={nickname}
+            disabled={isFocusing}
             onChange={(e) => {
               if (
                 e.target.value.length > 13 ||
@@ -216,6 +230,7 @@ function UserProfile() {
           "self-end",
           isSuccess && "bg-green-100 text-green-900 hover:bg-green-300",
         )}
+        disabled={isFocusing}
       >
         Update{isSuccess ? "d!" : null}
       </Button>
