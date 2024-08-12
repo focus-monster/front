@@ -25,7 +25,7 @@ export default function Today() {
             landing=""
             title={
               <div className="">
-                {open ? (
+                {auth?.anonymous && open ? (
                   <LoginPopup
                     onClick={() => setOpen(false)}
                     className="left-[50px] top-[200px] z-30"
