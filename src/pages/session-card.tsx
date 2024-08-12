@@ -1,6 +1,6 @@
 import { Session } from "@/hooks/sessions";
 import { Result } from "./result";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ResultDialogContext } from "@/components/result-dialog";
 import { LoaderCircle } from "lucide-react";
 
@@ -41,7 +41,8 @@ export function SessionCard({ session }: { session: Session }) {
       <div className="grid grid-cols-[1fr,96px] gap-4 bg-transparent px-8 pb-9 pt-4">
         {evaluationError ? (
           <div className="flex h-full w-full flex-row place-content-center items-center gap-2">
-            Evaluating... <LoaderCircle className="animate-spin" />
+            Coming up with a good joke...
+            <LoaderCircle className="animate-spin" />
           </div>
         ) : (
           <div className="line-clamp-4 text-lg">{evaluation}</div>
