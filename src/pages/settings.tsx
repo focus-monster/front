@@ -27,6 +27,7 @@ function BannedSites() {
   const [site, setSite] = useState("");
   const { bannedSites, add } = useBannedSites();
   const [error, setError] = useState(false);
+  const { isFocusing } = useSessions();
 
   return (
     <div className="flex grow flex-col space-y-4 pb-6 lg:pb-0 lg:pr-6">
@@ -40,6 +41,7 @@ function BannedSites() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            if (isFocusing) return;
             if (!site) {
               setError(true);
               return;
