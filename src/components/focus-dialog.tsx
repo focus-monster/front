@@ -171,7 +171,7 @@ export function FocusDialog() {
             </Button>
           </div>
           <div className="pt-3 text-center">
-            <p>'Quit session' is treated as a failure</p>
+            <p>'Quit session' is considered a failure</p>
           </div>
         </div>
       </DialogContent>
