@@ -105,8 +105,17 @@ export default function Timer() {
       setOpen(true);
       return;
     }
-    await fetchVideoStreamAsync();
-    mutate();
+
+    try {
+      const res = await fetchVideoStreamAsync();
+      if (res.isError) {
+        toast.error("Please allow screen sharing to start the session.");
+        return;
+      }
+      mutate();
+    } catch (e) {
+      toast.error("Didn't start the session.");
+    }
   }
 
   return (
