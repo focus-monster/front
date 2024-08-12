@@ -4,7 +4,6 @@
 
 @layer base {
   @import url("https://fonts.cdnfonts.com/css/sf-pro-display");
-  @import url("https://fonts.cdnfonts.com/css/sf-pro-text");
 
   html {
     font-family: "SF Pro Display", ui-sans-serif, system-ui, sans-serif,
@@ -81,6 +80,6 @@
   }
 
   #root {
-    @apply mx-auto flex h-svh min-w-[1350px] max-w-7xl flex-col overflow-hidden;
+    @apply mx-auto flex min-w-[1350px] max-w-7xl flex-col overflow-hidden;
   }
 }

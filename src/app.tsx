@@ -13,10 +13,20 @@ import Settings from "./pages/settings";
 import Collection from "./pages/collection";
 import Today from "./pages/today";
 import { ResultDialog, ResultDialogProvider } from "./components/result-dialog";
+import PrivacyPolicy from "./pages/privacy-policy";
+import UserAgreement from "./pages/user-agreement";
 
 export const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: "/user-agreement",
+    element: <UserAgreement />,
+  },
   {
     path: "/",
     element: (

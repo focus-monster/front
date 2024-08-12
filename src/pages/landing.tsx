@@ -3,7 +3,7 @@ import { Floating } from "../components/floating";
 
 function Landing() {
   return (
-    <div>
+    <div className="flex grow flex-col">
       <div>
         <img
           src="/logo.png"

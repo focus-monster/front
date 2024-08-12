@@ -19,7 +19,7 @@ export default function Folder({
       <img
         className=""
         src={`/folder-back${landing}.png`}
-        width={landing === "" ? "688px" : "860px"}
+        width={landing === "" ? "688px" : "800px"}
       />
       {title ? title : null}
       {insert ? insert : null}
