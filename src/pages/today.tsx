@@ -13,8 +13,8 @@ export default function Today() {
   const { isLoading, todaysSessions } = useSessions();
   const [open, setOpen] = useState(false);
 
-  const finishedTodaysSessions = todaysSessions
-    ?.reverse()
+  const finishedTodaysSessions = [...(todaysSessions ?? [])]
+    .reverse()
     .filter((session) => session.focusStatus !== "FOCUSING");
 
   return (
