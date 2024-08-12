@@ -60,7 +60,7 @@ export default function Today() {
             }
           />
         </div>
-        <div className="flex w-full grow flex-col gap-6 overflow-y-scroll">
+        <div className="flex max-h-[580px] w-full grow flex-col gap-6 overflow-y-scroll">
           {isLoading ? (
             <Loading />
           ) : todaysSessions && todaysSessions.length > 0 ? (
