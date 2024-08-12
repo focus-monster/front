@@ -1,7 +1,8 @@
 import { Session } from "@/hooks/sessions";
 import { Result } from "./result";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ResultDialogContext } from "@/components/result-dialog";
+import { LoaderCircle } from "lucide-react";
 
 export function SessionCard({ session }: { session: Session }) {
   const {
@@ -9,6 +10,15 @@ export function SessionCard({ session }: { session: Session }) {
     setResult,
     setShowLevelUp,
   } = useContext(ResultDialogContext);
+
+  let evaluation = "";
+  let evaluationError = false;
+  try {
+    evaluation = JSON.parse(session.evaluation).trim();
+  } catch (error) {
+    evaluation = "Evaluting your session...✨";
+    evaluationError = true;
+  }
 
   return (
     <div
@@ -29,9 +39,13 @@ export function SessionCard({ session }: { session: Session }) {
         <Result status={session} />
       </div>
       <div className="grid grid-cols-[1fr,96px] gap-4 bg-transparent px-8 pb-9 pt-4">
-        <div className="line-clamp-4 text-lg">
-          {JSON.parse(session.evaluation)}
-        </div>
+        {evaluationError ? (
+          <div className="flex h-full w-full flex-row place-content-center items-center gap-2">
+            Evaluating... <LoaderCircle className="animate-spin" />
+          </div>
+        ) : (
+          <div className="line-clamp-4 text-lg">{evaluation}</div>
+        )}
         <div className="aspect-square w-24 shrink-0 overflow-hidden rounded-xl">
           <img
             className="h-full w-full object-cover"
