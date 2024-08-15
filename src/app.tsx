@@ -3,7 +3,10 @@ import { Header } from "./components/header";
 import Timer from "./components/timer";
 import Tabs from "./components/tabs";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { FocusDialog, FocusDialogProvider } from "./components/focus-dialog";
+import {
+  FocusDialog,
+  FocusDialogProvider,
+} from "./components/dialog/focus-dialog";
 import AuthLayout from "./pages/auth-layout";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "./error-boundary";
@@ -12,9 +15,16 @@ import Onboarding from "./pages/onboarding";
 import Settings from "./pages/settings";
 import Collection from "./pages/collection";
 import Today from "./pages/today";
-import { ResultDialog, ResultDialogProvider } from "./components/result-dialog";
+import {
+  ResultDialog,
+  ResultDialogProvider,
+} from "./components/dialog/result-dialog";
 import PrivacyPolicy from "./pages/privacy-policy";
 import UserAgreement from "./pages/user-agreement";
+import {
+  CollectionDialog,
+  CollectionDialogProvider,
+} from "./components/dialog/collection-dialog";
 
 export const queryClient = new QueryClient();
 
@@ -61,7 +71,12 @@ const router = createBrowserRouter([
           },
           {
             path: "/collection",
-            element: <Collection />,
+            element: (
+              <CollectionDialogProvider>
+                <Collection />
+                <CollectionDialog />
+              </CollectionDialogProvider>
+            ),
           },
           {
             path: "/",

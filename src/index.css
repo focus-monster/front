@@ -80,6 +80,6 @@
   }
 
   #root {
-    @apply mx-auto flex min-w-[1350px] max-w-7xl flex-col overflow-hidden;
+    @apply mx-auto flex min-w-[1440px] max-w-7xl flex-col overflow-hidden;
   }
 }

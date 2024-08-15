@@ -108,7 +108,7 @@ export function Time({ session }: { session: Session }) {
 
   if (session.focusStatus === "SUCCEED") {
     Duration = () => (
-      <span className="text-green-500">
+      <span className="text-green-600">
         {" (Focused for "}
         {hours}h {minutes}m{")"}
       </span>
