@@ -17,6 +17,7 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { ResultDialogContext } from "./result-dialog";
+import { useTitle } from "@/hooks/title";
 
 export const FocusDialogContext = createContext(
   {} as { open: boolean; setOpen: (open: boolean) => void },
@@ -115,6 +116,12 @@ export function FocusDialog() {
 
   const timeEnded = timeLeft?.hours < 0;
 
+  const timeLeftString = `${Math.abs(timeLeft?.hours + (timeEnded ? 1 : 0))} h ${Math.abs(
+    timeLeft?.minutes,
+  )} m`;
+
+  useTitle(timeLeftString);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
@@ -132,6 +139,10 @@ export function FocusDialog() {
           <div className="text-center text-2xl font-bold">
             {timeEnded ? "LEVEL UP NOW" : "UNTIL LEVEL UP"}
           </div>
+          <title>
+            {Math.abs(timeLeft?.hours + (timeEnded ? 1 : 0))} h{" "}
+            {Math.abs(timeLeft?.minutes)} m
+          </title>
           <div
             className={cn(
               "relative text-center text-9xl font-bold",
