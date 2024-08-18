@@ -120,7 +120,7 @@ export function FocusDialog() {
     timeLeft?.minutes,
   )} m`;
 
-  useTitle(timeLeftString);
+  useTitle(timeLeftString, isFocusing);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
