@@ -41,7 +41,7 @@ export default function Today() {
                   onClick={() => {
                     setOpen(true);
                   }}
-                  className="absolute left-[50%] top-[250px] z-20 w-fit min-w-[300px] -translate-x-1/2 px-10 py-8 text-center"
+                  className="absolute left-[50%] top-[260px] z-20 w-fit min-w-[300px] -translate-x-1/2 px-10 py-8 text-center"
                 >
                   <span className="pr-3 text-xl font-bold">
                     {auth?.nickname === "Anonymous" ? "Guest" : auth?.nickname}
@@ -58,8 +58,8 @@ export default function Today() {
               </div>
             }
             insert={
-              <div className="absolute left-[50%] top-[30%] -translate-x-1/2 -translate-y-1/2">
-                <Character className="aspect-auto w-60" />
+              <div className="absolute left-[50%] top-[35%] w-[420px] -translate-x-1/2 -translate-y-1/2">
+                <Character className="aspect-auto w-full" />
               </div>
             }
           />
