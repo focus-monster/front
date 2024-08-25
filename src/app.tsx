@@ -25,6 +25,7 @@ import {
   CollectionDialog,
   CollectionDialogProvider,
 } from "./components/dialog/collection-dialog";
+import { isMobile } from "react-device-detect";
 
 export const queryClient = new QueryClient();
 
@@ -99,7 +100,24 @@ function MainPage() {
   );
 }
 
+function MobileNotSupported() {
+  return (
+    <div className="fixed flex h-screen w-screen flex-col items-center justify-center">
+      <img src="/block-monster.png" alt="block-monster" className="w-48" />
+      <div className="pt-8 text-center text-white">
+        <h1 className="text-xl font-bold">Please use PC</h1>
+        <p className="pt-2">Mobile version is not supported.</p>
+        <p className="">Please open the site on PC.</p>
+      </div>
+    </div>
+  );
+}
+
 function App() {
+  if (isMobile) {
+    return <MobileNotSupported />;
+  }
+
   return <RouterProvider router={router} />;
 }
 
