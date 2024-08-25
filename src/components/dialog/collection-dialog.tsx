@@ -63,8 +63,8 @@ export function CollectionDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="p-0">
         <DialogTitle className="sr-only"></DialogTitle>
-        <div className="scrol flex snap-x snap-mandatory gap-[180px] overflow-x-scroll">
-          <div className="w-[180px] shrink-0"></div>
+        <div className="pointer-events-none flex snap-x snap-mandatory gap-[180px] overflow-x-scroll">
+          <div className="pointer-events-none w-[180px] shrink-0"></div>
           {collection.map((session) => {
             return (
               <div
@@ -76,7 +76,7 @@ export function CollectionDialog() {
                   width: "694px",
                   height: "602px",
                 }}
-                className="shrink-0 snap-center"
+                className="pointer-events-auto shrink-0 snap-center"
               >
                 <div className="w-full py-5 text-center">
                   <Time session={session} />
@@ -93,7 +93,7 @@ export function CollectionDialog() {
               </div>
             );
           })}
-          <div className="w-[180px] shrink-0 font-semibold"></div>
+          <div className="pointer-events-none w-[180px] shrink-0 font-semibold"></div>
         </div>
       </DialogContent>
     </Dialog>

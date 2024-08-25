@@ -285,6 +285,8 @@ export default function Timer() {
           id="task"
           type="text"
           placeholder="What is your task for this session? (optional)"
+          disabled={isFocusing}
+          value={task}
           onChange={(e) => {
             if (isFocusing) return;
             setTask(e.target.value);
