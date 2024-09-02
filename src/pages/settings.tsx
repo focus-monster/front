@@ -64,6 +64,7 @@ function BannedSites() {
               "w-full rounded-full bg-gray-300/50 p-2 px-4 text-gray-50 placeholder-gray-300",
               error && "outline-4 outline-red-500",
             )}
+            disabled={isFocusing}
             placeholder="Enter URL"
             value={site}
             onChange={(e) => {

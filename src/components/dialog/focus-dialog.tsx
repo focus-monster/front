@@ -185,6 +185,19 @@ export function FocusDialog() {
             <p>'Quit session' is considered a failure</p>
           </div>
         </div>
+        <div
+          style={{
+            backgroundImage: "url(/word-border.png)",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            width: "400px",
+            height: "100px",
+          }}
+          className="absolute left-0 top-[200px] flex w-[400px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center text-[21px]"
+        >
+          <p>Aren't you focused right now?</p>
+          <p>Hang in there a litte longer!</p>
+        </div>
       </DialogContent>
     </Dialog>
   );
