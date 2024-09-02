@@ -124,42 +124,48 @@ export function FocusDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        style={{
-          backgroundImage: 'url("/dialog-frame.png")',
-          backgroundSize: "100% 100%",
-          backgroundRepeat: "no-repeat",
-          width: "800px",
-          height: "603px",
-        }}
-        className=""
-      >
-        <DialogTitle className="sr-only"></DialogTitle>
-        <div className="mt-[100px] grid h-[300px] place-content-center justify-items-center gap-8">
-          <div className="text-center text-2xl font-bold">
-            {timeEnded ? "LEVEL UP NOW" : "UNTIL LEVEL UP"}
+      <DialogContent className="w-fit">
+        <div
+          style={{
+            backgroundImage: 'url("/dialog-frame.png")',
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            width: "800px",
+            height: "603px",
+          }}
+        >
+          <div className="absolute -right-[110px] bottom-[40px] -z-50 w-[160px]">
+            <img
+              src="/focus-monster.png"
+              alt="focus monster"
+              className="-z-50"
+            />
           </div>
-          <title>
-            {Math.abs(timeLeft?.hours + (timeEnded ? 1 : 0))} h{" "}
-            {Math.abs(timeLeft?.minutes)} m
-          </title>
-          <div
-            className={cn(
-              "relative text-center text-9xl font-bold",
-              timeLeft?.hours < 0 && "text-green-600",
-            )}
-          >
-            {timeEnded ? (
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 pt-4 text-center text-lg">
-                You are over by
-              </div>
-            ) : null}
-            {Math.abs(timeLeft?.hours + (timeEnded ? 1 : 0))} h{" "}
-            {Math.abs(timeLeft?.minutes)} m
+          <DialogTitle className="sr-only"></DialogTitle>
+          <div className="mt-[100px] grid h-[300px] place-content-center justify-items-center gap-8">
+            <div className="text-center text-2xl font-bold">
+              {timeEnded ? "LEVEL UP NOW" : "UNTIL LEVEL UP"}
+            </div>
+            <title>
+              {Math.abs(timeLeft?.hours + (timeEnded ? 1 : 0))} h{" "}
+              {Math.abs(timeLeft?.minutes)} m
+            </title>
+            <div
+              className={cn(
+                "relative text-center text-9xl font-bold",
+                timeLeft?.hours < 0 && "text-green-600",
+              )}
+            >
+              {timeEnded ? (
+                <div className="absolute -top-8 left-1/2 -translate-x-1/2 pt-4 text-center text-lg">
+                  You are over by
+                </div>
+              ) : null}
+              {Math.abs(timeLeft?.hours + (timeEnded ? 1 : 0))} h{" "}
+              {Math.abs(timeLeft?.minutes)} m
+            </div>
           </div>
-        </div>
-        <div className="mx-auto">
-          <div className="flex h-fit flex-row gap-4">
+          <div className="flex h-fit flex-row justify-center gap-4">
             <Button
               variant="secondary"
               onClick={handleClick}
@@ -184,19 +190,19 @@ export function FocusDialog() {
           <div className="pt-3 text-center">
             <p>'Quit session' is considered a failure</p>
           </div>
-        </div>
-        <div
-          style={{
-            backgroundImage: "url(/word-border.png)",
-            backgroundSize: "100% 100%",
-            backgroundRepeat: "no-repeat",
-            width: "400px",
-            height: "100px",
-          }}
-          className="absolute left-0 top-[200px] flex w-[400px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center text-[21px]"
-        >
-          <p>Aren't you focused right now?</p>
-          <p>Hang in there a litte longer!</p>
+          <div
+            style={{
+              backgroundImage: "url(/word-border.png)",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+              width: "400px",
+              height: "100px",
+            }}
+            className="absolute left-0 top-[200px] flex w-[400px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center text-[21px]"
+          >
+            <p>Aren't you focused right now?</p>
+            <p>Hang in there a litte longer!</p>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

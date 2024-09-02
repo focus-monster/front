@@ -98,7 +98,7 @@ function BlockedItem({ site }: { site: string }) {
       <img
         width="24px"
         height="24px"
-        src={`https://www.google.com/s2/favicons?domain=${site}`}
+        src={`https://www.google.com/s2/favicons?domain=${site}&sz=128`}
         alt=""
       />
       <a

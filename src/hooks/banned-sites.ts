@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { create } from "zustand";
 
 type BannedSite = {
@@ -48,7 +49,13 @@ export const useBannedSites = create<BannedSitesType>((set) => ({
   },
   add: (key: string) => {
     set((state) => {
-      state.bannedSites[key] = true;
+      if (state.bannedSites[key]) {
+        toast.error("You have already added a website with this URL");
+      }
+      state.bannedSites = {
+        [key]: true,
+        ...state.bannedSites,
+      };
       window.localStorage.setItem(
         "bannedSites",
         JSON.stringify(state.bannedSites),
