@@ -9,6 +9,8 @@
     font-family: "SF Pro Display", ui-sans-serif, system-ui, sans-serif,
       "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
       "Noto Color Emoji";
+    user-drag: none;
+    user-select: none;
   }
 
   :root {
