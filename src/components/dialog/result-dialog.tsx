@@ -68,7 +68,7 @@ export function ResultDialog() {
       >
         <DialogTitle className="sr-only"></DialogTitle>
         <div className="flex flex-col items-center">
-          <div className="flex h-[500px] w-full grow flex-col items-center overflow-hidden pb-6 pt-14">
+          <div className="flex h-[550px] w-full grow flex-col items-center overflow-hidden pb-6 pt-14">
             <div className="grid h-full grid-cols-[2fr,3fr] gap-2 px-4">
               <Result result={result.focusStatus} />
               <p className="h-[128px] overflow-y-scroll">
@@ -84,7 +84,7 @@ export function ResultDialog() {
                   level={auth?.level ?? 0}
                 />
               </div>
-              <div className="overflow-hidden object-contain">
+              <div className="object-contain">
                 <Image image={result.image} />
               </div>
             </div>
