@@ -69,12 +69,19 @@ export function FocusDialog() {
       setOpen(false);
       if (data?.focusStatus === "SUCCEED") {
         toast.success("Session ended successfully");
+      } else if (data?.focusStatus === "FAILED") {
+        toast.success("Session quitted successfully");
       } else {
-        toast.error("Session quitted");
+        toast.error("Failed to end session");
       }
       if (data) {
         setResultOpen(true);
         setResult(data);
+
+        window.postMessage({
+          action: "openPopup",
+          payload: JSON.stringify(data),
+        });
       }
     },
     onError: (error) => {

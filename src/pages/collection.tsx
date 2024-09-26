@@ -48,7 +48,7 @@ function ImageCards() {
   return [...imageCards.reverse()].map(({ key, sessions }) => (
     <ImageCard
       key={key}
-      multiple={sessions.length > 1}
+      multiple={sessions.at(1)?.image || null}
       image={sessions.at(0)?.image || ""}
       date={key}
       sessions={sessions}
@@ -64,7 +64,7 @@ function ImageCard({
 }: {
   image: string;
   date: string;
-  multiple: boolean;
+  multiple: string | null;
   sessions: Session[];
 }) {
   const { setOpen, setCollection } = useContext(CollectionDialogContext);
@@ -77,18 +77,26 @@ function ImageCard({
       className="group space-y-6 hover:cursor-pointer"
     >
       <div className="relative">
-        <div className="aspect-square w-[180px] overflow-clip rounded-lg drop-shadow transition-transform group-hover:scale-105">
-          <img
-            height="180px"
-            width="180px"
-            loading="lazy"
-            src={image}
-            alt="image"
-            className="bg-neutral-400 bg-cover"
-          />
-        </div>
+        <div
+          className="aspect-square w-[180px] overflow-clip rounded-lg drop-shadow transition-transform group-hover:scale-105"
+          style={{
+            backgroundImage: `url(${image})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        ></div>
         {multiple ? (
-          <div className="absolute inset-0 -z-10 rotate-12 overflow-clip rounded-lg bg-neutral-600 drop-shadow transition-transform group-hover:rotate-[20deg]"></div>
+          <div
+            className="absolute inset-0 -z-10 rotate-12 overflow-clip rounded-lg bg-gray-900/50 bg-neutral-600 drop-shadow transition-transform group-hover:rotate-[20deg]"
+            style={{
+              backgroundImage: `url(${multiple})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              filter: "brightness(0.5)",
+            }}
+          ></div>
         ) : null}
       </div>
 

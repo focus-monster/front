@@ -61,7 +61,7 @@ export function CollectionDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="p-0">
+      <DialogContent className="p-0" style={{ pointerEvents: "none" }}>
         <DialogTitle className="sr-only"></DialogTitle>
         <div className="pointer-events-none flex snap-x snap-mandatory gap-[180px] overflow-x-scroll">
           <div className="pointer-events-none w-[180px] shrink-0"></div>
@@ -84,7 +84,7 @@ export function CollectionDialog() {
                 <div className="px-10 py-6">
                   <img
                     src={session.image}
-                    className="h-[300px] overflow-clip rounded-lg border-2 object-contain"
+                    className="h-[300px] overflow-clip rounded-3xl object-contain"
                   />
                 </div>
                 <div className="px-10 py-6">
