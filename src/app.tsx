@@ -26,6 +26,7 @@ import {
   CollectionDialogProvider,
 } from "./components/dialog/collection-dialog";
 import { isMobile } from "react-device-detect";
+import AboutUs from "./pages/about-us";
 
 export const queryClient = new QueryClient();
 
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
                 <CollectionDialog />
               </CollectionDialogProvider>
             ),
+          },
+          {
+            path: "/about-us",
+            element: <AboutUs />,
           },
           {
             path: "/",
