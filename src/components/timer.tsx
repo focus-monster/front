@@ -309,6 +309,11 @@ export default function Timer() {
         }}
       >
         <button
+          style={{
+            backgroundImage: "url(/button-outline.png)",
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+          }}
           className={cn(
             "flex w-[180px] items-center justify-center gap-4 rounded-2xl px-6 py-3 text-lg text-neutral-50",
             isPending && "cursor-not-allowed",
