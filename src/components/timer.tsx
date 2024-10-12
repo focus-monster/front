@@ -295,10 +295,17 @@ export default function Timer() {
       </div>
       <div
         style={{
-          backgroundImage: "url(/black-button.png)",
+          backgroundImage: `radial-gradient(
+            ${isFocusing ? "#FF7F0F, #FF7F0F" : "black, black"}
+          )`,
           backgroundSize: "100% 100%",
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
+          maskImage: "url(/black-button.png)",
+          maskSize: "100% 100%",
+          maskRepeat: "no-repeat",
+          WebkitMaskImage: "url(/black-button.png)",
+          WebkitMaskSize: "100% 100%",
+          WebkitMaskRepeat: "no-repeat",
         }}
       >
         <button
