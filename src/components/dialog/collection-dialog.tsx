@@ -64,7 +64,7 @@ export function CollectionDialog() {
       <DialogContent className="p-0" style={{ pointerEvents: "none" }}>
         <DialogTitle className="sr-only"></DialogTitle>
         <div className="pointer-events-none flex snap-x snap-mandatory gap-[180px] overflow-x-scroll">
-          <div className="pointer-events-none w-[180px] shrink-0"></div>
+          <div className="pointer-events-none w-[50vw] shrink-0"></div>
           {collection.map((session) => {
             return (
               <div
@@ -93,7 +93,7 @@ export function CollectionDialog() {
               </div>
             );
           })}
-          <div className="pointer-events-none w-[180px] shrink-0 font-semibold"></div>
+          <div className="pointer-events-none w-[50vw] shrink-0 font-semibold"></div>
         </div>
       </DialogContent>
     </Dialog>
