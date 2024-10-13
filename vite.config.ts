@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
-export const API_URL = "https://focusmonster.me:8080";
+export const API_URL = "https://focusmonster.me:8088";
 export const GEMINI_URL = "http://focusmonster.me:8090";
 
 // https://vitejs.dev/config/
