@@ -42,7 +42,7 @@ function ImageCards() {
 
   const imageCards = Object.entries(imageCardsObj).map(([date, sessions]) => ({
     key: date,
-    sessions: sessions,
+    sessions: [...sessions.reverse()],
   }));
 
   return [...imageCards.reverse()].map(({ key, sessions }) => (

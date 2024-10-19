@@ -84,7 +84,7 @@ export function CollectionDialog() {
                 <div className="px-10 py-6">
                   <img
                     src={session.image}
-                    className="h-[300px] overflow-clip rounded-3xl object-contain"
+                    className="mx-auto h-[300px] overflow-clip rounded-3xl object-contain"
                   />
                 </div>
                 <div className="px-10 py-6">
