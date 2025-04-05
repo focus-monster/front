@@ -1,4 +1,4 @@
-const GOOGLE_AUTH_LINK = `https://accounts.google.com/o/oauth2/v2/auth?client_id=1079870955606-p10pgairi5gb9dfak16lrdtpronlnl6r.apps.googleusercontent.com&redirect_uri=https://focusmonster.me:8088/oauth/google&response_type=code&scope=email profile https://www.googleapis.com/auth/user.birthday.read https://www.googleapis.com/auth/user.gender.read https://www.googleapis.com/auth/profile.language.read`;
+const GOOGLE_AUTH_LINK = `https://accounts.google.com/o/oauth2/v2/auth?client_id=1079870955606-p10pgairi5gb9dfak16lrdtpronlnl6r.apps.googleusercontent.com&redirect_uri=https://focusmonster.me/oauth/google&response_type=code&scope=email profile https://www.googleapis.com/auth/user.birthday.read https://www.googleapis.com/auth/user.gender.read https://www.googleapis.com/auth/profile.language.read`;
 
 export default function GoogleAuth() {
   return (
