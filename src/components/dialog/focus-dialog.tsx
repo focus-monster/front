@@ -51,6 +51,7 @@ export function FocusDialog() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept-Language": "en",
         },
         body: JSON.stringify({
           socialId: auth?.socialId,

@@ -47,6 +47,7 @@ export default function Onboarding() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept-Language": "en",
         },
         body: JSON.stringify({
           socialId: auth.data?.socialId,
