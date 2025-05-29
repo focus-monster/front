@@ -1,16 +1,16 @@
+import { LoginPopup } from "@/components/login-popup";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/auth";
 import { useBannedSites } from "@/hooks/banned-sites";
+import { useSessions } from "@/hooks/sessions";
+import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { Plus, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
-import { Job } from "./onboarding";
-import { cn } from "@/lib/utils";
-import { useSessions } from "@/hooks/sessions";
-import { LoginPopup } from "@/components/login-popup";
+import { Job, Language } from "./onboarding";
 
 export default function Settings() {
   return (
@@ -141,6 +141,7 @@ function UserProfile() {
 
   const [nickname, setNickname] = useState(data?.nickname);
   const [job, setJob] = useState(data?.job ?? "");
+  const [language, setLanguage] = useState(data?.language ?? "en");
   const [nicknameError, setNicknameError] = useState("");
 
   const { mutate, isSuccess } = useMutation({
@@ -217,7 +218,11 @@ function UserProfile() {
         <div className="text-neutral-100">Job</div>
         <Job myJob={job} setMyJob={setJob} transparent />
         <div className="text-neutral-100">Language</div>
-        <p className="rounded-lg p-2 text-gray-400">English</p>
+        <Language
+          myLanguage={language}
+          setMyLanguage={setLanguage}
+          transparent
+        />
       </div>
       <Button
         onClick={() => {
