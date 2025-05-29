@@ -7,7 +7,7 @@ import { useSessions } from "@/hooks/sessions";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { Plus, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { Job, Language } from "./onboarding";
@@ -139,9 +139,15 @@ function UserProfile() {
   const { data } = useAuth();
   const { isFocusing } = useSessions();
 
-  const [nickname, setNickname] = useState(data?.nickname);
-  const [job, setJob] = useState(data?.job ?? "");
-  const [language, setLanguage] = useState(data?.language ?? "en");
+  const [nickname, setNickname] = useState("");
+  const [job, setJob] = useState("");
+  const [language, setLanguage] = useState(() => {
+    const localStorageLanguage = localStorage.getItem("language");
+    if (!localStorageLanguage) {
+      localStorage.setItem("language", "en");
+    }
+    return localStorageLanguage || "en";
+  });
   const [nicknameError, setNicknameError] = useState("");
 
   const { mutate, isSuccess } = useMutation({
@@ -176,6 +182,13 @@ function UserProfile() {
       }
     },
   });
+
+  useEffect(() => {
+    if (data) {
+      setNickname(data.nickname);
+      setJob(data.job ?? "");
+    }
+  }, [data]);
 
   return (
     <div className="relative flex grow flex-col space-y-4 pl-6 pt-0">
