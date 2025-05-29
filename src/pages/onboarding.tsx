@@ -262,7 +262,7 @@ export function Language({
   const { isFocusing } = useSessions();
   const data = [
     { value: "en", label: "English" },
-    { value: "ko", label: "Korean" },
+    { value: "ko", label: "Korean (test)" },
   ];
 
   return (
