@@ -144,7 +144,7 @@ function UserProfile() {
   const [language, setLanguage] = useState(() => {
     const localStorageLanguage = localStorage.getItem("language");
     if (!localStorageLanguage) {
-      localStorage.setItem("language", "en");
+      changeLanguage("en");
     }
     return localStorageLanguage || "en";
   });
@@ -156,6 +156,7 @@ function UserProfile() {
       if (isFocusing) {
         return;
       }
+      changeLanguage(language);
       const res = await fetch("/api/users/onboarding", {
         method: "POST",
         headers: {
@@ -276,3 +277,12 @@ function getDomain(site: string) {
   const siteName = new URL("https://" + site).hostname;
   return siteName;
 }
+
+const changeLanguage = (language: string) => {
+  localStorage.setItem("language", language);
+
+  window.postMessage({
+    action: "FocusMonster-changeLanguage",
+    payload: language,
+  });
+};
