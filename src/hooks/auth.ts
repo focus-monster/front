@@ -14,6 +14,7 @@ export type Auth = {
   lastModifiedDateTime: string;
   focusStatus: string;
   level: number;
+  language?: string;
 };
 
 export const dummyAuth: Auth = {
