@@ -5,7 +5,7 @@ set -e
 cd ~/fe/front
 
 git fetch origin main
-git reset origin/main
+git reset --hard origin/main
 
 podman build -t docker.io/chaejunlee/focus-monster-fe .
 
