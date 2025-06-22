@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -e
+
+cd ~/fe/front
+
 git pull origin main
 
 podman build -t docker.io/chaejunlee/focus-monster-fe .
