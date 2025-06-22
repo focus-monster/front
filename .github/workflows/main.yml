@@ -1,3 +1,4 @@
+name: Remote SSH Command
 on:
   push:
     branches:
@@ -6,15 +7,12 @@ on:
 jobs:
   build:
     name: build and deploy
-    runs-on: self-hosted
-    env:
-      Workspace: /home/gemini/fe
+    runs-on: ubuntu-latest
     steps:
-      - name: Pull from main
-        run: cd $Workspace && git pull origin main
-      - name: Install Dependencies
-        run: cd $Workspace && npm install
-      - name: Build
-        run: cd $Workspace && npm run build
-      - name: Deploy
-        run: cd $Workspace && pm2 start ecosystem.config.cjs
+      - name: Execute remote SSH command
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secretes.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PW }}
+          script: sh ~/fe/front/deploy.sh
