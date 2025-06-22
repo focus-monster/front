@@ -326,6 +326,7 @@ export default function Timer() {
           WebkitMaskRepeat: "no-repeat",
         }}
       >
+        {/* NOTE: 홈에서 집중 모드 블로킹 */}
         <button
           style={{
             backgroundImage: "url(/button-outline.png)",
@@ -334,10 +335,10 @@ export default function Timer() {
           }}
           className={cn(
             "flex w-[180px] items-center justify-center gap-4 rounded-2xl px-6 py-3 text-lg text-neutral-50",
-            isPending && "cursor-not-allowed",
+            (isPending || true) && "cursor-not-allowed",
           )}
           onClick={handleClick}
-          disabled={isPending || isSessionLoading}
+          disabled={isPending || isSessionLoading || true}
         >
           <ButtonText isPending={isPending} sessionStarted={isFocusing} />
         </button>
