@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/auth";
 import { Session, useSessions } from "@/hooks/sessions";
+import { useTitle } from "@/hooks/title";
 import { useVideo } from "@/hooks/video";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -17,7 +18,27 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { ResultDialogContext } from "./result-dialog";
-import { useTitle } from "@/hooks/title";
+
+const SUCCESS_TITLES = [
+  "집중 성공! 잠깐 쉬었다 갈까요?",
+  "멋지게 해냈어요. 세션 완료!",
+  "수고 많으셨어요. 세션이 끝났어요.",
+  "집중 완료! 수고했어요~",
+  "집중 성공! 이제 잠깐 숨 돌려요.",
+] as const;
+
+const FAILURE_TITLES = [
+  "세션이 중단되었어요.",
+  "목표 시간을 못 채웠어요.",
+  "흐음, 다음엔 더 잘할 수 있어요!",
+] as const;
+
+const getOS = () => {
+  const userAgent = window.navigator.userAgent.toLowerCase();
+  if (userAgent.includes("win")) return "windows";
+  if (userAgent.includes("mac")) return "macos";
+  return "other";
+};
 
 export const FocusDialogContext = createContext(
   {} as { open: boolean; setOpen: (open: boolean) => void },
@@ -79,10 +100,55 @@ export function FocusDialog() {
         setResultOpen(true);
         setResult(data);
 
-        window.postMessage({
-          action: "openPopup",
-          payload: JSON.stringify(data),
-        });
+        if ("Notification" in window && Notification.permission === "granted") {
+          const os = getOS();
+
+          if (data.focusStatus === "SUCCEED") {
+            const randomTitle =
+              SUCCESS_TITLES[Math.floor(Math.random() * SUCCESS_TITLES.length)];
+            const hours = data.resultDuration.hours;
+            const minutes = data.resultDuration.minutes;
+            const level = auth?.level ?? 0; // NOTE: 세션 종료에 따라 level 값이 증가하는지 확인 필요
+
+            if (os === "windows") {
+              const notificationOptions: NotificationOptions & {
+                image?: string;
+              } = {
+                body: `${hours}시간 ${minutes}분 동안 집중 | Lv.${level}로 레벨 업`,
+                icon: "/icon-34.png",
+                image: data.image,
+              };
+              new Notification(randomTitle, notificationOptions);
+            } else {
+              new Notification(randomTitle, {
+                body: `${hours}시간 ${minutes}분 동안 집중 | Lv.${level}로 레벨 업`,
+                icon: "/icon-34.png",
+              });
+            }
+          } else {
+            const randomTitle =
+              FAILURE_TITLES[Math.floor(Math.random() * FAILURE_TITLES.length)];
+            const hours = data.resultDuration.hours;
+            const minutes = data.resultDuration.minutes;
+            const level = auth?.level ?? 0;
+
+            if (os === "windows") {
+              const notificationOptions: NotificationOptions & {
+                image?: string;
+              } = {
+                body: `${hours}시간 ${minutes}분 동안 집중 | Lv.${level}로 레벨 유지`,
+                icon: "/icon-34.png",
+                image: data.image,
+              };
+              new Notification(randomTitle, notificationOptions);
+            } else {
+              new Notification(randomTitle, {
+                body: `${hours}시간 ${minutes}분 동안 집중 | Lv.${level}로 레벨 유지`,
+                icon: "/icon-34.png",
+              });
+            }
+          }
+        }
       }
     },
     onError: (error) => {

@@ -1,14 +1,14 @@
-import { Session, useSessions } from "@/hooks/sessions";
-import { cn } from "@/lib/utils";
 import { queryClient } from "@/app";
+import { FocusDialogContext } from "@/components/dialog/focus-dialog";
+import { Session, useSessions } from "@/hooks/sessions";
+import { useVideo } from "@/hooks/video";
+import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { AlertTriangle, LoaderCircle } from "lucide-react";
 import { useContext, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../hooks/auth";
 import { useBannedSites } from "../hooks/banned-sites";
-import { FocusDialogContext } from "@/components/dialog/focus-dialog";
-import { useVideo } from "@/hooks/video";
 import { Input } from "./ui/input";
 
 /**
@@ -105,6 +105,23 @@ export default function Timer() {
     if (isFocusing) {
       setOpen(true);
       return;
+    }
+
+    if ("Notification" in window) {
+      if (Notification.permission === "default") {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          toast.error(
+            "Notification permission is required to start a focus session.",
+          );
+          return;
+        }
+      } else if (Notification.permission === "denied") {
+        toast.error(
+          "Please enable notifications in your browser settings to start a focus session.",
+        );
+        return;
+      }
     }
 
     try {
