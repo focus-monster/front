@@ -13,6 +13,6 @@ jobs:
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
-          username: ${{ secretes.SSH_USERNAME }}
+          username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PW }}
           script: sh ~/fe/front/deploy.sh
