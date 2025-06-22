@@ -47,6 +47,7 @@ export default function Onboarding() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept-Language": "en",
         },
         body: JSON.stringify({
           socialId: auth.data?.socialId,
@@ -239,6 +240,79 @@ export function Job({
                   )}
                 />
                 {job.label}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+export function Language({
+  myLanguage,
+  setMyLanguage,
+  transparent,
+}: {
+  myLanguage: string;
+  setMyLanguage: Dispatch<SetStateAction<string>>;
+  transparent?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const { isFocusing } = useSessions();
+  const data = [
+    { value: "en", label: "English" },
+    { value: "ko", label: "Korean (test)" },
+  ];
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className={cn(
+            "w-full justify-between",
+            transparent &&
+              "bg-transparent text-neutral-200 hover:bg-neutral-50/20",
+          )}
+          disabled={isFocusing}
+        >
+          {myLanguage.length > 0
+            ? data?.find((lang) => lang.value === myLanguage)?.label
+            : "Select your language..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className={"w-[400px] p-0"}>
+        <Command>
+          <CommandInput placeholder="Search your language..." />
+          <CommandEmpty className="px-6 py-6 text-center text-sm">
+            FocusMonster can't find your language.
+          </CommandEmpty>
+          <CommandGroup
+            className={"max-h-[300px] w-full overflow-y-scroll"}
+            style={{ scrollbarWidth: "none" }}
+          >
+            {data?.map((language) => (
+              <CommandItem
+                key={language.value}
+                value={language.value}
+                onSelect={(currentValue) => {
+                  setMyLanguage(
+                    currentValue === myLanguage ? "" : currentValue,
+                  );
+                  setOpen(false);
+                }}
+              >
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4 shrink-0",
+                    myLanguage === language.value ? "opacity-100" : "opacity-0",
+                  )}
+                />
+                {language.label}
               </CommandItem>
             ))}
           </CommandGroup>

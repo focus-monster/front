@@ -1,16 +1,16 @@
+import { LoginPopup } from "@/components/login-popup";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/auth";
 import { useBannedSites } from "@/hooks/banned-sites";
+import { useSessions } from "@/hooks/sessions";
+import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { Plus, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
-import { Job } from "./onboarding";
-import { cn } from "@/lib/utils";
-import { useSessions } from "@/hooks/sessions";
-import { LoginPopup } from "@/components/login-popup";
+import { Job, Language } from "./onboarding";
 
 export default function Settings() {
   return (
@@ -139,8 +139,15 @@ function UserProfile() {
   const { data } = useAuth();
   const { isFocusing } = useSessions();
 
-  const [nickname, setNickname] = useState(data?.nickname);
-  const [job, setJob] = useState(data?.job ?? "");
+  const [nickname, setNickname] = useState("");
+  const [job, setJob] = useState("");
+  const [language, setLanguage] = useState(() => {
+    const localStorageLanguage = localStorage.getItem("language");
+    if (!localStorageLanguage) {
+      changeLanguage("en");
+    }
+    return localStorageLanguage || "en";
+  });
   const [nicknameError, setNicknameError] = useState("");
 
   const { mutate, isSuccess } = useMutation({
@@ -149,10 +156,12 @@ function UserProfile() {
       if (isFocusing) {
         return;
       }
+      changeLanguage(language);
       const res = await fetch("/api/users/onboarding", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept-Language": "en",
         },
         body: JSON.stringify({
           socialId: data?.socialId,
@@ -175,11 +184,18 @@ function UserProfile() {
     },
   });
 
+  useEffect(() => {
+    if (data) {
+      setNickname(data.nickname);
+      setJob(data.job ?? "");
+    }
+  }, [data]);
+
   return (
     <div className="relative flex grow flex-col space-y-4 pl-6 pt-0">
       <h2 className="text-2xl font-semibold text-neutral-100">User Profile</h2>
       {data?.anonymous ? <LoginPopup className="left-16 top-6" /> : null}
-      <div className="relative grid grid-cols-[200px__1fr] place-content-center items-center gap-2 pt-10">
+      <div className="relative grid grid-cols-[200px_1fr] place-content-center items-center gap-2 pt-10">
         {nicknameError.length > 0 && (
           <div className="absolute -top-1 rounded-full bg-red-100 px-4 py-1 text-red-600">
             {nicknameError}
@@ -216,7 +232,18 @@ function UserProfile() {
         <div className="text-neutral-100">Job</div>
         <Job myJob={job} setMyJob={setJob} transparent />
         <div className="text-neutral-100">Language</div>
-        <p className="rounded-lg p-2 text-gray-400">English</p>
+        <Language
+          myLanguage={language}
+          setMyLanguage={setLanguage}
+          transparent
+        />
+        {language !== localStorage.getItem("language") && (
+          <div className="text-black-100 col-span-2">
+            Changing the language will update not only the homepage,
+            <br />
+            but also the extension and notification languages.
+          </div>
+        )}
       </div>
       <Button
         onClick={() => {
@@ -250,3 +277,12 @@ function getDomain(site: string) {
   const siteName = new URL("https://" + site).hostname;
   return siteName;
 }
+
+const changeLanguage = (language: string) => {
+  localStorage.setItem("language", language);
+
+  window.postMessage({
+    action: "FocusMonster-changeLanguage",
+    payload: language,
+  });
+};

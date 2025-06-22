@@ -1,14 +1,15 @@
-import { useMutation } from "@tanstack/react-query";
-import { Auth } from "../../hooks/auth";
 import { queryClient } from "@/app";
-import { Button } from "../ui/button";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Auth } from "../../hooks/auth";
+import { Button } from "../ui/button";
 
 const mutation = async () => {
   const response = await fetch("/api/users/signUpAnonymous", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Accept-Language": "en",
     },
     body: JSON.stringify({}),
   });
