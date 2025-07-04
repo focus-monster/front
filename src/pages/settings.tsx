@@ -157,8 +157,8 @@ function UserProfile() {
         return;
       }
       changeLanguage(language);
-      const res = await fetch("/api/users/onboarding", {
-        method: "POST",
+      const res = await fetch("/api/users", {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "Accept-Language": "en",
