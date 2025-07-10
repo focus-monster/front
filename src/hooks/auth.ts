@@ -58,10 +58,8 @@ const query = async () => {
   //   console.log("DEV MODE");
   //   return JSON.parse(import.meta.env.VITE_AUTH) as Auth;
   // }
-  const socialId = getSocialId();
-
   try {
-    const response = await fetch(`/api/users/${socialId}`, {
+    const response = await fetch(`/api/users/me`, {
       credentials: "include",
     });
     const data = await response.json();
