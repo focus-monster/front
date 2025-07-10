@@ -45,6 +45,7 @@ export default function Onboarding() {
     mutationFn: async () => {
       const response = await fetch("/api/users/onboarding", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "Accept-Language": "en",
@@ -183,7 +184,9 @@ export function Job({
   const { data } = useQuery({
     queryKey: ["jobs"],
     queryFn: async () => {
-      const response = await fetch("/api/jobs/list");
+      const response = await fetch("/api/jobs/list", {
+        credentials: "include",
+      });
       const data = (await response.json()) as string[];
       return data.map((v) => ({
         value: lowercaseAllFirstLetters(v),

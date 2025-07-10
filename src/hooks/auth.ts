@@ -61,7 +61,9 @@ const query = async () => {
   const socialId = getSocialId();
 
   try {
-    const response = await fetch(`/api/users/${socialId}`);
+    const response = await fetch(`/api/users/${socialId}`, {
+      credentials: "include",
+    });
     const data = await response.json();
     return data as Auth;
   } catch (e) {

@@ -132,6 +132,7 @@ async function sendBlobToServer(blob: Blob, focusId: number, socialId: string) {
       `/gemini/image?focusId=${focusId}&socialId=${socialId}`,
       {
         method: "POST",
+        credentials: "include",
         body: formData,
       },
     );

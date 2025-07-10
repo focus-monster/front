@@ -70,6 +70,7 @@ export function FocusDialog() {
 
       const res = await fetch(`/api/focus/${result}`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "Accept-Language": "en",
