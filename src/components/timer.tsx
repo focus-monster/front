@@ -61,6 +61,7 @@ export default function Timer() {
     mutationFn: async () => {
       const res = await fetch("/api/focus", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "Accept-Language": "en",

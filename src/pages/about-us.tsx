@@ -69,7 +69,9 @@ function DescriptionList() {
   const { data, isLoading } = useQuery<Description[]>({
     queryKey: ["about-us-description"],
     queryFn: async () => {
-      const response = await fetch("/api/about");
+      const response = await fetch("/api/about", {
+        credentials: "include",
+      });
       return response.json();
     },
   });

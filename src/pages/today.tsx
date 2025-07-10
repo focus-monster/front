@@ -142,6 +142,9 @@ function TotalFocusTime() {
       const socialId = auth?.socialId ?? getSocialId();
       const response = await fetch(
         `/api/focus/today-time?socialId=${socialId}`,
+        {
+          credentials: "include",
+        },
       );
       return response.json();
     },

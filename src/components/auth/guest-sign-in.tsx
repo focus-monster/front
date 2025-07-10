@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 const mutation = async () => {
   const response = await fetch("/api/users/signUpAnonymous", {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       "Accept-Language": "en",

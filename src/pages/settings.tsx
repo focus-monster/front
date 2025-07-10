@@ -159,6 +159,7 @@ function UserProfile() {
       changeLanguage(language);
       const res = await fetch("/api/users", {
         method: "PUT",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "Accept-Language": "en",

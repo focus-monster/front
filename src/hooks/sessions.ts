@@ -32,7 +32,9 @@ export function useSessions() {
     queryKey: ["session"],
     queryFn: async () => {
       const socialId = auth?.socialId ?? getSocialId();
-      const response = await fetch(`/api/focus?socialId=${socialId}`);
+      const response = await fetch(`/api/focus?socialId=${socialId}`, {
+        credentials: "include",
+      });
       const data = await response.json();
       return data as Session[];
     },
