@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getSocialId, useAuth } from "./auth";
+import { getTokenFromQueryParamsOrLocalStorage, useAuth } from "./auth";
 import { useMemo } from "react";
 
 export type Session = {
@@ -31,7 +31,8 @@ export function useSessions() {
   const query = useQuery<Session[]>({
     queryKey: ["session"],
     queryFn: async () => {
-      const socialId = auth?.socialId ?? getSocialId();
+      const socialId =
+        auth?.socialId ?? getTokenFromQueryParamsOrLocalStorage();
       const response = await fetch(`/api/focus?socialId=${socialId}`, {
         credentials: "include",
       });

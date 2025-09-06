@@ -32,8 +32,9 @@ export const dummyAuth: Auth = {
   level: 0,
 };
 
-export function getSocialId() {
+export function getTokenFromQueryParamsOrLocalStorage() {
   const urlSearch = new URLSearchParams(window.location.search);
+
   let socialId = urlSearch.get("socialId");
   let accessToken = urlSearch.get("accessToken");
   let refreshToken = urlSearch.get("refreshToken");
@@ -48,11 +49,7 @@ export function getSocialId() {
     refreshToken = localStorage.getItem("refreshToken");
   }
 
-  if (!socialId) {
-    return dummyAuth;
-  }
-
-  localStorage.setItem("socialId", socialId);
+  localStorage.setItem("socialId", socialId ?? "");
   localStorage.setItem("accessToken", accessToken ?? "");
   localStorage.setItem("refreshToken", refreshToken ?? "");
 
@@ -61,6 +58,10 @@ export function getSocialId() {
   url.searchParams.delete("accessToken");
   url.searchParams.delete("refreshToken");
   window.history.replaceState({}, "", url.toString());
+
+  if (!socialId) {
+    return dummyAuth;
+  }
 
   return socialId;
 }
