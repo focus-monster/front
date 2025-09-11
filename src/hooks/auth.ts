@@ -32,23 +32,36 @@ export const dummyAuth: Auth = {
   level: 0,
 };
 
-export function getSocialId() {
+export function getTokenFromQueryParamsOrLocalStorage() {
   const urlSearch = new URLSearchParams(window.location.search);
+
   let socialId = urlSearch.get("socialId");
+  let accessToken = urlSearch.get("accessToken");
+  let refreshToken = urlSearch.get("refreshToken");
 
   if (!socialId) {
     socialId = localStorage.getItem("socialId");
   }
+  if (!accessToken) {
+    accessToken = localStorage.getItem("accessToken");
+  }
+  if (!refreshToken) {
+    refreshToken = localStorage.getItem("refreshToken");
+  }
+
+  localStorage.setItem("socialId", socialId ?? "");
+  localStorage.setItem("accessToken", accessToken ?? "");
+  localStorage.setItem("refreshToken", refreshToken ?? "");
+
+  const url = new URL(window.location.href);
+  url.searchParams.delete("socialId");
+  url.searchParams.delete("accessToken");
+  url.searchParams.delete("refreshToken");
+  window.history.replaceState({}, "", url.toString());
 
   if (!socialId) {
     return dummyAuth;
   }
-
-  localStorage.setItem("socialId", socialId);
-
-  const url = new URL(window.location.href);
-  url.searchParams.delete("socialId");
-  window.history.replaceState({}, "", url.toString());
 
   return socialId;
 }

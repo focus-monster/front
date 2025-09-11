@@ -1,4 +1,4 @@
-import { getSocialId, useAuth } from "@/hooks/auth";
+import { getTokenFromQueryParamsOrLocalStorage, useAuth } from "@/hooks/auth";
 import Folder from "../components/folder";
 import Loading from "@/components/loading";
 import { useSessions, Session, applyTimezoneOffset } from "@/hooks/sessions";
@@ -139,7 +139,8 @@ function TotalFocusTime() {
   }>({
     queryKey: ["totalFocusTime"],
     queryFn: async () => {
-      const socialId = auth?.socialId ?? getSocialId();
+      const socialId =
+        auth?.socialId ?? getTokenFromQueryParamsOrLocalStorage();
       const response = await fetch(
         `/api/focus/today-time?socialId=${socialId}`,
         {
