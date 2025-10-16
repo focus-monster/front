@@ -1,6 +1,7 @@
 import PrivacyPolicyDialog from "@/components/dialog/privacy-policy-dialog";
 import UserAgreementDialog from "@/components/dialog/user-agreement-dialog";
 import Loading from "@/components/loading";
+import { apiFetch } from "@/utils/api";
 import { useQuery } from "@tanstack/react-query";
 
 export default function AboutUs() {
@@ -69,7 +70,7 @@ function DescriptionList() {
   const { data, isLoading } = useQuery<Description[]>({
     queryKey: ["about-us-description"],
     queryFn: async () => {
-      const response = await fetch("/api/about", {
+      const response = await apiFetch("/api/about", {
         credentials: "include",
       });
       return response.json();

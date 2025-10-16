@@ -18,6 +18,7 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { ResultDialogContext } from "./result-dialog";
+import { apiFetch } from "@/utils/api";
 
 const SUCCESS_TITLES = [
   "집중 성공! 잠깐 쉬었다 갈까요?",
@@ -68,7 +69,7 @@ export function FocusDialog() {
     mutationFn: async (result: "succeed" | "fail") => {
       if (!isFocusing) return;
 
-      const res = await fetch(`/api/focus/${result}`, {
+      const res = await apiFetch(`/api/focus/${result}`, {
         method: "POST",
         credentials: "include",
         headers: {

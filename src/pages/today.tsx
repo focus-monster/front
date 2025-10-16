@@ -7,6 +7,7 @@ import { Character } from "@/components/character";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { LoginPopup } from "@/components/login-popup";
+import { apiFetch } from "@/utils/api";
 
 export default function Today() {
   const { data: auth } = useAuth();
@@ -141,7 +142,7 @@ function TotalFocusTime() {
     queryFn: async () => {
       const socialId =
         auth?.socialId ?? getTokenFromQueryParamsOrLocalStorage().socialId;
-      const response = await fetch(
+      const response = await apiFetch(
         `/api/focus/today-time?socialId=${socialId}`,
         {
           credentials: "include",

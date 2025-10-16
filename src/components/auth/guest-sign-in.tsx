@@ -3,9 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Auth } from "../../hooks/auth";
 import { Button } from "../ui/button";
+import { apiFetch } from "@/utils/api";
 
 const mutation = async () => {
-  const response = await fetch("/api/users/signUpAnonymous", {
+  const response = await apiFetch("/api/users/signUpAnonymous", {
     method: "POST",
     credentials: "include",
     headers: {

@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useAuth } from "../hooks/auth";
 import { useBannedSites } from "../hooks/banned-sites";
 import { Input } from "./ui/input";
+import { apiFetch } from "@/utils/api";
 
 /**
  *  "socialId": "116618166312500650927",
@@ -59,7 +60,7 @@ export default function Timer() {
 
   const { mutate, isPending } = useMutation<Session>({
     mutationFn: async () => {
-      const res = await fetch("/api/focus", {
+      const res = await apiFetch("/api/focus", {
         method: "POST",
         credentials: "include",
         headers: {

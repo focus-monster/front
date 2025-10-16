@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { useSessions } from "./sessions";
 import { useAuth } from "./auth";
+import { apiFetch } from "@/utils/api";
 
 export function useVideoStream() {
   const query = useQuery({
@@ -128,7 +129,7 @@ async function sendBlobToServer(blob: Blob, focusId: number, socialId: string) {
   formData.append("file", blob);
 
   try {
-    const req = await fetch(
+    const req = await apiFetch(
       `/gemini/image?focusId=${focusId}&socialId=${socialId}`,
       {
         method: "POST",
