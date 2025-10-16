@@ -20,7 +20,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useAuth } from "@/hooks/auth";
+import { useAuth, useToken } from "@/hooks/auth";
 import { cn } from "@/lib/utils";
 import { queryClient } from "@/app";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -38,6 +38,7 @@ export default function Onboarding() {
   const [jobError, setJobError] = useState("");
 
   const auth = useAuth();
+  const token = useToken();
   const navigation = useNavigate();
 
   const { mutate, isPending } = useMutation({
@@ -49,6 +50,7 @@ export default function Onboarding() {
         headers: {
           "Content-Type": "application/json",
           "Accept-Language": "en",
+          Authorization: `Bearer ${token.accessToken}`,
         },
         body: JSON.stringify({
           socialId: auth.data?.socialId,
@@ -186,9 +188,14 @@ export function Job({
     queryFn: async () => {
       const response = await fetch("/api/jobs/list", {
         credentials: "include",
+        headers: {
+          "Accept-Language": "en",
+        },
       });
       const data = (await response.json()) as string[];
-      return data.map((v) => ({
+      const jobSet = new Set(data);
+      const uniqueJobs = Array.from(jobSet);
+      return uniqueJobs.map((v) => ({
         value: lowercaseAllFirstLetters(v),
         label: v,
       }));

@@ -140,7 +140,7 @@ function TotalFocusTime() {
     queryKey: ["totalFocusTime"],
     queryFn: async () => {
       const socialId =
-        auth?.socialId ?? getTokenFromQueryParamsOrLocalStorage();
+        auth?.socialId ?? getTokenFromQueryParamsOrLocalStorage().socialId;
       const response = await fetch(
         `/api/focus/today-time?socialId=${socialId}`,
         {
