@@ -30,6 +30,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { regex } from "./settings";
 import { useSessions } from "@/hooks/sessions";
+import { apiFetch } from "@/utils/api";
 
 export default function Onboarding() {
   const [nickname, setNickname] = useState("");
@@ -44,7 +45,7 @@ export default function Onboarding() {
   const { mutate, isPending } = useMutation({
     mutationKey: ["user"],
     mutationFn: async () => {
-      const response = await fetch("/api/users/onboarding", {
+      const response = await apiFetch("/api/users/onboarding", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -186,7 +187,7 @@ export function Job({
   const { data } = useQuery({
     queryKey: ["jobs"],
     queryFn: async () => {
-      const response = await fetch("/api/jobs/list", {
+      const response = await apiFetch("/api/jobs/list", {
         credentials: "include",
         headers: {
           "Accept-Language": "en",

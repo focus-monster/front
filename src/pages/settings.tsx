@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import { Job, Language } from "./onboarding";
+import { apiFetch } from "@/utils/api";
 
 export default function Settings() {
   return (
@@ -157,7 +158,7 @@ function UserProfile() {
         return;
       }
       changeLanguage(language);
-      const res = await fetch("/api/users", {
+      const res = await apiFetch("/api/users", {
         method: "PUT",
         credentials: "include",
         headers: {

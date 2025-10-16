@@ -1,3 +1,4 @@
+import { apiFetch } from "@/utils/api";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
@@ -31,7 +32,7 @@ export function useSessions() {
   const query = useQuery<Session[]>({
     queryKey: ["session"],
     queryFn: async () => {
-      const response = await fetch(`/api/focus?socialId=${socialId}`, {
+      const response = await apiFetch(`/api/focus?socialId=${socialId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

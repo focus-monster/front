@@ -1,3 +1,4 @@
+import { apiFetch } from "@/utils/api";
 import { useQuery } from "@tanstack/react-query";
 
 type Token = {
@@ -83,7 +84,7 @@ export function getTokenFromQueryParamsOrLocalStorage(): Token {
 
 const query = async (token: Token) => {
   try {
-    const response = await fetch(`/api/users/me`, {
+    const response = await apiFetch(`/api/users/me`, {
       credentials: "include",
       headers: {
         Authorization: `Bearer ${token.accessToken}`,
