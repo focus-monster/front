@@ -1,5 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 
+type Token = {
+  socialId: string;
+  accessToken: string;
+  refreshToken: string;
+};
+
 export type Auth = {
   id: number;
   nickname: string;
@@ -14,6 +20,8 @@ export type Auth = {
   lastModifiedDateTime: string;
   focusStatus: string;
   level: number;
+  accessToken?: string;
+  refreshToken?: string;
 };
 
 export const dummyAuth: Auth = {
@@ -30,9 +38,11 @@ export const dummyAuth: Auth = {
   lastModifiedDateTime: "",
   focusStatus: "",
   level: 0,
+  accessToken: "",
+  refreshToken: "",
 };
 
-export function getTokenFromQueryParamsOrLocalStorage() {
+export function getTokenFromQueryParamsOrLocalStorage(): Token {
   const urlSearch = new URLSearchParams(window.location.search);
 
   let socialId = urlSearch.get("socialId");
@@ -57,23 +67,27 @@ export function getTokenFromQueryParamsOrLocalStorage() {
   url.searchParams.delete("socialId");
   url.searchParams.delete("accessToken");
   url.searchParams.delete("refreshToken");
+
   window.history.replaceState({}, "", url.toString());
+  window.postMessage({
+    action: "FocusMonster-openPopup",
+    payload: JSON.stringify(null),
+  });
 
-  if (!socialId) {
-    return dummyAuth;
-  }
-
-  return socialId;
+  return {
+    socialId,
+    accessToken,
+    refreshToken,
+  } as Token;
 }
 
-const query = async () => {
-  // if (import.meta.env.DEV) {
-  //   console.log("DEV MODE");
-  //   return JSON.parse(import.meta.env.VITE_AUTH) as Auth;
-  // }
+const query = async (token: Token) => {
   try {
     const response = await fetch(`/api/users/me`, {
       credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token.accessToken}`,
+      },
     });
     const data = await response.json();
     return data as Auth;
@@ -86,8 +100,13 @@ const query = async () => {
 };
 
 export function useAuth() {
+  const token = getTokenFromQueryParamsOrLocalStorage();
   return useQuery<Auth>({
     queryKey: ["user"],
-    queryFn: query,
+    queryFn: () => query(token),
   });
+}
+
+export function useToken() {
+  return getTokenFromQueryParamsOrLocalStorage();
 }
